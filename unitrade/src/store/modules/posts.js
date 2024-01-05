@@ -3,6 +3,7 @@ import { collection, getDocs } from "firebase/firestore/lite";
 import { firebaseDB } from "@/firebase-config";
 const dbCollection = collection(firebaseDB, "posts");
 const dbCreator = collection(firebaseDB, "users");
+import axios from "axios";
 export default {
   namespaced: true,
   state: () => ({
@@ -40,30 +41,17 @@ export default {
         throw error;
       }
     },
-    async loadListByDormitory({ commit }, dormitory) {
-      try {
-        const querySnapshot = await getDocs(dbCollection);
-        const creatorSnapshot = await getDocs(dbCreator);
-        const list = querySnapshot.docs
-          .filter((doc) => doc.data().dormitory == dormitory)
-          .map((doc) => {
-            const creatorId = doc.data().creatorId;
-            const creator = creatorSnapshot.docs.find(
-              (creatorDoc) => creatorDoc.id === creatorId
-            );
-
-            return {
-              id: doc.id,
-              ...doc.data(),
-              creator: creator ? { ...creator.data() } : null,
-            };
-          });
-        commit("setList", list);
-        return list; // Опціонально, можна повертати дані для подальшого використання
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
+    loadListByDormitory({ commit }, dormitory) {
+      axios
+        .get(`http://localhost:8000/api/${dormitory}/advertisements`)
+        .then((response) => {
+          console.log(response.data.data);
+          commit("setList", response.data.data);
+          return response;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
     async loadListByCreator({ commit }, creatorUid) {
       try {

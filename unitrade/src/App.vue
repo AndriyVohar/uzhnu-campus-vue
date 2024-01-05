@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Header/>
+    <Header />
     <RouterView></RouterView>
-    <Footer/>
+    <Footer />
   </div>
 </template>
 
@@ -11,30 +11,29 @@
 import Header from "./components/UpperMenu.vue";
 import Footer from "@/components/Footer.vue";
 
-import {mapGetters} from 'vuex';
-
+import { mapGetters } from "vuex";
 export default {
   name: "App",
   data() {
-    return {}
+    return {};
   },
   components: {
     Footer,
     Header,
   },
   computed: {
-    ...mapGetters('user', ['isLoggedIn'])
+    ...mapGetters("user", ["isLoggedIn"]),
   },
   mounted() {
     window.stopScroll = (value) => {
-      let val = '';
+      let val = "";
       if (!value) {
         val = "auto";
       } else {
         val = "hidden";
       }
       document.body.style.overflowY = val;
-    }
+    };
     if (!localStorage.getItem("defaultDormitory")) {
       localStorage.setItem("defaultDormitory", 4);
     }
@@ -56,10 +55,7 @@ export default {
 @import "assets/main_colors";
 
 .material-symbols-outlined {
-  font-variation-settings: 'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 24
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
 .stop-scroll {
@@ -86,11 +82,14 @@ body {
   background-color: $background;
 }
 
-button, textarea, select {
+button,
+textarea,
+select {
   font-family: "Montserrat", sans-serif;
 }
 
-input::placeholder, input {
+input::placeholder,
+input {
   font-family: "Montserrat", sans-serif;
 }
 
@@ -108,12 +107,12 @@ input::placeholder, input {
 
   ::-webkit-scrollbar-thumb {
     background: #888;
-    transition: background-color ease-out .3s;
+    transition: background-color ease-out 0.3s;
   }
 
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
-    transition: background-color ease-out .3s;
+    transition: background-color ease-out 0.3s;
   }
 }
 
@@ -122,7 +121,7 @@ input::placeholder, input {
   height: 2px;
   width: 100%;
   border-radius: 5px;
-  background-color: #B8DEDC;
+  background-color: #b8dedc;
 }
 
 body {

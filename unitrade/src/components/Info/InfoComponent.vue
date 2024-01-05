@@ -5,10 +5,10 @@
         <span v-if="user.role == 'admin'">№{{ attention.dormitory }}</span>
         {{ attention.title }}
         <span>{{
-          new Date(attention.creationDate.toMillis()).toLocaleDateString()
+          attention.created_at
         }}</span>
       </h4>
-      <p>{{ attention.content }}</p>
+      <p>{{ attention.description }}</p>
     </div>
     <div class="right-part">
       <font-awesome-icon

@@ -1,5 +1,5 @@
 <script>
-import {mapActions} from "vuex";
+import { mapActions } from "vuex";
 import data from "../../dormitory_data.json";
 import InfoComponent from "./InfoComponent.vue";
 
@@ -27,36 +27,37 @@ export default {
     selected_dormitory(newValue) {
       localStorage.setItem("defaultDormitory", newValue);
       let dorm = data.filter(
-          (dorm) => parseInt(this.selected_dormitory) === dorm.dormitory_num
+        (dorm) => parseInt(this.selected_dormitory) === dorm.dormitory_num
       )[0];
       this.dormitory_data = dorm.workers;
       this.loadListByDormitory(this.selected_dormitory)
-          .then((list) => {
-            this.attentionList = list;
-          })
-          .catch(() => {
-            console.log("some error");
-          });
-    },
-  },
-  methods: {
-    ...mapActions("information", ["loadListByDormitory"]),
-  },
-  created() {
-    if (!localStorage.getItem("defaultDormitory")) {
-      localStorage.setItem("defaultDormitory", 4);
-    }
-    this.loadListByDormitory(this.selected_dormitory)
         .then((list) => {
           this.attentionList = list;
         })
         .catch(() => {
           console.log("some error");
         });
+    },
+  },
+  methods: {
+    ...mapActions("information", ["loadListByDormitory"]),
+  },
+  mounted() {
+    if (!localStorage.getItem("defaultDormitory")) {
+      localStorage.setItem("defaultDormitory", 4);
+    }
+    this.loadListByDormitory(this.selected_dormitory)
+      .then((list) => {
+        console.log(list);
+        this.attentionList = list;
+      })
+      .catch(() => {
+        console.log("some error");
+      });
     let dorm = data.filter(
-        (dorm) =>
-            parseInt(localStorage.getItem("defaultDormitory")) ===
-            dorm.dormitory_num
+      (dorm) =>
+        parseInt(localStorage.getItem("defaultDormitory")) ===
+        dorm.dormitory_num
     )[0];
     this.dormitory_data = dorm.workers;
   },
@@ -90,9 +91,9 @@ export default {
 
     <div class="alert-holder">
       <info-component
-          :attention="attention"
-          v-for="attention in attentionList"
-          :key="attention.title"
+        :attention="attention"
+        v-for="attention in attentionList"
+        :key="attention.title"
       ></info-component>
     </div>
     <div class="posts-spacer"></div>
