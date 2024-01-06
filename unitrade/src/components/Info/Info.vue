@@ -1,7 +1,7 @@
 <script>
-import { mapActions } from "vuex";
 import data from "../../dormitory_data.json";
 import InfoComponent from "./InfoComponent.vue";
+import { loadItemsListByDormitory } from "@/DbOperations";
 
 export default {
   name: "Info",
@@ -30,7 +30,12 @@ export default {
         (dorm) => parseInt(this.selected_dormitory) === dorm.dormitory_num
       )[0];
       this.dormitory_data = dorm.workers;
-      this.loadListByDormitory(this.selected_dormitory)
+      this.loadItems();
+    },
+  },
+  methods: {
+    loadItems() {
+      loadItemsListByDormitory("infos", this.selected_dormitory)
         .then((list) => {
           this.attentionList = list;
         })
@@ -39,21 +44,11 @@ export default {
         });
     },
   },
-  methods: {
-    ...mapActions("information", ["loadListByDormitory"]),
-  },
   mounted() {
     if (!localStorage.getItem("defaultDormitory")) {
       localStorage.setItem("defaultDormitory", 4);
     }
-    this.loadListByDormitory(this.selected_dormitory)
-      .then((list) => {
-        console.log(list);
-        this.attentionList = list;
-      })
-      .catch(() => {
-        console.log("some error");
-      });
+    this.loadItems();
     let dorm = data.filter(
       (dorm) =>
         parseInt(localStorage.getItem("defaultDormitory")) ===
@@ -93,7 +88,7 @@ export default {
       <info-component
         :attention="attention"
         v-for="attention in attentionList"
-        :key="attention.title"
+        :key="attention"
       ></info-component>
     </div>
     <div class="posts-spacer"></div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="form-container" v-if="formData">
+  <div class="form-container" @submit.prevent="updateInfo()">
     <form class="form-content">
       <h2 class="form-title">{{ $t("info.edit") }}</h2>
       <div class="input-group">
@@ -14,14 +14,14 @@
         <input
           type="text"
           id="tag"
-          v-model="formData.content"
+          v-model="formData.description"
           :placeholder="$t('form.content')"
           class="input-field"
           required
         />
       </div>
       <div class="button-group">
-        <button class="save-button" @click="updateInfo()">
+        <button class="save-button">
           {{ $t("form.submit") }}
         </button>
         <button
@@ -38,8 +38,7 @@
   
   <script>
 import { mapActions } from "vuex";
-import { firebaseDB } from "@/firebase-config";
-import { doc, updateDoc } from "firebase/firestore/lite";
+import { loadItemById, updateItem } from "@/DbOperations";
 
 export default {
   data() {
@@ -49,30 +48,31 @@ export default {
   },
   methods: {
     ...mapActions("user", ["loadUser"]),
-    ...mapActions("information", ["loadListById"]),
     updateInfo() {
-      updateDoc(
-        doc(firebaseDB, "information", this.$route.params.id),
-        this.formData
-      );
-      this.$router.push("/me");
+      updateItem("infos", this.$route.params.id, this.formData)
+        .then(() => {
+          this.$router.push("/me");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
   created() {
-    this.loadListById(this.$route.params.id)
-      .then((list) => {
-        this.loadUser().then((user) => {
-          if (user.role == "admin") {
-            this.formData = list[0];
-          } else {
-            alert("Ви не маєте доступу до цих функцій");
-            this.$router.push("/me");
-          }
-        });
-      })
-      .catch(() => {
-        console.log("something wrong");
-      });
+    this.loadUser().then((user) => {
+      if (user.role == "admin") {
+        loadItemById('infos',this.$route.params.id)
+          .then((response) => {
+            this.formData = response;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        alert("Ви не маєте доступу до цих функцій");
+        this.$router.push("/me");
+      }
+    });
   },
 };
 </script>

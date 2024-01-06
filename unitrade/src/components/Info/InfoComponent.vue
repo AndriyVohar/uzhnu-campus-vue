@@ -4,9 +4,7 @@
       <h4>
         <span v-if="user.role == 'admin'">№{{ attention.dormitory }}</span>
         {{ attention.title }}
-        <span>{{
-          attention.created_at
-        }}</span>
+        <span>{{ attention.created_at }}</span>
       </h4>
       <p>{{ attention.description }}</p>
     </div>
@@ -25,7 +23,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { deleteItem } from "@/DbOperations";
 export default {
   name: "InfoComponent",
   props: {
@@ -36,7 +34,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions("informationDefaultDB", ["deleteItem"]),
     updateInfo() {
       this.$router.push({
         name: "infoEdit",
@@ -45,13 +42,7 @@ export default {
     },
     deleteInfo() {
       if (confirm("Видалити інформацію ?")) {
-        this.deleteItem(this.attention.id)
-          .then(() => {
-            location.reload();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        deleteItem("infos", this.attention.id).then(() => location.reload()); // Застосовано зміни тут
       }
     },
   },

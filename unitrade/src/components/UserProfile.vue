@@ -3,9 +3,9 @@
     <div class="user-data">
       <div class="main-data">
         <div class="profile-photo">
-          <img :src="user.avatarUrl" alt="Фото профілю"/>
+          <img :src="user.avatarUrl" alt="Фото профілю" />
           <div class="edit-pen" @click="edit_state = true">
-            <font-awesome-icon :icon="['fas', 'pen']"/>
+            <font-awesome-icon :icon="['fas', 'pen']" />
           </div>
         </div>
         <div class="data">
@@ -22,25 +22,21 @@
       <div class="contacts">
         <div class="left-part">
           <p>
-            <font-awesome-icon :icon="['fas', 'phone']"/>
+            <font-awesome-icon :icon="['fas', 'phone']" />
             {{ user.phone }}
           </p>
           <p>
-            <font-awesome-icon :icon="['far', 'envelope']"/>
+            <font-awesome-icon :icon="['far', 'envelope']" />
             {{ user.email }}
           </p>
         </div>
         <div class="right-part">
           <div class="links">
-            <a :href="user.instagram"
-            >
-              <font-awesome-icon :icon="['fab', 'instagram']"
-              />
+            <a :href="user.instagram">
+              <font-awesome-icon :icon="['fab', 'instagram']" />
             </a>
-            <a :href="user.telegram"
-            >
-              <font-awesome-icon :icon="['fab', 'telegram']"
-              />
+            <a :href="user.telegram">
+              <font-awesome-icon :icon="['fab', 'telegram']" />
             </a>
           </div>
         </div>
@@ -54,9 +50,9 @@
           <option value="works">{{ $t("global.work") }}</option>
           <option value="info">{{ $t("global.info") }}</option>
         </select>
-        <img src="@/assets/svg/browse.svg" alt="" v-if="toggle == 'posts'"/>
-        <img src="@/assets/svg/work.svg" alt="" v-else-if="toggle == 'works'"/>
-        <img src="@/assets/svg/info.svg" alt="" v-else/>
+        <img src="@/assets/svg/browse.svg" alt="" v-if="toggle == 'posts'" />
+        <img src="@/assets/svg/work.svg" alt="" v-else-if="toggle == 'works'" />
+        <img src="@/assets/svg/info.svg" alt="" v-else />
       </div>
     </div>
     <div class="user-actions">
@@ -64,13 +60,17 @@
         {{ $t("profile.logout") }}
       </button>
       <button
-          id="create-post"
-          v-if="toggle == 'posts'"
-          @click="createBtn(toggle)"
+        id="create-post"
+        v-if="toggle == 'posts'"
+        @click="createBtn(toggle)"
       >
         {{ $t("profile.createAdvertisement") }}
       </button>
-      <button id="create-work" v-else-if="toggle=='works'" @click="createBtn(toggle)">
+      <button
+        id="create-work"
+        v-else-if="toggle == 'works'"
+        @click="createBtn(toggle)"
+      >
         {{ $t("profile.createWork") }}
       </button>
       <button id="create-info" v-else @click="createBtn(toggle)">
@@ -80,33 +80,33 @@
     <div class="spacer"></div>
     <div class="list" v-if="toggle == 'posts'">
       <Post_comp
-          :post="post"
-          :userProp="user"
-          v-for="post in posts_list"
-          :key="post.id"
+        :post="post"
+        :userProp="user"
+        v-for="post in posts_list"
+        :key="post.id"
       />
     </div>
     <div class="list" v-else-if="toggle == 'works'">
       <Work_comp
-          :work="work"
-          :userProp="user"
-          v-for="work in works_list"
-          :key="work.id"
+        :work="work"
+        :userProp="user"
+        v-for="work in works_list"
+        :key="work.id"
       />
     </div>
     <div class="list" v-else>
       <info-component
-          :attention="attention"
-          :user="user"
-          v-for="attention in attentionList"
-          :key="attention.title"
+        :attention="attention"
+        :user="user"
+        v-for="attention in attentionList"
+        :key="attention.title"
       />
     </div>
   </div>
   <div class="user-edit" v-else>
     <div class="main-data">
       <div class="profile-photo">
-        <img :src="user.avatarUrl" alt="Фото профілю"/>
+        <img :src="user.avatarUrl" alt="Фото профілю" />
       </div>
       <div class="data">
         <p id="fullname">{{ user.fullName }}</p>
@@ -117,45 +117,45 @@
     </div>
     <div class="inputs">
       <div class="input-row">
-        <font-awesome-icon :icon="['fas', 'building']"/>
+        <font-awesome-icon :icon="['fas', 'building']" />
         <input
-            type="number"
-            v-model="user.dormitory"
-            max="5"
-            min="1"
-            placeholder="Номер гуртожитку. Приклад: 4"
+          type="number"
+          v-model="user.dormitory"
+          max="5"
+          min="1"
+          placeholder="Номер гуртожитку. Приклад: 4"
         />
       </div>
       <div class="input-row">
-        <font-awesome-icon :icon="['fas', 'person-shelter']"/>
+        <font-awesome-icon :icon="['fas', 'person-shelter']" />
         <input
-            type="text"
-            v-model="user.room"
-            placeholder="Номер кімнати. Приклад: 82/4"
+          type="text"
+          v-model="user.room"
+          placeholder="Номер кімнати. Приклад: 82/4"
         />
       </div>
       <div class="input-row">
-        <font-awesome-icon :icon="['fas', 'phone']"/>
+        <font-awesome-icon :icon="['fas', 'phone']" />
         <input
-            type="text"
-            v-model="user.phone"
-            placeholder="Приклад: +380950990019"
+          type="text"
+          v-model="user.phone"
+          placeholder="Приклад: +380950990019"
         />
       </div>
       <div class="input-row">
-        <font-awesome-icon :icon="['fab', 'instagram']"/>
+        <font-awesome-icon :icon="['fab', 'instagram']" />
         <input
-            type="text"
-            v-model="user.instagram"
-            placeholder="Приклад: https://www.instagram.com/uzhnu/"
+          type="text"
+          v-model="user.instagram"
+          placeholder="Приклад: https://www.instagram.com/uzhnu/"
         />
       </div>
       <div class="input-row">
-        <font-awesome-icon :icon="['fab', 'telegram']"/>
+        <font-awesome-icon :icon="['fab', 'telegram']" />
         <input
-            type="text"
-            v-model="user.telegram"
-            placeholder="https://t.me/uzhnu"
+          type="text"
+          v-model="user.telegram"
+          placeholder="https://t.me/uzhnu"
         />
       </div>
     </div>
@@ -169,23 +169,25 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
-import {auth} from "@/firebase-config.js";
-import {signOut} from "firebase/auth";
+import { mapActions, mapGetters } from "vuex";
+import { auth } from "@/firebase-config.js";
+import { signOut } from "firebase/auth";
 import Token from "@/token-usage.js";
 import Post_comp from "@/components/Post/Post_comp.vue";
 import Work_comp from "@/components/Work/Work_comp.vue";
 import InfoComponent from "@/components/Info/InfoComponent.vue";
 
-import {firebaseDB} from "@/firebase-config";
-import {doc, setDoc} from "firebase/firestore/lite";
+import { firebaseDB } from "@/firebase-config";
+import { doc, setDoc } from "firebase/firestore/lite";
+
+import { loadItemsList } from "@/DbOperations";
 
 export default {
-  components: {Work_comp, Post_comp, InfoComponent},
+  components: { Work_comp, Post_comp, InfoComponent },
   async mounted() {
     try {
       const user = await this.loadUser();
-      if(!user){
+      if (!user) {
         location.reload();
       }
 
@@ -196,7 +198,13 @@ export default {
         const works = await this.loadWorks();
         this.works_list = works;
 
-        this.attentionList = await this.loadInfo()
+        loadItemsList('infos')
+          .then((response) => {
+            this.attentionList = response;
+          })
+          .catch((error) => {
+            console.error(error); // Виводьте помилку в консоль в разі необхідності
+          });
       }
     } catch (error) {
       console.error("An error occurred:", error);
@@ -234,23 +242,23 @@ export default {
       loadInfo: "fetchList",
     }),
     openPost(id) {
-      this.$router.push({name: "post", params: {id: id}});
+      this.$router.push({ name: "post", params: { id: id } });
     },
     signOutMethod() {
       signOut(auth)
-          .then(() => {
-            Token.removeAccessTokenCookie();
-            Token.removeUserCookie();
-            this.$router.push("/");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        .then(() => {
+          Token.removeAccessTokenCookie();
+          Token.removeUserCookie();
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     async setUser() {
       try {
         if (this.user.dormitory > 0 && this.user.dormitory < 6) {
-          const userWithoutId = {...this.user};
+          const userWithoutId = { ...this.user };
           delete userWithoutId.id;
           await setDoc(doc(firebaseDB, "users", this.user.id), userWithoutId);
           location.reload();
@@ -263,11 +271,11 @@ export default {
     },
     createBtn(type) {
       if (
-          this.user.dormitory &&
-          this.user.instagram &&
-          this.user.phone &&
-          this.user.room &&
-          this.user.telegram
+        this.user.dormitory &&
+        this.user.instagram &&
+        this.user.phone &&
+        this.user.room &&
+        this.user.telegram
       ) {
         this.$router.push(`${type}/create`);
       } else {

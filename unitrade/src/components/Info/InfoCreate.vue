@@ -1,5 +1,5 @@
 <template>
-  <div class="form-container" v-if="formData">
+  <div class="form-container" @submit.prevent="createInfo()">
     <form class="form-content">
       <h2 class="form-title">{{ $t("info.create") }}</h2>
       <div class="input-group">
@@ -14,14 +14,14 @@
         <input
           type="text"
           id="tag"
-          v-model="formData.content"
+          v-model="formData.description"
           :placeholder="$t('form.content')"
           class="input-field"
           required
         />
       </div>
       <div class="button-group">
-        <button class="save-button" @click="createInfo()">
+        <button class="save-button" type="submit">
           {{ $t("form.submit") }}
         </button>
         <button
@@ -37,16 +37,13 @@
 </template>
 
 <script>
-import { serverTimestamp } from "firebase/firestore/lite";
+import {addItem} from '@/DbOperations';
 import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
       formData: {
-        content: "",
-        title: "",
         dormitory: 1,
-        creationDate: serverTimestamp(),
       },
     };
   },
@@ -54,12 +51,16 @@ export default {
     ...mapGetters("user", ["user"]),
   },
   methods: {
-    ...mapActions("informationDefaultDB", ["addItem"]),
     ...mapActions("user", ["loadUser"]),
     createInfo() {
       this.formData.dormitory = this.user.dormitory;
-      this.addItem(this.formData);
-      this.$router.push("/me");
+      addItem('infos',this.formData)
+        .then(() => {
+          this.$router.push('/me');
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
   async mounted() {
