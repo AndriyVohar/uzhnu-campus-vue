@@ -1,7 +1,7 @@
 <template>
-  <div class="form-container" v-if="formData">
-    <form class="form-content">
-      <h2 class="form-title">{{ $t('post.edit') }}</h2>
+  <div class="form-container">
+    <form @submit.prevent="createPost()" class="form-content">
+      <h2 class="form-title">{{ $t("post.create") }}</h2>
       <div class="input-group">
         <input
           type="file"
@@ -14,7 +14,7 @@
         <input
           type="text"
           id="title"
-          v-model="formData.name"
+          v-model="formData.title"
           :placeholder="$t('form.name')"
           class="input-field"
           required
@@ -29,33 +29,38 @@
         />
       </div>
       <div class="button-group">
-        <button class="save-button" @click="updatePost()">{{$t('form.submit')}}</button>
+        <button type="submit" class="save-button">
+          {{ $t("form.submit") }}
+        </button>
         <button
           type="button"
           class="cancel-button"
           @click="this.$router.push('/me')"
         >
-          {{$t('form.cancel')}}
+          {{ $t("form.cancel") }}
         </button>
       </div>
     </form>
   </div>
 </template>
-  
-  <script>
-import { mapActions } from "vuex";
-import { firebaseDB } from "@/firebase-config";
-import { doc, updateDoc } from "firebase/firestore/lite";
+
+<script>
+import { mapGetters, mapActions } from "vuex";
+import { addItem } from "@/DbOperations";
 export default {
   data() {
     return {
       formData: {},
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters("user", ["user"]),
+  },
   methods: {
     ...mapActions("user", ["loadUser"]),
-    ...mapActions("posts", ["loadListById"]),
+    submitForm() {
+      console.log("Надіслано:", this.formData);
+    },
     checkFileSize(event) {
       const input = event.target;
       const file = input.files[0]; // Assuming only one file is selected
@@ -75,40 +80,35 @@ export default {
     },
     encodeImageFileAsURL(event) {
       var file = event.target.files[0];
+
       if (file) {
         var reader = new FileReader();
+
         reader.onloadend = () => {
-          this.formData.img = reader.result;
+          this.formData.imgURL = reader.result;
         };
+
         reader.readAsDataURL(file);
       } else {
         console.error("No file selected.");
       }
     },
-    updatePost() {
-      updateDoc(doc(firebaseDB, "posts", this.$route.params.id), this.formData);
-      this.$router.push("/me");
+
+    createPost() {
+      // this.formData.user_id = this.user.id;
+      // TODO: Зв'язати user_id з правжнім id
+      this.formData.user_id = 1;
+      addItem("advertisements", this.formData).then(() => {
+        this.$router.push("/me");
+      });
     },
   },
-  created() {
-    this.loadListById(this.$route.params.id)
-      .then((list) => {
-        this.loadUser().then((user) => {
-          if (user.role == "admin" || user.id == list[0].creatorId) {
-            this.formData = list[0];
-          } else {
-            alert("Ви не маєте доступу до цих функцій");
-            this.$router.push("/me");
-          }
-        });
-      })
-      .catch(() => {
-        console.log("something wrong");
-      });
+  async mounted() {
+    await this.loadUser();
   },
 };
 </script>
-  
+
 <style scoped lang="scss">
 @import "../../assets/main_colors";
 .form-container {

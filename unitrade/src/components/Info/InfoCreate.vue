@@ -11,14 +11,13 @@
           class="input-field"
           required
         />
-        <input
-          type="text"
-          id="tag"
+        <textarea
+          style="resize: none"
           v-model="formData.description"
-          :placeholder="$t('form.content')"
+          :placeholder="$t('form.description')"
           class="input-field"
           required
-        />
+        ></textarea>
       </div>
       <div class="button-group">
         <button class="save-button" type="submit">

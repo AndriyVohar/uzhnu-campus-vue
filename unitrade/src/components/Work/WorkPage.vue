@@ -1,53 +1,43 @@
 <template>
-  <div class="mobile-form-container" v-if="work_data">
+  <div class="mobile-form-container" v-if="workData">
     <div class="form-container">
       <div class="photo-container">
-        <img :src="work_data.img" alt="Photo" class="photo" />
+        <img :src="workData.imgURL" alt="Photo" class="photo" />
       </div>
       <div class="form-content">
-        <p class="header-text">{{ work_data.name }}</p>
-        <p class="description">{{ work_data.description }}</p>
+        <p class="header-text">{{ workData.title }}</p>
+        <p class="description">{{ workData.description }}</p>
         <p class="payment">
-          {{ $t("work.salary") }}: <b>{{ work_data.salary }}₴</b>
+          {{ $t("work.salary") }}: <b>{{ workData.salary }}₴</b>
         </p>
         <div style="display: flex" class="down">
-          <div class="category">{{ work_data.tag }}</div>
+          <div class="category">{{ workData.tag }}</div>
         </div>
       </div>
     </div>
   </div>
+  <div v-else>{{ $t("global.loading") }}...</div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
-
+import{itemById } from "@/DbOperations";
 export default {
   name: "WorkPage",
   data() {
     return {
-      work_data: {},
+      workData: {},
     };
   },
-  computed: {
-    workId() {
-      return this.$route.params.id;
-    },
-  },
   methods: {
-    ...mapActions("works", ["loadListById"]),
-    report() {
-      alert(`На допис з Id ${this.workId} поскаржено`);
-    },
     copyToClipboard(value) {
       navigator.clipboard.writeText(value);
       alert("Номер скопійовано");
     },
   },
-  async created() {
-    this.loadListById(this.$route.params.id)
-      .then((list) => {
-        this.work_data = list[0];
-        this.isLoaded = true;
+  mounted() {
+    itemById('works',this.$route.params.id)
+      .then((response) => {
+        this.workData = response;
       })
       .catch(() => {
         console.log("something wrong");

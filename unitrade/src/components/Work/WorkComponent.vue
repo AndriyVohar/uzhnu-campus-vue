@@ -1,10 +1,11 @@
 <template>
   <div class="work" @click="openWork()">
-    <img :src="work.img" alt="Фото поста" />
+    <img :src="work.imgURL" alt="Фото поста" />
     <div class="post-data">
       <div class="text">
-        <p class="post-name">{{ work.name }}</p>
+        <p class="post-name">{{ work.title }}</p>
       </div>
+      <div style="font-size:14px;">{{ work.salary }}₴</div>
       <div class="post-bottom">
         <div class="tag">
           <span>{{ work.tag }}</span>
@@ -28,9 +29,10 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters} from "vuex";
+import {deleteItem} from '@/DbOperations'
 export default {
-  name: "Work_comp",
+  name: "WorkComponent",
   props: {
     work: Object,
   },
@@ -38,7 +40,6 @@ export default {
     ...mapGetters("user", ["user"]),
   },
   methods: {
-    ...mapActions("worksDefaultDB", ["deleteItem"]),
     updateWork() {
       this.$router.push({ name: "workEdit", params: { id: this.work.id } });
     },
@@ -47,7 +48,7 @@ export default {
     },
     deleteWork() {
       if (confirm("Видалити оголошення ?")) {
-        this.deleteItem(this.work.id)
+        deleteItem('works',this.work.id)
           .then(() => {
             location.reload();
           })

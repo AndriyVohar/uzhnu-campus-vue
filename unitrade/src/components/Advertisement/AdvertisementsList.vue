@@ -2,36 +2,33 @@
   <div class="container">
     <div class="menu">
       <select v-model="dormitoryNumber">
-        <option value="1">{{$t('global.dormitory')}} №1</option>
-        <option value="2">{{$t('global.dormitory')}} №2</option>
-        <option value="3">{{$t('global.dormitory')}} №3</option>
-        <option value="4">{{$t('global.dormitory')}} №4</option>
-        <option value="5">{{$t('global.dormitory')}} №5</option>
+        <option value="1">{{ $t("global.dormitory") }} №1</option>
+        <option value="2">{{ $t("global.dormitory") }} №2</option>
+        <option value="3">{{ $t("global.dormitory") }} №3</option>
+        <option value="4">{{ $t("global.dormitory") }} №4</option>
+        <option value="5">{{ $t("global.dormitory") }} №5</option>
       </select>
     </div>
     <div class="posts-spacer"></div>
-    <div class="posts_list">
-      <Post_comp :post="post" v-for="post in list" :key="post.id" />
+    <div class="posts_list" v-if="postsList&&postsList[0].creator != null">
+      <advertisement-component
+        :post="post"
+        v-for="post in postsList"
+        :key="post.id"
+      />
     </div>
+    <div v-else>{{ $t("global.loading") }}...</div>
   </div>
 </template>
 
 <script>
-import Post_comp from "@/components/Post/Post_comp.vue";
-// import debounce from "lodash.debounce";
-import { mapGetters, mapActions } from "vuex";
+import AdvertisementComponent from "@/components/Advertisement/AdvertisementComponent.vue";
+import { loadItemsListByDormitory } from "@/DbOperations";
 
 export default {
   name: "Posts_list",
-  components: { Post_comp },
-  computed: {
-    ...mapGetters("posts", ["list"]),
-  },
+  components: { AdvertisementComponent },
   methods: {
-    ...mapActions("posts", ["loadListByDormitory"]),
-    fetch() {
-      alert("Симуляція fetch запиту");
-    },
     subPage() {
       if (this.page_index > 0) {
         this.page_index -= 1;
@@ -47,10 +44,8 @@ export default {
     return {
       page_index: 0,
       search: undefined,
-      category: 0,
-      is_free: false,
-      isLoaded: false,
       dormitoryNumber: localStorage.getItem("defaultDormitory"),
+      postsList: null,
     };
   },
   watch: {
@@ -63,19 +58,26 @@ export default {
     is_free() {
       this.fetch();
     },
-    async dormitoryNumber(newValue) {
+    dormitoryNumber(newValue) {
       localStorage.setItem("defaultDormitory", newValue);
-      this.isLoaded = false;
-      await this.loadListByDormitory(newValue);
-      this.isLoaded = true;
+      loadItemsListByDormitory("advertisements", newValue)
+        .then((response) => {
+          this.postsList = response;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.postsList = null;
+        });
     },
   },
-  async created() {
-    if (!localStorage.getItem("defaultDormitory")) {
-      localStorage.setItem("defaultDormitory", 4);
-    }
-    await this.loadListByDormitory(this.dormitoryNumber);
-    this.isLoaded = true;
+  mounted() {
+    loadItemsListByDormitory("advertisements", this.dormitoryNumber)
+      .then((response) => {
+        this.postsList = response;
+      })
+      .catch(() => {
+        this.postsList = null;
+      });
   },
 };
 </script>

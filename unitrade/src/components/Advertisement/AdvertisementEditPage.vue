@@ -1,8 +1,7 @@
 <template>
-  <div class="form-container">
-    <form @submit="submitForm()" class="form-content">
-      <h2 class="form-title">{{$t('post.create')}}</h2>
-      <!-- Заголовок -->
+  <div class="form-container" v-if="formData">
+    <form @submit.prevent="updatePost()" class="form-content">
+      <h2 class="form-title">{{ $t("post.edit") }}</h2>
       <div class="input-group">
         <input
           type="file"
@@ -10,12 +9,11 @@
           id="photo"
           accept="image/*"
           class="input-field"
-          required
         />
         <input
           type="text"
           id="title"
-          v-model="formData.name"
+          v-model="formData.title"
           :placeholder="$t('form.name')"
           class="input-field"
           required
@@ -30,47 +28,33 @@
         />
       </div>
       <div class="button-group">
-        <button type="submit" class="save-button" @click="createPost()">
-          {{$t('form.submit')}}
+        <button type="submit" class="save-button">
+          {{ $t("form.submit") }}
         </button>
         <button
           type="button"
           class="cancel-button"
           @click="this.$router.push('/me')"
         >
-          {{$t('form.cancel')}}
+          {{ $t("form.cancel") }}
         </button>
       </div>
     </form>
   </div>
 </template>
-
-<script>
-import { serverTimestamp } from "firebase/firestore/lite";
-import Token from "@/token-usage";
-import { mapGetters, mapActions } from "vuex";
+  
+  <script>
+import { mapActions } from "vuex";
+import { updateItem, itemById } from "@/DbOperations";
 export default {
   data() {
     return {
-      formData: {
-        img: "",
-        name: "",
-        tag: "",
-        dormitory: 1,
-        creatorId: Token.getAccessTokenFromCookie(),
-        creationDate: serverTimestamp(),
-      },
+      formData: {},
     };
   },
-  computed: {
-    ...mapGetters("user", ["user"]),
-  },
+  computed: {},
   methods: {
-    ...mapActions("postsDefaultDB", ["addItem"]),
     ...mapActions("user", ["loadUser"]),
-    submitForm() {
-      console.log("Надіслано:", this.formData);
-    },
     checkFileSize(event) {
       const input = event.target;
       const file = input.files[0]; // Assuming only one file is selected
@@ -90,32 +74,45 @@ export default {
     },
     encodeImageFileAsURL(event) {
       var file = event.target.files[0];
-
       if (file) {
         var reader = new FileReader();
-
         reader.onloadend = () => {
-          this.formData.img = reader.result;
+          this.formData.imgURL = reader.result;
         };
-
         reader.readAsDataURL(file);
       } else {
         console.error("No file selected.");
       }
     },
-
-    createPost() {
-      this.formData.dormitory = this.user.dormitory;
-      this.addItem(this.formData);
-      this.$router.push("/me");
+    updatePost() {
+      updateItem("advertisements", this.$route.params.id, this.formData)
+        .then(() => {
+          this.$router.push("/me");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
-  async mounted() {
-    await this.loadUser();
+  mounted() {
+    itemById("advertisements", this.$route.params.id)
+      .then((response) => {
+        this.loadUser().then((user) => {
+          if (user.role == "admin" || user.id == response.creator.id) {
+            this.formData = response;
+          } else {
+            alert("Ви не маєте доступу до цих функцій");
+            this.$router.push("/me");
+          }
+        });
+      })
+      .catch(() => {
+        console.log("something wrong");
+      });
   },
 };
 </script>
-
+  
 <style scoped lang="scss">
 @import "../../assets/main_colors";
 .form-container {

@@ -7,7 +7,8 @@
         "save": "Save",
         "cancel": "Cancel",
         "select": "Select",
-        "info": "Information"
+        "info": "Information",
+        "loading":"Loading"
     },
     "footer": {
         "main": "Main",

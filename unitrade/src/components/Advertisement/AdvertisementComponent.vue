@@ -1,14 +1,15 @@
 <template>
   <div class="post" @click="openPost()">
-    <img :src="post.img" alt="Фото поста" />
+    <img :src="post.imgURL" alt="Фото поста" />
     <div class="post-data">
       <div class="text">
         <div class="post-name-icon">
-          <span class="post-name">{{ post.name }}</span>
-          <img :src="post.creator.avatarUrl" alt="" class="user-profile" />
+          <span class="post-name">{{ post.title }}</span>
+          <img :src="post.creator.imgURL" alt="" class="user-profile" />
         </div>
         <p class="address">
-          {{$t('global.dormitory')}} №{{ post.dormitory }} {{ post.creator.room }}
+          {{ $t("global.dormitory") }} №{{ post.dormitory }}
+          {{ post.creator.room }}
         </p>
       </div>
       <div class="post-bottom">
@@ -34,7 +35,8 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
+import { deleteItem } from "@/DbOperations";
 export default {
   name: "Post_comp",
   props: {
@@ -44,16 +46,21 @@ export default {
     ...mapGetters("user", ["user"]),
   },
   methods: {
-    ...mapActions("postsDefaultDB", ["deleteItem"]),
     openPost() {
-      this.$router.push({ name: "post", params: { id: this.post.id } });
+      this.$router.push({
+        name: "advertisement",
+        params: { id: this.post.id },
+      });
     },
     updatePost() {
-      this.$router.push({ name: "postEdit", params: { id: this.post.id } });
+      this.$router.push({
+        name: "advertisementEdit",
+        params: { id: this.post.id },
+      });
     },
     deletePost() {
       if (confirm("Видалити оголошення ?")) {
-        this.deleteItem(this.post.id)
+        deleteItem('advertisements',this.post.id)
           .then(() => {
             location.reload();
           })
@@ -81,7 +88,7 @@ export default {
   flex-direction: row;
   transition: all ease-out 0.3s;
   padding: 10px;
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
 

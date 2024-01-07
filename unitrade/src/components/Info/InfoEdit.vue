@@ -38,7 +38,7 @@
   
   <script>
 import { mapActions } from "vuex";
-import { loadItemById, updateItem } from "@/DbOperations";
+import { itemById, updateItem } from "@/DbOperations";
 
 export default {
   data() {
@@ -61,7 +61,7 @@ export default {
   created() {
     this.loadUser().then((user) => {
       if (user.role == "admin") {
-        loadItemById('infos',this.$route.params.id)
+        itemById('infos',this.$route.params.id)
           .then((response) => {
             this.formData = response;
           })

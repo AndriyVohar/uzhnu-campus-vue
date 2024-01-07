@@ -1,7 +1,7 @@
 <template>
   <div class="form-container" v-if="formData">
     <form class="form-content">
-      <h2 class="form-title">{{$t('work.edit')}}</h2>
+      <h2 class="form-title">{{ $t("work.edit") }}</h2>
       <div class="input-group">
         <input
           type="file"
@@ -9,12 +9,11 @@
           @change="checkFileSize"
           accept="image/*"
           class="input-field"
-          required
         />
         <input
           type="text"
           id="title"
-          v-model="formData.name"
+          v-model="formData.title"
           :placeholder="$t('form.name')"
           class="input-field"
           required
@@ -28,7 +27,7 @@
           required
         />
         <input
-          type="text"
+          type="number"
           id="salary"
           v-model="formData.salary"
           :placeholder="$t('form.salary')"
@@ -45,14 +44,14 @@
       </div>
       <div class="button-group">
         <button type="submit" class="save-button" @click="updateWork()">
-          {{$t('form.submit')}}
+          {{ $t("form.submit") }}
         </button>
         <button
           type="button"
           class="cancel-button"
           @click="this.$router.push('/me')"
         >
-          {{$t('form.cancel')}}
+          {{ $t("form.cancel") }}
         </button>
       </div>
     </form>
@@ -60,17 +59,15 @@
 </template>
     
 <script>
-import { mapActions} from "vuex";
-import { firebaseDB } from "@/firebase-config";
-import { doc, updateDoc } from "firebase/firestore/lite";
+import { mapActions } from "vuex";
+import { updateItem, itemById } from "@/DbOperations";
 export default {
   data() {
     return {
       formData: {},
     };
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     ...mapActions("user", ["loadUser"]),
     ...mapActions("works", ["loadListById"]),
@@ -104,21 +101,30 @@ export default {
       }
     },
     updateWork() {
-      updateDoc(doc(firebaseDB, "works", this.$route.params.id), this.formData);
-      this.$router.push("/me");
+      updateItem("works", this.$route.params.id, this.formData)
+        .then(() => {
+          this.$router.push("/me");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
-  created() {
-    this.loadListById(this.$route.params.id)
-      .then((list) => {
-        this.loadUser().then((user) => {
-          if (user.role == "admin") {
-            this.formData = list[0];
-          } else{
-            alert("Ви не маєте доступу до цих функцій");
-            this.$router.push('/me');
-          }
-        });
+  mounted() {
+    this.loadUser()
+      .then((user) => {
+        if (user.role == "admin") {
+          itemById("works", this.$route.params.id)
+            .then((response) => {
+              this.formData = response;
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } else {
+          alert("Ви не маєте доступу до цих функцій");
+          this.$router.push("/me");
+        }
       })
       .catch(() => {
         console.log("something wrong");
@@ -127,7 +133,7 @@ export default {
 };
 </script>
     
-  <style scoped lang="scss">
+<style scoped lang="scss">
 @import "../../assets/main_colors";
 .form-container {
   display: flex;

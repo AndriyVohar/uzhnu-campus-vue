@@ -1,56 +1,49 @@
 <template>
-  <div class="mobile-form-container" v-if="post_data">
+  <div class="mobile-form-container" v-if="postData">
     <div class="form-container">
       <div class="photo-container">
-        <img :src="post_data.img" alt="Photo" class="photo" />
+        <img :src="postData.imgURL" alt="Photo" class="photo" />
       </div>
       <div class="form-content">
-        <p class="header-text">{{ post_data.name }}</p>
-        <p class="name">{{ post_data.creator.fullName }}</p>
+        <p class="header-text">{{ postData.title }}</p>
+        <p class="name">{{ postData.creator.fullName }}</p>
         <p class="address">
-          {{ $t("global.dormitory") }}: {{ post_data.dormitory }}
-          {{ post_data.creator.room }}
+          {{ $t("global.dormitory") }}: {{ postData.dormitory }}
+          {{ postData.creator.room }}
         </p>
         <div class="icons">
-          <a :href="post_data.creator.instagram">
+          <a :href="'https://www.instagram.com/'+postData.creator.instagram">
             <font-awesome-icon class="icon" :icon="['fab', 'instagram']" />
           </a>
-          <a :href="post_data.creator.telegram">
+          <a :href="'https://t.me/'+postData.creator.telegram">
             <font-awesome-icon class="icon" :icon="['fab', 'telegram']" />
           </a>
-          <a @click="copyToClipboard(post_data.creator.email, 'email')">
+          <a @click="copyToClipboard(postData.creator.email, 'email')">
             <font-awesome-icon class="icon" :icon="['far', 'envelope']" />
           </a>
-          <a @click="copyToClipboard(post_data.creator.phone, 'phone')">
+          <a @click="copyToClipboard(postData.creator.phone, 'phone')">
             <font-awesome-icon class="icon" :icon="['fas', 'phone']" />
           </a>
         </div>
         <div style="display: flex" class="down">
-          <div class="category">{{ post_data.tag }}</div>
+          <div class="category">{{ postData.tag }}</div>
         </div>
       </div>
     </div>
   </div>
+  <div v-else>{{ $t("global.loading") }}...</div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
-
+import{itemById } from "@/DbOperations";
 export default {
   name: "PostPage",
   data() {
     return {
-      post_data: false,
-      isLoaded: false,
+      postData: null,
     };
   },
-  computed: {
-    postId() {
-      return this.$route.params.id;
-    },
-  },
   methods: {
-    ...mapActions("posts", ["loadListById"]),
     copyToClipboard(value, type) {
       let text = "Номер скопійовано";
       if (type == "email") {
@@ -60,16 +53,15 @@ export default {
       alert(text);
     },
   },
-  created() {
-    this.loadListById(this.$route.params.id)
-      .then((list) => {
-        this.post_data = list[0];
-        this.isLoaded = true;
+  mounted() {
+    itemById('advertisements',this.$route.params.id)
+      .then((response) => {
+        this.postData = response;
       })
       .catch(() => {
         console.log("something wrong");
       });
-    // this.user_data = this.post_data.user_data
+    // this.user_data = this.postData.user_data
   },
 };
 </script>

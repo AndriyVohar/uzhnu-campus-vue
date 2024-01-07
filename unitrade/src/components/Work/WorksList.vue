@@ -1,60 +1,41 @@
 <template>
   <div class="container">
     <div class="works-spacer"></div>
-    <div class="works_list">
-      <Work_comp :work="work" v-for="work in getItemsList" :key="work.id"/>
+    <div class="works_list" v-if="worksList && worksList.length > 0">
+      <work-component :work="work" v-for="work in worksList" :key="work" />
+    </div>
+    <div v-else>
+      {{ $t('global.loading') }}...
     </div>
   </div>
 </template>
 <script>
-import debounce from "lodash.debounce";
-import {mapGetters, mapActions} from "vuex";
-import Work_comp from "@/components/Work/Work_comp.vue";
+import WorkComponent from "@/components/Work/WorkComponent.vue";
+import { loadItemsList } from "@/DbOperations";
 
 export default {
   name: "Works_list",
-  components: {Work_comp},
-  computed: {
-    ...mapGetters('worksDefaultDB', ['getItemsList']),
-  },
+  components: { WorkComponent },
   methods: {
-    ...mapActions("worksDefaultDB", ["loadList"]),
     fetch() {
       alert("Симуляція fetch запиту");
     },
-    subPage() {
-      if (this.page_index > 0) {
-        this.page_index -= 1;
-      }
-    },
-    addPage() {
-      if (this.has_next_page) {
-        this.page_index += 1;
-      }
-    }
   },
   data() {
     return {
-      page_index: 0,
-      gender: 'all',
-      search: undefined,
+      worksList: []
     }
   },
-  watch: {
-    search() {
-      this.debouncedFetch();
-    },
-    gender() {
-      this.fetch();
-    },
-  },
   mounted() {
-    this.debouncedFetch = debounce(() => {
-      this.fetch();
-    }, 500)
-    this.loadList()
+    loadItemsList("works")
+      .then((response) => {
+        this.worksList = response;
+      })
+      .catch(() => {
+        console.log("some error");
+      });
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -63,17 +44,17 @@ export default {
 .works-spacer {
   width: calc(100vw - 30px);
   height: 1px;
-  background-color: #006D77;
+  background-color: #006d77;
 }
 
 .hidden-page {
   opacity: 0 !important;
-  transition: opacity ease-out .2s;
+  transition: opacity ease-out 0.2s;
   cursor: default !important;
 }
 
 .page-toggle {
-  transition: opacity ease-out .2s;
+  transition: opacity ease-out 0.2s;
 }
 
 .page-toggle:hover {
@@ -116,7 +97,9 @@ export default {
   .works_list {
     gap: 15px;
     padding-top: 20px;
-    min-height: calc(100vh - 75px - 68px); // $2 це селектор $3 це верхнє меню + 1px (1px height spacer)
+    min-height: calc(
+      100vh - 75px - 68px
+    ); // $2 це селектор $3 це верхнє меню + 1px (1px height spacer)
     width: calc(100vw - 30px);
     display: flex;
     flex-direction: column;

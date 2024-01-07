@@ -20,8 +20,8 @@ export default {
     </div>
     <div
         class="footer-element"
-        :class="{ selected: $route.path === '/posts' }"
-        @click="pushLink('/posts')"
+        :class="{ selected: $route.path === '/advertisements' }"
+        @click="pushLink('/advertisements')"
     >
       <img src="@/assets/svg/browse.svg" alt=""/>
       <span>{{$t('global.advertisement')}}</span>

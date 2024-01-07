@@ -32,8 +32,8 @@ export function loadItemsListByDormitory(name, dormitory) {
     .then((response) => {
       return response.data.data;
     })
-    .catch((error) => {
-      console.error(error);
+    .catch(() => {
+      return Promise.reject("Error fetching items list. Please try again later.");
     });
 }
 /**
@@ -60,7 +60,7 @@ export function addItem(name, data) {
  * @param {number|string} id - Ідентифікатор об'єкта для завантаження.
  * @returns {Promise<Object>} - Об'єкт Promise, який вирішиться об'єктом або вилучить помилку.
  */
-export function loadItemById(name, id) {
+export function itemById(name, id) {
   return axios
     .get(`${databaseApiUrl}/${name}/${id}`)
     .then((response) => {

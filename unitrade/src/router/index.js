@@ -49,33 +49,33 @@ const routes = [
     },
   },
   {
-    path: "/posts",
-    name: "posts",
-    component: () => import("@/components/Post/Posts_list.vue"),
+    path: "/advertisements",
+    name: "advertisements",
+    component: () => import("@/components/Advertisement/AdvertisementsList.vue"),
     meta: {
       forLoggedIn: false,
     },
   },
   {
-    path: "/posts/create",
-    name: "postCreate",
-    component: () => import("@/components/Post/PostCreatePage.vue"),
+    path: "/advertisements/create",
+    name: "advertisementCreate",
+    component: () => import("@/components/Advertisement/AdvertisementCreatePage.vue"),
     meta: {
       forLoggedIn: true,
     },
   },
   {
-    path: "/posts/:id",
-    name: "post",
-    component: () => import("@/components/Post/PostPage.vue"),
+    path: "/advertisements/:id",
+    name: "advertisement",
+    component: () => import("@/components/Advertisement/AdvertisementPage.vue"),
     meta: {
       forLoggedIn: false,
     },
   },
   {
-    path: "/posts/:id/edit",
-    name: "postEdit",
-    component: () => import("@/components/Post/PostEditPage.vue"),
+    path: "/advertisements/:id/edit",
+    name: "advertisementEdit",
+    component: () => import("@/components/Advertisement/AdvertisementEditPage.vue"),
     meta: {
       forLoggedIn: true,
     },
@@ -83,7 +83,7 @@ const routes = [
   {
     path: "/works",
     name: "works",
-    component: () => import("@/components/Work/Works_list.vue"),
+    component: () => import("@/components/Work/WorksList.vue"),
     meta: {
       forLoggedIn: false,
     },

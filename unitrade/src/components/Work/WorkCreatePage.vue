@@ -14,7 +14,7 @@
         <input
           type="text"
           id="title"
-          v-model="formData.name"
+          v-model="formData.title"
           :placeholder="$t('form.name')"
           class="input-field"
           required
@@ -28,7 +28,7 @@
           required
         />
         <input
-          type="text"
+          type="number"
           id="salary"
           v-model="formData.salary"
           :placeholder="$t('form.salary')"
@@ -60,27 +60,18 @@
 </template>
   
   <script>
-import { serverTimestamp } from "firebase/firestore/lite";
-import Token from "@/token-usage";
 import { mapGetters, mapActions } from "vuex";
+import {addItem} from '@/DbOperations';
 export default {
   data() {
     return {
-      formData: {
-        img: "",
-        name: "",
-        tag: "",
-        salary: "",
-        creatorId: Token.getAccessTokenFromCookie(),
-        creationDate: serverTimestamp(),
-      },
+      formData: {},
     };
   },
   computed: {
     ...mapGetters("user", ["user"]),
   },
   methods: {
-    ...mapActions("worksDefaultDB", ["addItem"]),
     ...mapActions("user", ["loadUser"]),
     submitForm() {
       console.log("Надіслано:", this.formData);
@@ -109,7 +100,7 @@ export default {
         var reader = new FileReader();
 
         reader.onloadend = () => {
-          this.formData.img = reader.result;
+          this.formData.imgURL = reader.result;
         };
 
         reader.readAsDataURL(file);
@@ -119,7 +110,7 @@ export default {
     },
 
     createWork() {
-      this.addItem(this.formData);
+      addItem('works',this.formData);
       this.$router.push("/me");
     },
   },

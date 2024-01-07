@@ -46,11 +46,11 @@
       <span>{{ $t("profile.show") }}</span>
       <div class="select-group">
         <select v-model="toggle">
-          <option value="posts">{{ $t("global.advertisement") }}</option>
+          <option value="advertisements">{{ $t("global.advertisement") }}</option>
           <option value="works">{{ $t("global.work") }}</option>
           <option value="info">{{ $t("global.info") }}</option>
         </select>
-        <img src="@/assets/svg/browse.svg" alt="" v-if="toggle == 'posts'" />
+        <img src="@/assets/svg/browse.svg" alt="" v-if="toggle == 'adverisements'" />
         <img src="@/assets/svg/work.svg" alt="" v-else-if="toggle == 'works'" />
         <img src="@/assets/svg/info.svg" alt="" v-else />
       </div>
@@ -61,7 +61,7 @@
       </button>
       <button
         id="create-post"
-        v-if="toggle == 'posts'"
+        v-if="toggle == 'advertisements'"
         @click="createBtn(toggle)"
       >
         {{ $t("profile.createAdvertisement") }}
@@ -78,8 +78,8 @@
       </button>
     </div>
     <div class="spacer"></div>
-    <div class="list" v-if="toggle == 'posts'">
-      <Post_comp
+    <div class="list" v-if="toggle == 'advertisements'">
+      <advertisement-component
         :post="post"
         :userProp="user"
         v-for="post in posts_list"
@@ -87,7 +87,7 @@
       />
     </div>
     <div class="list" v-else-if="toggle == 'works'">
-      <Work_comp
+      <work-component
         :work="work"
         :userProp="user"
         v-for="work in works_list"
@@ -169,12 +169,14 @@
 </template>
 
 <script>
+// TODO: Робити загрузку інформації та роботи тільки при виборі, а не одразу в mounted;
+
 import { mapActions, mapGetters } from "vuex";
 import { auth } from "@/firebase-config.js";
 import { signOut } from "firebase/auth";
 import Token from "@/token-usage.js";
-import Post_comp from "@/components/Post/Post_comp.vue";
-import Work_comp from "@/components/Work/Work_comp.vue";
+import AdvertisementComponent from "@/components/Advertisement/AdvertisementComponent.vue";
+import WorkComponent from "@/components/Work/WorkComponent.vue";
 import InfoComponent from "@/components/Info/InfoComponent.vue";
 
 import { firebaseDB } from "@/firebase-config";
@@ -183,7 +185,7 @@ import { doc, setDoc } from "firebase/firestore/lite";
 import { loadItemsList } from "@/DbOperations";
 
 export default {
-  components: { Work_comp, Post_comp, InfoComponent },
+  components: { WorkComponent, AdvertisementComponent, InfoComponent },
   async mounted() {
     try {
       const user = await this.loadUser();
@@ -195,15 +197,20 @@ export default {
       this.posts_list = posts;
 
       if (user.role == "admin") {
-        const works = await this.loadWorks();
-        this.works_list = works;
+        loadItemsList('works')
+          .then((response) => {
+            this.works_list = response;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
 
         loadItemsList('infos')
           .then((response) => {
             this.attentionList = response;
           })
           .catch((error) => {
-            console.error(error); // Виводьте помилку в консоль в разі необхідності
+            console.error(error);
           });
       }
     } catch (error) {
@@ -213,7 +220,7 @@ export default {
 
   data() {
     return {
-      toggle: "posts",
+      toggle: "advertisements",
       posts_list: [],
       works_list: [],
       attentionList: [],
@@ -231,16 +238,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions("worksDefaultDB", {
-      loadWorks: "loadList",
-    }),
     ...mapActions("posts", {
       loadPosts: "loadListByCreator",
     }),
     ...mapActions("user", ["loadUser"]),
-    ...mapActions("information", {
-      loadInfo: "fetchList",
-    }),
     openPost(id) {
       this.$router.push({ name: "post", params: { id: id } });
     },
