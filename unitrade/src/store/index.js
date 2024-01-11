@@ -1,18 +1,32 @@
-import { createStore } from "vuex";
-import posts from "./modules/posts";
-import user from "./modules/user";
-import works from "./modules/works";
-
-// import firestoreHelper from "./helpers/firestore-helper";
-import firebaseGetModules from "./helpers/getModuleSettingObject";
-export default createStore({
+import Token from "@/token-usage";
+import { itemById } from "@/DbOperations";
+export default {
   namespaced: true,
-  modules: {
-    posts,
-    postsDefaultDB: firebaseGetModules("posts"),
-    user,
-    usersDefaultDB: firebaseGetModules("users"),
-    works,
-    worksDefaultDB: firebaseGetModules("works"),
+  state: {
+    user: {},
+    accessToken: Token.getAccessTokenFromCookie(),
   },
-});
+  getters: {
+    user: ({ user }) => {
+      return user;
+    },
+    accessToken: ({ accessToken }) => {
+      return accessToken;
+    },
+  },
+  mutations: {
+    changeUser(state, value) {
+      state.user = value;
+    },
+    changeAccessToken(state, value) {
+      state.accessToken = value;
+    },
+  },
+  actions: {
+    loadUser({commit},$google_id){
+      itemById('users', $google_id).then((response)=>{
+        commit('changeUser',response)
+      })
+    }
+  },
+};

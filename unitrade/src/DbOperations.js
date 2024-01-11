@@ -1,5 +1,4 @@
 import axios from "axios";
-// TODO: Write in .env file VUE_APP_DATABASE_API_URL=your api http
 const databaseApiUrl = process.env.VUE_APP_DATABASE_API_URL;
 /**
  * Завантажує список даних з бази даних за допомогою HTTP GET запиту.
@@ -33,7 +32,9 @@ export function loadItemsListByDormitory(name, dormitory) {
       return response.data.data;
     })
     .catch(() => {
-      return Promise.reject("Error fetching items list. Please try again later.");
+      return Promise.reject(
+        "Error fetching items list. Please try again later."
+      );
     });
 }
 /**
@@ -41,12 +42,18 @@ export function loadItemsListByDormitory(name, dormitory) {
  *
  * @param {string} name - Назва ендпоінту або шляху до ресурсу бази даних (infos/advertisements/works/users).
  * @param {Object} data - Об'єкт даних, які будуть відправлені на сервер.
+ * @param {String} token - Токен користувача
  * @returns {Promise} - Обіцянка (Promise), яка вирішиться результатом HTTP запиту.
  *                     Успішна обіцянка містить об'єкт відповіді сервера, інакше вона відхиляється з помилкою.
  */
-export function addItem(name, data) {
+export function addItem(name, data, userGoogleId) {
   return axios
-    .post(`${databaseApiUrl}/${name}`, data)
+    .post(`${databaseApiUrl}/${name}`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        'User-Google-Id': userGoogleId
+      },
+    })
     .then((response) => {
       return response.data;
     })
@@ -77,9 +84,14 @@ export function itemById(name, id) {
  * @param {Object} data - Дані, які слід оновити.
  * @returns {Promise<Object>} - Об'єкт Promise, який вирішиться оновленим об'єктом або вилучить помилку.
  */
-export function updateItem(name, id, data) {
+export function updateItem(name, id, data, userGoogleId) {
   return axios
-    .put(`${databaseApiUrl}/${name}/${id}`, data)
+    .put(`${databaseApiUrl}/${name}/${id}`, data,{
+      headers: {
+        "Content-Type": "application/json",
+        'User-Google-Id': userGoogleId
+      },
+    })
     .then((response) => {
       return response.data;
     })
@@ -95,6 +107,11 @@ export function updateItem(name, id, data) {
  * @returns {Promise} - Обіцянка (Promise), яка вирішиться результатом HTTP запиту.
  *                     Успішна обіцянка містить об'єкт відповіді сервера, інакше вона відхиляється з помилкою.
  */
-export function deleteItem(name, id) {
-  return axios.delete(`${databaseApiUrl}/${name}/${id}`);
+export function deleteItem(name, id, userGoogleId) {
+  return axios.delete(`${databaseApiUrl}/${name}/${id}`,{
+    headers:{
+      "Content-Type": "application/json",
+      'User-Google-Id': userGoogleId
+    }
+  });
 }

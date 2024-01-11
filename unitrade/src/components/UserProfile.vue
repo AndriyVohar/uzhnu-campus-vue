@@ -3,19 +3,19 @@
     <div class="user-data">
       <div class="main-data">
         <div class="profile-photo">
-          <img :src="user.avatarUrl" alt="Фото профілю" />
+          <img :src="user.imgURL" alt="Фото профілю" />
           <div class="edit-pen" @click="edit_state = true">
             <font-awesome-icon :icon="['fas', 'pen']" />
           </div>
         </div>
         <div class="data">
-          <p id="fullname">{{ user.fullName }}</p>
+          <p id="fullname">{{ user.name }}</p>
           <p id="dormitory">
             {{ $t("global.dormitory") }} №{{ user.dormitory }},
             {{ $t("global.room") }} {{ user.room }}
           </p>
-          <p id="creationdate" v-if="formatJoinDate">
-            {{ $t("profile.dateOfJoining") }}: {{ formatJoinDate }}
+          <p id="creationdate">
+            {{ $t("profile.dateOfJoining") }}: {{ user.created_at }}
           </p>
         </div>
       </div>
@@ -32,10 +32,10 @@
         </div>
         <div class="right-part">
           <div class="links">
-            <a :href="user.instagram">
+            <a :href="'https://instagram.com/' + user.instagram">
               <font-awesome-icon :icon="['fab', 'instagram']" />
             </a>
-            <a :href="user.telegram">
+            <a :href="'https://t.me/' + user.telegram">
               <font-awesome-icon :icon="['fab', 'telegram']" />
             </a>
           </div>
@@ -46,11 +46,17 @@
       <span>{{ $t("profile.show") }}</span>
       <div class="select-group">
         <select v-model="toggle">
-          <option value="advertisements">{{ $t("global.advertisement") }}</option>
+          <option value="advertisements">
+            {{ $t("global.advertisement") }}
+          </option>
           <option value="works">{{ $t("global.work") }}</option>
           <option value="info">{{ $t("global.info") }}</option>
         </select>
-        <img src="@/assets/svg/browse.svg" alt="" v-if="toggle == 'adverisements'" />
+        <img
+          src="@/assets/svg/browse.svg"
+          alt=""
+          v-if="toggle == 'adverisements'"
+        />
         <img src="@/assets/svg/work.svg" alt="" v-else-if="toggle == 'works'" />
         <img src="@/assets/svg/info.svg" alt="" v-else />
       </div>
@@ -106,12 +112,12 @@
   <div class="user-edit" v-else>
     <div class="main-data">
       <div class="profile-photo">
-        <img :src="user.avatarUrl" alt="Фото профілю" />
+        <img :src="user.imgURL" alt="Фото профілю" />
       </div>
       <div class="data">
-        <p id="fullname">{{ user.fullName }}</p>
-        <p id="creationdate" v-if="formatJoinDate">
-          {{ $t("profile.dateOfJoining") }}: {{ formatJoinDate }}
+        <p id="fullname">{{ user.name }}</p>
+        <p id="creationdate">
+          {{ $t("profile.dateOfJoining") }}: {{ user.created_at }}
         </p>
       </div>
     </div>
@@ -147,7 +153,7 @@
         <input
           type="text"
           v-model="user.instagram"
-          placeholder="Приклад: https://www.instagram.com/uzhnu/"
+          placeholder="Приклад: uzhnu"
         />
       </div>
       <div class="input-row">
@@ -155,7 +161,7 @@
         <input
           type="text"
           v-model="user.telegram"
-          placeholder="https://t.me/uzhnu"
+          placeholder="Приклад: uzhnu"
         />
       </div>
     </div>
@@ -171,33 +177,23 @@
 <script>
 // TODO: Робити загрузку інформації та роботи тільки при виборі, а не одразу в mounted;
 
-import { mapActions, mapGetters } from "vuex";
-import { auth } from "@/firebase-config.js";
-import { signOut } from "firebase/auth";
 import Token from "@/token-usage.js";
 import AdvertisementComponent from "@/components/Advertisement/AdvertisementComponent.vue";
 import WorkComponent from "@/components/Work/WorkComponent.vue";
 import InfoComponent from "@/components/Info/InfoComponent.vue";
 
-import { firebaseDB } from "@/firebase-config";
-import { doc, setDoc } from "firebase/firestore/lite";
-
-import { loadItemsList } from "@/DbOperations";
+import { loadItemsList, itemById, updateItem } from "@/DbOperations";
 
 export default {
   components: { WorkComponent, AdvertisementComponent, InfoComponent },
-  async mounted() {
-    try {
-      const user = await this.loadUser();
-      if (!user) {
-        location.reload();
-      }
-
-      const posts = await this.loadPosts(user.id);
-      this.posts_list = posts;
+  mounted() {
+    itemById("users", Token.getAccessTokenFromCookie()).then((user) => {
+      this.user = user;
+      // TODO: Posts list for user
+      this.posts_list = [];
 
       if (user.role == "admin") {
-        loadItemsList('works')
+        loadItemsList("works")
           .then((response) => {
             this.works_list = response;
           })
@@ -205,7 +201,7 @@ export default {
             console.error(error);
           });
 
-        loadItemsList('infos')
+        loadItemsList("infos")
           .then((response) => {
             this.attentionList = response;
           })
@@ -213,61 +209,40 @@ export default {
             console.error(error);
           });
       }
-    } catch (error) {
-      console.error("An error occurred:", error);
-    }
+    });
   },
 
   data() {
     return {
       toggle: "advertisements",
+      user: {},
       posts_list: [],
       works_list: [],
       attentionList: [],
       edit_state: false,
     };
   },
-  computed: {
-    ...mapGetters("user", ["user"]),
-    formatJoinDate() {
-      if (this.user && this.user.joinDate) {
-        return new Date(this.user.joinDate.toMillis()).toLocaleDateString();
-      } else {
-        return null;
-      }
-    },
-  },
   methods: {
-    ...mapActions("posts", {
-      loadPosts: "loadListByCreator",
-    }),
-    ...mapActions("user", ["loadUser"]),
     openPost(id) {
       this.$router.push({ name: "post", params: { id: id } });
     },
+    // TODO: singOut()
     signOutMethod() {
-      signOut(auth)
-        .then(() => {
-          Token.removeAccessTokenCookie();
-          Token.removeUserCookie();
-          this.$router.push("/");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      Token.removeAccessTokenCookie();
+      this.$router.push('/');
     },
-    async setUser() {
-      try {
-        if (this.user.dormitory > 0 && this.user.dormitory < 6) {
-          const userWithoutId = { ...this.user };
-          delete userWithoutId.id;
-          await setDoc(doc(firebaseDB, "users", this.user.id), userWithoutId);
-          location.reload();
-        } else {
-          alert("Введіть коректний номер гуртожиту");
-        }
-      } catch (error) {
-        console.error("Error setting document:", error);
+    setUser() {
+      if (this.user.dormitory > 0 && this.user.dormitory < 6) {
+        const userEdited = {...this.user};
+        delete userEdited.id;
+        delete userEdited.created_at;
+        updateItem("users", this.user.google_id, userEdited, this.user.google_id).then(
+          ()=>{
+            location.reload();
+          }
+        );
+      } else {
+        alert("Введіть коректний номер гуртожиту");
       }
     },
     createBtn(type) {
@@ -347,6 +322,7 @@ export default {
 
     .profile-photo:hover {
       .edit-pen {
+        cursor: pointer;
         transition: box-shadow ease-out 0.2s;
         box-shadow: 0px 0px 5px #000000;
       }

@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="alert">
-      <h3>{{ $t('auth.oops') }} <span class="material-symbols-outlined">sentiment_sad</span></h3>
+      <h3>{{ $t('auth.oops') }}...</h3>
       <p>{{ $t('auth.text.notLogged') }}</p>
       <p>{{ $t('auth.text.functions') }}</p>
       <Auth_btn/>

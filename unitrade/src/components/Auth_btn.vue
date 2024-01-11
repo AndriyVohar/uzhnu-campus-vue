@@ -1,64 +1,103 @@
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "@/firebase-config";
+// import axios from "axios";
 import Token from "@/token-usage";
-import { firebaseDB } from "@/firebase-config";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore/lite";
 // const dbCollection = collection(firebaseDB, "users");
-
+import hello from "hellojs";
+import { addItem } from "@/DbOperations";
 export default {
   name: "Auth_btn",
-  computed: {
-    ...mapGetters("usersDefaultDB", ["getItemById", "getItemsList"]),
-  },
   methods: {
-    ...mapActions("user", ["changeUser", "addItem"]),
-    ...mapActions("usersDefaultDB", ["loadList"]),
-    handleGoogle() {
-      const provider = new GoogleAuthProvider();
-      //використовуємо функцію авторизації у спливаючому вікні
-      signInWithPopup(auth, provider)
-        .then(async (result) => {
-          const user = result.user; //Дістаємо об'єкт користувача
-          if (!this.getItemById(user.uid)) {
-            console.log("Write to firestore");
-            await setDoc(doc(firebaseDB, "users", user.uid), {
-              avatarUrl: user.photoURL,
-              fullName: user.displayName,
-              email: user.email,
-              role: "student",
-              joinDate: serverTimestamp(),
-            });
+    signInWithGoogle() {
+      hello.init({
+        google: process.env.VUE_APP_GOOGLE_CLIENT_ID,
+      });
+      hello("google")
+        .login({ scope: "email" })
+        .then(
+          (authResponse) => {
+            const accessToken = authResponse.authResponse.access_token;
+            console.log(accessToken);
+            hello("google")
+            .api("me")
+            .then(
+              (response) => {
+                  Token.setAccessTokenCookie(response.id);
+                  const dataToBackend = {
+                    google_id: response.id,
+                    name: response.name,
+                    email: response.email,
+                    imgURL: response.picture,
+                  };
+                  console.log(dataToBackend);
+                  addItem("users", dataToBackend, response.id).then(() => {
+                    this.$router.push("/me");
+                  });
+                },
+                (error) => {
+                  console.error("Помилка отримання профілю: ", error);
+                }
+              );
+          },
+          (error) => {
+            console.error("Авторизація не вдалась: ", error);
           }
-          //Set token to cookie
-          Token.setAccessTokenCookie(
-            user.uid,
-            new Date().getTime() + 3 * 60 * 60 * 1000 // 3 hours in milliseconds
-          );
-
-          if (this.$route.query.redirect!="/me") {
-            this.$router.push(this.$route.query.redirect);
-          } else if(this.$route.query.redirect=="/me"){
-            this.$router.push(this.$route.query.redirect)
-          }else
-            {
-            location.reload();
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        );
     },
+    // handleGoogle() {
+    //   const backendUrl = "http://localhost:8000/auth/google";
+    //   axios
+    //     .get(backendUrl)
+    //     .then((response) => {
+    //       // Отримали відповідь від бекенду, можливо, потрібно щось обробити
+    //       console.log(response.data);
+    //     })
+    //     .catch((error) => {
+    //       // Обробка помилок, якщо є
+    //       console.error("Error during backend request:", error);
+    //     });
+    //   const provider = new GoogleAuthProvider();
+    //   //використовуємо функцію авторизації у спливаючому вікні
+    //   signInWithPopup(auth, provider)
+    //     .then(async (result) => {
+    //       const user = result.user; //Дістаємо об'єкт користувача
+    //       if (!this.getItemById(user.uid)) {
+    //         console.log("Write to firestore");
+    //         await setDoc(doc(firebaseDB, "users", user.uid), {
+    //           avatarUrl: user.photoURL,
+    //           fullName: user.displayName,
+    //           email: user.email,
+    //           role: "student",
+    //           joinDate: serverTimestamp(),
+    //         });
+    //       }
+    //       //Set token to cookie
+    //       Token.setAccessTokenCookie(
+    //         user.uid,
+    //         new Date().getTime() + 3 * 60 * 60 * 1000 // 3 hours in milliseconds
+    //       );
+
+    //       if (this.$route.query.redirect!="/me") {
+    //         this.$router.push(this.$route.query.redirect);
+    //       } else if(this.$route.query.redirect=="/me"){
+    //         this.$router.push(this.$route.query.redirect)
+    //       }else
+    //         {
+    //         location.reload();
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
   },
-  async created() {
-    await this.loadList();
-  },
+  // async created() {
+  //   await this.loadList();
+  // },
 };
 </script>
 
 <template>
-  <div class="auth-btn" @click="handleGoogle()">
+  <div class="auth-btn" @click="signInWithGoogle()">
     <svg
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
@@ -84,12 +123,13 @@ export default {
       ></path>
       <path fill="none" d="M0 0h48v48H0z"></path>
     </svg>
-    <span>{{ $t('auth.authorize') }}</span>
+    <span>{{ $t("auth.authorize") }}</span>
   </div>
 </template>
 
 <style scoped lang="scss">
 .auth-btn {
+  cursor: pointer;
   display: flex;
   flex-direction: row;
   align-items: center;

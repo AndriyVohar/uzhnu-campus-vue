@@ -6,7 +6,7 @@
       </div>
       <div class="form-content">
         <p class="header-text">{{ postData.title }}</p>
-        <p class="name">{{ postData.creator.fullName }}</p>
+        <p class="name">{{ postData.creator.name }}</p>
         <p class="address">
           {{ $t("global.dormitory") }}: {{ postData.dormitory }}
           {{ postData.creator.room }}
