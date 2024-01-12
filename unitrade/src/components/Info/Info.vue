@@ -45,9 +45,6 @@ export default {
     },
   },
   mounted() {
-    if (!localStorage.getItem("defaultDormitory")) {
-      localStorage.setItem("defaultDormitory", 4);
-    }
     this.loadItems();
     let dorm = data.filter(
       (dorm) =>

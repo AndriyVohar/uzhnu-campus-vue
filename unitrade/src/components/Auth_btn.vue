@@ -21,6 +21,7 @@ export default {
             .api("me")
             .then(
               (response) => {
+                  Token.setGoogleIdCookie(response.id);
                   Token.setAccessTokenCookie(response.id);
                   const dataToBackend = {
                     google_id: response.id,

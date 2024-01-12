@@ -44,7 +44,7 @@
 </template>
   
   <script>
-import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import { updateItem, itemById } from "@/DbOperations";
 export default {
   data() {
@@ -52,9 +52,10 @@ export default {
       formData: {},
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["user"]),
+  },
   methods: {
-    ...mapActions("user", ["loadUser"]),
     checkFileSize(event) {
       const input = event.target;
       const file = input.files[0]; // Assuming only one file is selected
@@ -97,14 +98,12 @@ export default {
   mounted() {
     itemById("advertisements", this.$route.params.id)
       .then((response) => {
-        this.loadUser().then((user) => {
-          if (user.role == "admin" || user.id == response.creator.id) {
-            this.formData = response;
-          } else {
-            alert("Ви не маєте доступу до цих функцій");
-            this.$router.push("/me");
-          }
-        });
+        if (this.user.role == "admin" || this.user.id == response.creator.id) {
+          this.formData = response;
+        } else {
+          alert("Ви не маєте доступу до цих функцій");
+          this.$router.push("/me");
+        }
       })
       .catch(() => {
         console.log("something wrong");

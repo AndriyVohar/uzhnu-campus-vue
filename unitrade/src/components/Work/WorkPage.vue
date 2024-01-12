@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import{itemById } from "@/DbOperations";
+import { itemById } from "@/DbOperations";
 export default {
   name: "WorkPage",
   data() {
@@ -28,14 +28,8 @@ export default {
       workData: {},
     };
   },
-  methods: {
-    copyToClipboard(value) {
-      navigator.clipboard.writeText(value);
-      alert("Номер скопійовано");
-    },
-  },
   mounted() {
-    itemById('works',this.$route.params.id)
+    itemById("works", this.$route.params.id)
       .then((response) => {
         this.workData = response;
       })

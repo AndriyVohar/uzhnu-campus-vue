@@ -36,34 +36,30 @@
 </template>
 
 <script>
-import {addItem} from '@/DbOperations';
-import { mapGetters, mapActions } from "vuex";
+import { addItem } from "@/DbOperations";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      formData: {
-        dormitory: 1,
-      },
+      formData: {},
     };
   },
   computed: {
-    ...mapGetters("user", ["user"]),
+    ...mapGetters(["user"]),
   },
   methods: {
-    ...mapActions("user", ["loadUser"]),
     createInfo() {
       this.formData.dormitory = this.user.dormitory;
-      addItem('infos',this.formData)
+      addItem("infos", this.formData, this.user.google_id)
         .then(() => {
-          this.$router.push('/me');
+          this.$router.push("/me");
         })
         .catch((error) => {
           console.error(error);
         });
     },
   },
-  async mounted() {
-    await this.loadUser();
+  mounted() {
     if (this.user.role != "admin") {
       alert("Ви не маєте доступу до цих функцій");
       this.$router.push("/me");

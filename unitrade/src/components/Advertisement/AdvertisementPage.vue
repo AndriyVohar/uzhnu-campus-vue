@@ -8,7 +8,7 @@
         <p class="header-text">{{ postData.title }}</p>
         <p class="name">{{ postData.creator.name }}</p>
         <p class="address">
-          {{ $t("global.dormitory") }}: {{ postData.dormitory }}
+          {{ $t("global.dormitory") }}: {{ postData.creator.dormitory }}
           {{ postData.creator.room }}
         </p>
         <div class="icons">
@@ -76,6 +76,7 @@ export default {
   padding: 5px 0px;
 
   .icon {
+    cursor: pointer;
     color: black;
     width: 20px;
     height: 20px;

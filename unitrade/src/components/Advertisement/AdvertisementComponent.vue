@@ -8,7 +8,7 @@
           <img :src="post.creator.imgURL" alt="" class="user-profile" />
         </div>
         <p class="address">
-          {{ $t("global.dormitory") }} №{{ post.dormitory }}
+          {{ $t("global.dormitory") }} №{{ post.creator.dormitory }}
           {{ post.creator.room }}
         </p>
       </div>
@@ -18,7 +18,7 @@
         </div>
         <div
           class="buttons"
-          v-if="user.id == post.creatorId || user.role == 'admin'"
+          v-if="user.id == post.creator.id || user.role == 'admin'"
         >
           <font-awesome-icon
             :icon="['fas', 'pen']"
@@ -43,7 +43,7 @@ export default {
     post: Object,
   },
   computed: {
-    ...mapGetters("user", ["user"]),
+    ...mapGetters(["user"]),
   },
   methods: {
     openPost() {

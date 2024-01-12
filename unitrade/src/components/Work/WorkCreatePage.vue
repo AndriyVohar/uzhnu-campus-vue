@@ -60,8 +60,8 @@
 </template>
   
   <script>
-import { mapGetters, mapActions } from "vuex";
-import {addItem} from '@/DbOperations';
+import { mapGetters } from "vuex";
+import { addItem } from "@/DbOperations";
 export default {
   data() {
     return {
@@ -69,10 +69,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("user", ["user"]),
+    ...mapGetters(["user"]),
   },
   methods: {
-    ...mapActions("user", ["loadUser"]),
     submitForm() {
       console.log("Надіслано:", this.formData);
     },
@@ -110,12 +109,15 @@ export default {
     },
 
     createWork() {
-      addItem('works',this.formData);
+      addItem("works", this.formData, this.user.google_id);
       this.$router.push("/me");
     },
   },
-  async mounted() {
-    await this.loadUser();
+  mounted() {
+    if (this.user.role != "admin") {
+      alert("Ви не маєте доступу до цих функцій");
+      this.$router.push("/me");
+    }
   },
 };
 </script>

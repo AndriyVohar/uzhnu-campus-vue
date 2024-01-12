@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import { addItem } from "@/DbOperations";
 export default {
   data() {
@@ -54,13 +54,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("user", ["user"]),
+    ...mapGetters(["user", "userGoogleId"]),
   },
   methods: {
-    ...mapActions("user", ["loadUser"]),
-    submitForm() {
-      console.log("Надіслано:", this.formData);
-    },
     checkFileSize(event) {
       const input = event.target;
       const file = input.files[0]; // Assuming only one file is selected
@@ -95,16 +91,11 @@ export default {
     },
 
     createPost() {
-      // this.formData.user_id = this.user.id;
-      // TODO: Зв'язати user_id з правжнім id
-      this.formData.user_id = 1;
-      addItem("advertisements", this.formData).then(() => {
+      this.formData.user_id = this.user.id;
+      addItem("advertisements", this.formData, this.userGoogleId).then(() => {
         this.$router.push("/me");
       });
     },
-  },
-  async mounted() {
-    await this.loadUser();
   },
 };
 </script>

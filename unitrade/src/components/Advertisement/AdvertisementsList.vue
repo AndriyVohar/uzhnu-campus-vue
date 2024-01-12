@@ -10,14 +10,16 @@
       </select>
     </div>
     <div class="posts-spacer"></div>
-    <div class="posts_list" v-if="postsList&&postsList[0].creator != null">
-      <advertisement-component
-        :post="post"
-        v-for="post in postsList"
-        :key="post.id"
-      />
+    <div class="posts_list">
+      <div v-if="postsList.length>0">
+        <advertisement-component
+          :post="post"
+          v-for="post in postsList"
+          :key="post.id"
+        />
+      </div>
+      <div v-else>{{ $t("global.loading") }}...</div>
     </div>
-    <div v-else>{{ $t("global.loading") }}...</div>
   </div>
 </template>
 
@@ -45,7 +47,7 @@ export default {
       page_index: 0,
       search: undefined,
       dormitoryNumber: localStorage.getItem("defaultDormitory"),
-      postsList: null,
+      postsList: [],
     };
   },
   watch: {

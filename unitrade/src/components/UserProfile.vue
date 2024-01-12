@@ -50,7 +50,7 @@
             {{ $t("global.advertisement") }}
           </option>
           <option value="works">{{ $t("global.work") }}</option>
-          <option value="info">{{ $t("global.info") }}</option>
+          <option value="infos">{{ $t("global.info") }}</option>
         </select>
         <img
           src="@/assets/svg/browse.svg"
@@ -87,7 +87,6 @@
     <div class="list" v-if="toggle == 'advertisements'">
       <advertisement-component
         :post="post"
-        :userProp="user"
         v-for="post in posts_list"
         :key="post.id"
       />
@@ -181,37 +180,16 @@ import Token from "@/token-usage.js";
 import AdvertisementComponent from "@/components/Advertisement/AdvertisementComponent.vue";
 import WorkComponent from "@/components/Work/WorkComponent.vue";
 import InfoComponent from "@/components/Info/InfoComponent.vue";
-
-import { loadItemsList, itemById, updateItem } from "@/DbOperations";
+import { mapGetters } from "vuex";
+import {
+  loadItemsList,
+  itemById,
+  updateItem,
+  advertisementsByUser,
+} from "@/DbOperations";
 
 export default {
   components: { WorkComponent, AdvertisementComponent, InfoComponent },
-  mounted() {
-    itemById("users", Token.getAccessTokenFromCookie()).then((user) => {
-      this.user = user;
-      // TODO: Posts list for user
-      this.posts_list = [];
-
-      if (user.role == "admin") {
-        loadItemsList("works")
-          .then((response) => {
-            this.works_list = response;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-
-        loadItemsList("infos")
-          .then((response) => {
-            this.attentionList = response;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-    });
-  },
-
   data() {
     return {
       toggle: "advertisements",
@@ -222,25 +200,71 @@ export default {
       edit_state: false,
     };
   },
+  computed: {
+    ...mapGetters(["userGoogleId"]),
+  },
+  mounted() {
+    itemById("users", Token.getGoogleIdFromCookie()).then((user) => {
+      this.user = user;
+      this.$store.commit("changeUser", user);
+
+      advertisementsByUser(this.user.id, this.userGoogleId).then(
+        (advertisements) => {
+          this.posts_list = advertisements;
+        }
+      );
+    });
+  },
+  watch: {
+    toggle(newValue) {
+      if (newValue == "advertisements" && this.posts_list.length < 1) {
+        advertisementsByUser(this.user.id, this.userGoogleId).then(
+          (advertisements) => {
+            console.log(advertisements)
+            this.posts_list = advertisements;
+          }
+        );
+      } else if (newValue == "works" && this.works_list.length < 1) {
+        loadItemsList("works")
+          .then((response) => {
+            this.works_list = response;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else if (newValue == "infos" && this.attentionList.length < 1) {
+        loadItemsList("infos")
+          .then((response) => {
+            this.attentionList = response;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    },
+  },
   methods: {
     openPost(id) {
       this.$router.push({ name: "post", params: { id: id } });
     },
-    // TODO: singOut()
     signOutMethod() {
+      Token.removeGoogleIdCookie();
       Token.removeAccessTokenCookie();
-      this.$router.push('/');
+      this.$router.push("/");
     },
     setUser() {
       if (this.user.dormitory > 0 && this.user.dormitory < 6) {
-        const userEdited = {...this.user};
+        const userEdited = { ...this.user };
         delete userEdited.id;
         delete userEdited.created_at;
-        updateItem("users", this.user.google_id, userEdited, this.user.google_id).then(
-          ()=>{
-            location.reload();
-          }
-        );
+        updateItem(
+          "users",
+          this.user.google_id,
+          userEdited,
+          this.user.google_id
+        ).then(() => {
+          location.reload();
+        });
       } else {
         alert("Введіть коректний номер гуртожиту");
       }

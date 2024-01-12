@@ -59,7 +59,7 @@
 </template>
     
 <script>
-import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import { updateItem, itemById } from "@/DbOperations";
 export default {
   data() {
@@ -67,10 +67,10 @@ export default {
       formData: {},
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["user"]),
+  },
   methods: {
-    ...mapActions("user", ["loadUser"]),
-    ...mapActions("works", ["loadListById"]),
     checkFileSize(event) {
       const input = event.target;
       const file = input.files[0]; // Assuming only one file is selected
@@ -101,7 +101,12 @@ export default {
       }
     },
     updateWork() {
-      updateItem("works", this.$route.params.id, this.formData)
+      updateItem(
+        "works",
+        this.$route.params.id,
+        this.formData,
+        this.user.google_id
+      )
         .then(() => {
           this.$router.push("/me");
         })
@@ -111,24 +116,18 @@ export default {
     },
   },
   mounted() {
-    this.loadUser()
-      .then((user) => {
-        if (user.role == "admin") {
-          itemById("works", this.$route.params.id)
-            .then((response) => {
-              this.formData = response;
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        } else {
-          alert("Ви не маєте доступу до цих функцій");
-          this.$router.push("/me");
-        }
-      })
-      .catch(() => {
-        console.log("something wrong");
-      });
+    if (this.user.role == "admin") {
+      itemById("works", this.$route.params.id)
+        .then((response) => {
+          this.formData = response;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      alert("Ви не маєте доступу до цих функцій");
+      this.$router.push("/me");
+    }
   },
 };
 </script>

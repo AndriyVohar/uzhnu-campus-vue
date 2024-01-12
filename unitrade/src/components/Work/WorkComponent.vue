@@ -37,7 +37,7 @@ export default {
     work: Object,
   },
   computed: {
-    ...mapGetters("user", ["user"]),
+    ...mapGetters(["user"]),
   },
   methods: {
     updateWork() {

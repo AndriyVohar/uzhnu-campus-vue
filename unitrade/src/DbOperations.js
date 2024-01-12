@@ -51,7 +51,7 @@ export function addItem(name, data, userGoogleId) {
     .post(`${databaseApiUrl}/${name}`, data, {
       headers: {
         "Content-Type": "application/json",
-        'User-Google-Id': userGoogleId
+        "User-Google-Id": userGoogleId,
       },
     })
     .then((response) => {
@@ -86,10 +86,10 @@ export function itemById(name, id) {
  */
 export function updateItem(name, id, data, userGoogleId) {
   return axios
-    .put(`${databaseApiUrl}/${name}/${id}`, data,{
+    .put(`${databaseApiUrl}/${name}/${id}`, data, {
       headers: {
         "Content-Type": "application/json",
-        'User-Google-Id': userGoogleId
+        "User-Google-Id": userGoogleId,
       },
     })
     .then((response) => {
@@ -108,10 +108,28 @@ export function updateItem(name, id, data, userGoogleId) {
  *                     Успішна обіцянка містить об'єкт відповіді сервера, інакше вона відхиляється з помилкою.
  */
 export function deleteItem(name, id, userGoogleId) {
-  return axios.delete(`${databaseApiUrl}/${name}/${id}`,{
-    headers:{
+  return axios.delete(`${databaseApiUrl}/${name}/${id}`, {
+    headers: {
       "Content-Type": "application/json",
-      'User-Google-Id': userGoogleId
-    }
+      "User-Google-Id": userGoogleId,
+    },
   });
+}
+
+//===========================
+//Special methods
+export function advertisementsByUser(id, userGoogleId) {
+  return axios
+    .get(`${databaseApiUrl}/users/${id}/advertisements`, {
+      headers: {
+        "Content-Type": "application/json",
+        "User-Google-Id": userGoogleId,
+      },
+    })
+    .then((response) => {
+      return response.data.data;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 }

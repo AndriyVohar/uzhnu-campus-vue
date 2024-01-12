@@ -37,7 +37,7 @@
 </template>
   
   <script>
-import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import { itemById, updateItem } from "@/DbOperations";
 
 export default {
@@ -46,10 +46,12 @@ export default {
       formData: {},
     };
   },
+  computed: {
+    ...mapGetters(["user"]),
+  },
   methods: {
-    ...mapActions("user", ["loadUser"]),
     updateInfo() {
-      updateItem("infos", this.$route.params.id, this.formData)
+      updateItem("infos", this.$route.params.id, this.formData, this.user.google_id)
         .then(() => {
           this.$router.push("/me");
         })
@@ -58,21 +60,19 @@ export default {
         });
     },
   },
-  created() {
-    this.loadUser().then((user) => {
-      if (user.role == "admin") {
-        itemById('infos',this.$route.params.id)
-          .then((response) => {
-            this.formData = response;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      } else {
-        alert("Ви не маєте доступу до цих функцій");
-        this.$router.push("/me");
-      }
-    });
+  mounted() {
+    if (this.user.role == "admin") {
+      itemById("infos", this.$route.params.id)
+        .then((response) => {
+          this.formData = response;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      alert("Ви не маєте доступу до цих функцій");
+      this.$router.push("/me");
+    }
   },
 };
 </script>

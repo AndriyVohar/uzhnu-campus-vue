@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <div class="works-spacer"></div>
-    <div class="works_list" v-if="worksList && worksList.length > 0">
-      <work-component :work="work" v-for="work in worksList" :key="work" />
-    </div>
-    <div v-else>
-      {{ $t('global.loading') }}...
+    <div class="works_list">
+      <div v-if="worksList.length > 0">
+        <work-component :work="work" v-for="work in worksList" :key="work" />
+      </div>
+      <div v-else>{{ $t("global.loading") }}...</div>
     </div>
   </div>
 </template>
@@ -16,15 +16,10 @@ import { loadItemsList } from "@/DbOperations";
 export default {
   name: "Works_list",
   components: { WorkComponent },
-  methods: {
-    fetch() {
-      alert("Симуляція fetch запиту");
-    },
-  },
   data() {
     return {
-      worksList: []
-    }
+      worksList: [],
+    };
   },
   mounted() {
     loadItemsList("works")

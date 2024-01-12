@@ -42,7 +42,7 @@ export default {
     },
     deleteInfo() {
       if (confirm("Видалити інформацію ?")) {
-        deleteItem("infos", this.attention.id).then(() => location.reload()); // Застосовано зміни тут
+        deleteItem("infos", this.attention.id, this.user.google_id).then(() => location.reload()); // Застосовано зміни тут
       }
     },
   },
