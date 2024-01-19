@@ -10,16 +10,29 @@
       </select>
     </div>
     <div class="posts-spacer"></div>
-    <div class="posts_list">
-      <div v-if="postsList.length>0">
-        <advertisement-component
-          :post="post"
-          v-for="post in postsList"
-          :key="post.id"
+    <div class="posts_list" v-if="postsList.length > 0">
+      <advertisement-component
+        :post="post"
+        v-for="post in postsList"
+        :key="post.id"
+      />
+      <div class="page-selector">
+        <font-awesome-icon
+          icon="arrow-left"
+          :class="{ 'hidden-page': page_index == 1 }"
+          @click="subPage()"
+          class="page-toggle"
+        />
+        <span>{{ page_index }}</span>
+        <font-awesome-icon
+          icon="arrow-right"
+          :class="{ 'hidden-page': page_index == lastPage }"
+          @click="addPage()"
+          class="page-toggle"
         />
       </div>
-      <div v-else>{{ $t("global.loading") }}...</div>
     </div>
+    <div v-else>{{ $t("global.loading") }}...</div>
   </div>
 </template>
 
@@ -32,39 +45,20 @@ export default {
   components: { AdvertisementComponent },
   methods: {
     subPage() {
-      if (this.page_index > 0) {
+      if (this.page_index > 1) {
         this.page_index -= 1;
       }
     },
     addPage() {
-      if (this.has_next_page) {
+      if (this.page_index != this.lastPage) {
         this.page_index += 1;
       }
     },
-  },
-  data() {
-    return {
-      page_index: 0,
-      search: undefined,
-      dormitoryNumber: localStorage.getItem("defaultDormitory"),
-      postsList: [],
-    };
-  },
-  watch: {
-    search() {
-      this.debouncedFetch();
-    },
-    category() {
-      this.fetch();
-    },
-    is_free() {
-      this.fetch();
-    },
-    dormitoryNumber(newValue) {
-      localStorage.setItem("defaultDormitory", newValue);
-      loadItemsListByDormitory("advertisements", newValue)
+    loadPostsList(dormitoryNumber, pageIndex) {
+      loadItemsListByDormitory("advertisements", dormitoryNumber, pageIndex)
         .then((response) => {
-          this.postsList = response;
+          this.postsList = response.data;
+          this.lastPage = response.last_page;
         })
         .catch((error) => {
           console.log(error);
@@ -72,14 +66,27 @@ export default {
         });
     },
   },
+  data() {
+    return {
+      page_index: 1,
+      search: undefined,
+      dormitoryNumber: localStorage.getItem("defaultDormitory"),
+      postsList: [],
+      lastPage: 1,
+    };
+  },
+  watch: {
+    page_index(newValue) {
+      this.loadPostsList(this.dormitoryNumber, newValue);
+    },
+    dormitoryNumber(newValue) {
+      localStorage.setItem("defaultDormitory", newValue);
+      this.page_index = 1;
+      this.loadPostsList(newValue, this.page_index);
+    },
+  },
   mounted() {
-    loadItemsListByDormitory("advertisements", this.dormitoryNumber)
-      .then((response) => {
-        this.postsList = response;
-      })
-      .catch(() => {
-        this.postsList = null;
-      });
+    this.loadPostsList(this.dormitoryNumber, this.page_index);
   },
 };
 </script>
@@ -154,7 +161,6 @@ export default {
     margin-bottom: 50px;
     width: 100%;
     display: flex;
-    margin-top: 20px;
     border-top: 1px solid $border-default;
     flex-direction: row;
     align-items: center;

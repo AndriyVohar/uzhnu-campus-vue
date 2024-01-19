@@ -12,10 +12,10 @@
           {{ postData.creator.room }}
         </p>
         <div class="icons">
-          <a :href="'https://www.instagram.com/'+postData.creator.instagram">
+          <a :href="'https://www.instagram.com/' + postData.creator.instagram">
             <font-awesome-icon class="icon" :icon="['fab', 'instagram']" />
           </a>
-          <a :href="'https://t.me/'+postData.creator.telegram">
+          <a :href="'https://t.me/' + postData.creator.telegram">
             <font-awesome-icon class="icon" :icon="['fab', 'telegram']" />
           </a>
           <a @click="copyToClipboard(postData.creator.email, 'email')">
@@ -27,6 +27,7 @@
         </div>
         <div style="display: flex" class="down">
           <div class="category">{{ postData.tag }}</div>
+          <p class="date">{{ postData.created_at }}</p>
         </div>
       </div>
     </div>
@@ -35,7 +36,7 @@
 </template>
 
 <script>
-import{itemById } from "@/DbOperations";
+import { itemById } from "@/DbOperations";
 export default {
   name: "PostPage",
   data() {
@@ -54,7 +55,7 @@ export default {
     },
   },
   mounted() {
-    itemById('advertisements',this.$route.params.id)
+    itemById("advertisements", this.$route.params.id)
       .then((response) => {
         this.postData = response;
       })
@@ -174,6 +175,9 @@ export default {
       font-size: 12px;
       padding: 5px 10px;
       background-color: #72ddf7;
+    }
+    .date{
+      font-size:12px;
     }
   }
 }

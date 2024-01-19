@@ -5,15 +5,15 @@
       <div class="text">
         <p class="post-name">{{ work.title }}</p>
       </div>
-      <div style="font-size:14px;">{{ work.salary }}₴</div>
+      <p style="font-size: 10px">
+        {{ work.created_at }}
+      </p>
+      <div style="font-size: 14px">{{ work.salary }}₴</div>
       <div class="post-bottom">
         <div class="tag">
           <span>{{ work.tag }}</span>
         </div>
-        <div
-          class="buttons"
-          v-if="user.role == 'admin'"
-        >
+        <div class="buttons" v-if="user.role == 'admin'">
           <font-awesome-icon
             :icon="['fas', 'pen']"
             @click.stop="updateWork()"
@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import { mapGetters} from "vuex";
-import {deleteItem} from '@/DbOperations'
+import { mapGetters } from "vuex";
+import { deleteItem } from "@/DbOperations";
 export default {
   name: "WorkComponent",
   props: {
@@ -48,7 +48,7 @@ export default {
     },
     deleteWork() {
       if (confirm("Видалити оголошення ?")) {
-        deleteItem('works',this.work.id)
+        deleteItem("works", this.work.id)
           .then(() => {
             location.reload();
           })
@@ -76,7 +76,7 @@ export default {
   flex-direction: row;
   transition: all ease-out 0.3s;
   padding: 10px;
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
   img {

@@ -11,6 +11,9 @@
           {{ $t("global.dormitory") }} №{{ post.creator.dormitory }}
           {{ post.creator.room }}
         </p>
+        <p class="address">
+          {{ post.created_at }}
+        </p>
       </div>
       <div class="post-bottom">
         <div class="tag">
@@ -60,7 +63,7 @@ export default {
     },
     deletePost() {
       if (confirm("Видалити оголошення ?")) {
-        deleteItem('advertisements',this.post.id)
+        deleteItem("advertisements", this.post.id)
           .then(() => {
             location.reload();
           })

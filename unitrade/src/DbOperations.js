@@ -7,10 +7,19 @@ const databaseApiUrl = process.env.VUE_APP_DATABASE_API_URL;
  * @returns {Promise<Array>} - Обіцянка (Promise), яка вирішиться масивом даних отриманих з сервера.
  *                     Успішна обіцянка містить масив даних, інакше вона відхиляється з помилкою.
  */
-export function loadItemsList(name) {
+export function loadItemsList(name, pageIndex=null) {
+  let url;
+  if(pageIndex){
+    url = `${databaseApiUrl}/${name}?page=${pageIndex}`;
+  }else{
+    url = `${databaseApiUrl}/${name}`;
+  }
   return axios
-    .get(`${databaseApiUrl}/${name}`)
+    .get(url)
     .then((response) => {
+      if(pageIndex){
+        return response.data;
+      }
       return response.data.data;
     })
     .catch((error) => {
@@ -25,10 +34,19 @@ export function loadItemsList(name) {
  * @returns {Promise<Array>} - Обіцянка (Promise), яка вирішиться масивом даних отриманих з сервера.
  *                     Успішна обіцянка містить масив даних, інакше вона відхиляється з помилкою.
  */
-export function loadItemsListByDormitory(name, dormitory) {
+export function loadItemsListByDormitory(name, dormitory, pageIndex=null) {
+  let url;
+  if(pageIndex){
+    url = `${databaseApiUrl}/${dormitory}/${name}?page=${pageIndex}`;
+  }else{
+    url = `${databaseApiUrl}/${dormitory}/${name}`;
+  }
   return axios
-    .get(`${databaseApiUrl}/${dormitory}/${name}`)
+    .get(url)
     .then((response) => {
+      if(pageIndex){
+        return response.data;
+      }
       return response.data.data;
     })
     .catch(() => {

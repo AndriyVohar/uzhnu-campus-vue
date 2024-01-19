@@ -98,6 +98,23 @@
         v-for="work in works_list"
         :key="work.id"
       />
+      <div class="page-selector">
+        <font-awesome-icon
+          icon="arrow-left"
+          :class="{ 'hidden-page': page_index == 1 }"
+          @click="subPage()"
+          class="page-toggle"
+        />
+        <span>{{ page_index }}</span>
+        <font-awesome-icon
+          icon="arrow-right"
+          :class="{ 'hidden-page': page_index == lastPage }"
+          @click="addPage()"
+          class="page-toggle"
+        />
+      </div>
+
+      <!-- TODO: Index page -->
     </div>
     <div class="list" v-else>
       <info-component
@@ -174,13 +191,10 @@
 </template>
 
 <script>
-// TODO: Робити загрузку інформації та роботи тільки при виборі, а не одразу в mounted;
-
 import Token from "@/token-usage.js";
 import AdvertisementComponent from "@/components/Advertisement/AdvertisementComponent.vue";
 import WorkComponent from "@/components/Work/WorkComponent.vue";
 import InfoComponent from "@/components/Info/InfoComponent.vue";
-import { mapGetters } from "vuex";
 import {
   loadItemsList,
   itemById,
@@ -198,17 +212,17 @@ export default {
       works_list: [],
       attentionList: [],
       edit_state: false,
+      page_index: 1,
+      lastPage: 1,
     };
   },
-  computed: {
-    ...mapGetters(["userGoogleId"]),
-  },
+  computed: {},
   mounted() {
     itemById("users", Token.getGoogleIdFromCookie()).then((user) => {
       this.user = user;
       this.$store.commit("changeUser", user);
 
-      advertisementsByUser(this.user.id, this.userGoogleId).then(
+      advertisementsByUser(this.user.id, this.user.google_id).then(
         (advertisements) => {
           this.posts_list = advertisements;
         }
@@ -216,18 +230,29 @@ export default {
     });
   },
   watch: {
+    page_index(newValue) {
+      loadItemsList("works", newValue)
+          .then((response) => {
+            this.works_list = response.data;
+            this.lastPage = response.last_page;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+    },
     toggle(newValue) {
       if (newValue == "advertisements" && this.posts_list.length < 1) {
-        advertisementsByUser(this.user.id, this.userGoogleId).then(
+        advertisementsByUser(this.user.id, this.user.google_id).then(
           (advertisements) => {
-            console.log(advertisements)
+            console.log(advertisements);
             this.posts_list = advertisements;
           }
         );
       } else if (newValue == "works" && this.works_list.length < 1) {
-        loadItemsList("works")
+        loadItemsList("works", this.page_index)
           .then((response) => {
-            this.works_list = response;
+            this.works_list = response.data;
+            this.lastPage = response.last_page;
           })
           .catch((error) => {
             console.error(error);
@@ -244,6 +269,16 @@ export default {
     },
   },
   methods: {
+    subPage() {
+      if (this.page_index > 1) {
+        this.page_index -= 1;
+      }
+    },
+    addPage() {
+      if (this.page_index != this.lastPage) {
+        this.page_index += 1;
+      }
+    },
     openPost(id) {
       this.$router.push({ name: "post", params: { id: id } });
     },
@@ -288,6 +323,12 @@ export default {
 
 <style lang="scss" scoped>
 @import "../assets/main_colors";
+
+.hidden-page {
+  opacity: 0 !important;
+  transition: opacity ease-out 0.2s;
+  cursor: default !important;
+}
 
 #exit {
   background-color: $danger-color;
@@ -638,6 +679,19 @@ export default {
     flex-direction: column;
     gap: 15px;
     padding-bottom: 60px;
+  }
+  .page-selector {
+    margin-bottom: 50px;
+    width: 100%;
+    display: flex;
+    border-top: 1px solid $border-default;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 500;
   }
 
   .user-selector {

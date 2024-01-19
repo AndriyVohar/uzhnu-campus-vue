@@ -12,6 +12,7 @@
         </p>
         <div style="display: flex" class="down">
           <div class="category">{{ workData.tag }}</div>
+          <p class="date">{{ workData.created_at }}</p>
         </div>
       </div>
     </div>
@@ -135,6 +136,9 @@ export default {
       font-size: 12px;
       padding: 5px 10px;
       background-color: #72ddf7;
+    }
+    .date{
+      font-size:12px;
     }
   }
 }
