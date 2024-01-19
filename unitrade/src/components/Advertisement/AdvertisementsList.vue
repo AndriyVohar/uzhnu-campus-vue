@@ -10,7 +10,7 @@
       </select>
     </div>
     <div class="posts-spacer"></div>
-    <div class="posts_list" v-if="postsList.length > 0">
+    <div class="posts_list" v-if="postsList&&postsList.length>0">
       <advertisement-component
         :post="post"
         v-for="post in postsList"
@@ -32,7 +32,7 @@
         />
       </div>
     </div>
-    <div v-else>{{ $t("global.loading") }}...</div>
+    <div class="posts_list" v-else>{{ $t("global.loading") }}...</div>
   </div>
 </template>
 
@@ -71,7 +71,7 @@ export default {
       page_index: 1,
       search: undefined,
       dormitoryNumber: localStorage.getItem("defaultDormitory"),
-      postsList: [],
+      postsList: null, //[]
       lastPage: 1,
     };
   },
@@ -114,7 +114,6 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  margin-top: 10px;
   overflow: hidden;
   justify-content: space-between;
 

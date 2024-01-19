@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="header-content">
-      <img src="@/assets/svg/logo_orange.svg" alt="" />
+      <img src="@/assets/svg/logo_dormitory_text.svg" alt="" />
       <select
         class="language-select"
         v-model="selectedLanguage"
@@ -11,7 +11,6 @@
         <option value="en">EN</option>
       </select>
     </div>
-    <div class="spacer"></div>
   </header>
 </template>
 
@@ -55,6 +54,8 @@ header {
   justify-content: center;
   width: 100vw;
   overflow-x: hidden;
+  border-bottom: 1px solid #64948f;
+  border-radius: $default-border-radius $default-border-radius;
 
   .header-content {
     height: 50px;

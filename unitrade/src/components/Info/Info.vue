@@ -202,7 +202,6 @@ export default {
   padding: 0 5vw;
   padding-bottom: 50px;
   margin-bottom: 15px;
-  margin-top: 10px;
   background-color: #b8dedc;
   min-height: calc(100vh - 67px);
   display: flex;

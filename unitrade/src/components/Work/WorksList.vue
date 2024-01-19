@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <div class="works-spacer"></div>
     <div class="works_list" v-if="worksList.length > 0">
       <work-component :work="work" v-for="work in worksList" :key="work" />
       <div class="page-selector">
@@ -93,7 +92,6 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  margin-top: 10px;
   overflow: hidden;
   justify-content: space-between;
   .works-spacer {
