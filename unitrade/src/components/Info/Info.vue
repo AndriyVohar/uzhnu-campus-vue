@@ -202,7 +202,7 @@ export default {
   padding: 0 5vw;
   padding-bottom: 50px;
   margin-bottom: 15px;
-  background-color: #b8dedc;
+  background-color: #D3DFE3;
   min-height: calc(100vh - 67px);
   display: flex;
   flex-direction: column;

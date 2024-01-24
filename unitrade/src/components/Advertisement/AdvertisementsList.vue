@@ -109,7 +109,7 @@ export default {
 }
 
 .container {
-  background-color: $bg-green;
+  background-color: #D3DFE3;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -127,6 +127,7 @@ export default {
     gap: 30px;
     justify-content: space-between;
     select {
+      background-color: white;
       outline: none;
       flex: 1;
       font-size: 11px;

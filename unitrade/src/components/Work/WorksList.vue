@@ -87,7 +87,7 @@ export default {
 }
 
 .container {
-  background-color: $bg-green;
+  background-color: #D3DFE3;
   display: flex;
   flex-direction: column;
   align-items: center;
