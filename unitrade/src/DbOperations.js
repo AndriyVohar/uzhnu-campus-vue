@@ -7,17 +7,22 @@ const databaseApiUrl = process.env.VUE_APP_DATABASE_API_URL;
  * @returns {Promise<Array>} - Обіцянка (Promise), яка вирішиться масивом даних отриманих з сервера.
  *                     Успішна обіцянка містить масив даних, інакше вона відхиляється з помилкою.
  */
-export function loadItemsList(name, pageIndex=null) {
+export function loadItemsList(name, pageIndex = null) {
   let url;
-  if(pageIndex){
+  if (pageIndex) {
     url = `${databaseApiUrl}/${name}?page=${pageIndex}`;
-  }else{
+  } else {
     url = `${databaseApiUrl}/${name}`;
   }
   return axios
-    .get(url)
+    .get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true",
+      },
+    })
     .then((response) => {
-      if(pageIndex){
+      if (pageIndex) {
         return response.data;
       }
       return response.data.data;
@@ -34,17 +39,22 @@ export function loadItemsList(name, pageIndex=null) {
  * @returns {Promise<Array>} - Обіцянка (Promise), яка вирішиться масивом даних отриманих з сервера.
  *                     Успішна обіцянка містить масив даних, інакше вона відхиляється з помилкою.
  */
-export function loadItemsListByDormitory(name, dormitory, pageIndex=null) {
+export function loadItemsListByDormitory(name, dormitory, pageIndex = null) {
   let url;
-  if(pageIndex){
+  if (pageIndex) {
     url = `${databaseApiUrl}/${dormitory}/${name}?page=${pageIndex}`;
-  }else{
+  } else {
     url = `${databaseApiUrl}/${dormitory}/${name}`;
   }
   return axios
-    .get(url)
+    .get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true",
+      },
+    })
     .then((response) => {
-      if(pageIndex){
+      if (pageIndex) {
         return response.data;
       }
       return response.data.data;
@@ -87,7 +97,12 @@ export function addItem(name, data, userGoogleId) {
  */
 export function itemById(name, id) {
   return axios
-    .get(`${databaseApiUrl}/${name}/${id}`)
+    .get(`${databaseApiUrl}/${name}/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true",
+      },
+    })
     .then((response) => {
       return response.data.data;
     })
@@ -107,6 +122,7 @@ export function updateItem(name, id, data, userGoogleId) {
     .put(`${databaseApiUrl}/${name}/${id}`, data, {
       headers: {
         "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true",
         "User-Google-Id": userGoogleId,
       },
     })
@@ -129,6 +145,7 @@ export function deleteItem(name, id, userGoogleId) {
   return axios.delete(`${databaseApiUrl}/${name}/${id}`, {
     headers: {
       "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": "true",
       "User-Google-Id": userGoogleId,
     },
   });
@@ -141,6 +158,7 @@ export function advertisementsByUser(id, userGoogleId) {
     .get(`${databaseApiUrl}/users/${id}/advertisements`, {
       headers: {
         "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true",
         "User-Google-Id": userGoogleId,
       },
     })

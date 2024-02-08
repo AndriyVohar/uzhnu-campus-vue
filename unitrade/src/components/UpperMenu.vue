@@ -7,8 +7,8 @@
         v-model="selectedLanguage"
         @change="changeLanguage"
       >
-        <option value="ua">UA</option>
-        <option value="en">EN</option>
+        <option value="ua">🇺🇦</option>
+        <option value="en">🇬🇧</option>
       </select>
     </div>
   </header>
@@ -26,8 +26,8 @@ export default {
     };
   },
   mounted() {
-    this.$i18n.locale = localStorage.getItem("selectedLanguage"),
-    this.selectedLanguage = localStorage.getItem("selectedLanguage")
+    (this.$i18n.locale = localStorage.getItem("selectedLanguage")),
+      (this.selectedLanguage = localStorage.getItem("selectedLanguage"));
   },
   computed: {
     ...mapGetters("user", ["user"]),
@@ -54,7 +54,7 @@ header {
   justify-content: center;
   width: 100vw;
   overflow-x: hidden;
-  border-bottom: 1px solid #64948f;
+  border-bottom: 1px solid black;
   border-radius: $default-border-radius $default-border-radius;
 
   .header-content {
@@ -65,16 +65,14 @@ header {
     justify-content: space-between;
     align-items: center;
     .language-select {
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      background-color: #b8dedc;
+      background-color: #d3dfe3;
       color: #000000; /* Adjust text color as needed */
-      padding: 10px;
-      border: 2px solid #b8dedc;
+      padding: 5px;
+      border: 0;
       border-radius: 5px;
-      outline: none;
+      // outline: none;
       cursor: pointer;
+      font-size: 24px;
     }
     img {
       height: 35px;

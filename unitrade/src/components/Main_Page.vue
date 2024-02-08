@@ -1,41 +1,3 @@
-<script>
-import Auth_btn from "@/components/Auth_btn.vue";
-import Token from "@/token-usage.js";
-
-export default {
-  name: "Main_Page",
-  components: {Auth_btn},
-  data() {
-    return {
-      selected_dormitory: localStorage.getItem("defaultDormitory"),
-    };
-  },
-  methods: {},
-  computed: {
-    isLoggedIn() {
-      return Token.getAccessTokenFromCookie();
-    },
-    selector_bg() {
-      if (this.selected_dormitory == 1) {
-        return "dorm-1";
-      } else if (this.selected_dormitory == 2) {
-        return "dorm-2";
-      } else if (this.selected_dormitory == 3) {
-        return "dorm-3";
-      } else if (this.selected_dormitory == 4) {
-        return "dorm-4";
-      } else {
-        return "dorm-5";
-      }
-    },
-  },
-  watch: {
-    selected_dormitory(newValue) {
-      localStorage.setItem("defaultDormitory", newValue);
-    },
-  },
-};
-</script>
 <template>
   <div class="main-page-container">
     <div class="login-notification" v-if="!isLoggedIn">
@@ -85,9 +47,49 @@ export default {
     <div class="space"></div>
   </div>
 </template>
-<style scoped lang="scss">
 
+<script>
+import Auth_btn from "@/components/Auth_btn.vue";
+import Token from "@/token-usage.js";
+
+export default {
+  name: "Main_Page",
+  components: {Auth_btn},
+  data() {
+    return {
+      selected_dormitory: localStorage.getItem("defaultDormitory"),
+    };
+  },
+  methods: {},
+  computed: {
+    isLoggedIn() {
+      return Token.getAccessTokenFromCookie();
+    },
+    selector_bg() {
+      if (this.selected_dormitory == 1) {
+        return "dorm-1";
+      } else if (this.selected_dormitory == 2) {
+        return "dorm-2";
+      } else if (this.selected_dormitory == 3) {
+        return "dorm-3";
+      } else if (this.selected_dormitory == 4) {
+        return "dorm-4";
+      } else {
+        return "dorm-5";
+      }
+    },
+  },
+  watch: {
+    selected_dormitory(newValue) {
+      localStorage.setItem("defaultDormitory", newValue);
+    },
+  },
+};
+</script>
+
+<style scoped lang="scss">
 .disclaimer {
+  cursor: pointer;
   text-align: left;
   width: calc(100% - 30px);
   border-radius: 15px;
