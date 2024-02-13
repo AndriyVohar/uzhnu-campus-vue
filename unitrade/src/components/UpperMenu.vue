@@ -55,7 +55,6 @@ header {
   width: 100vw;
   overflow-x: hidden;
   border-bottom: 1px solid black;
-  border-radius: $default-border-radius $default-border-radius;
 
   .header-content {
     height: 50px;
