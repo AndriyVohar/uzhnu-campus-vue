@@ -51,66 +51,78 @@ const routes = [
   {
     path: "/advertisements",
     name: "advertisements",
-    component: () => import("@/components/Advertisement/AdvertisementsList.vue"),
-    meta: {
-      forLoggedIn: false,
-    },
+    component: () => import("@/components/AdvertisementPage"),
+    children: [
+      {
+        path: "/posts",
+        name: "posts",
+        component: () => import("@/components/Post/PostsList.vue"),
+        meta: {
+          forLoggedIn: false,
+        },
+      },
+      {
+        path: "/works",
+        name: "works",
+        component: () => import("@/components/Work/WorksList.vue"),
+        meta: {
+          forLoggedIn: false,
+        },
+      },
+    ],
   },
+      {
+        path: "/posts/create",
+        name: "postCreate",
+        component: () => import("@/components/Post/PostCreatePage.vue"),
+        meta: {
+          forLoggedIn: true,
+        },
+      },
+      {
+        path: "/posts/:id",
+        name: "post",
+        component: () => import("@/components/Post/PostPage.vue"),
+        meta: {
+          forLoggedIn: false,
+        },
+      },
+      {
+        path: "/posts/:id/edit",
+        name: "postEdit",
+        component: () => import("@/components/Post/PostEditPage.vue"),
+        meta: {
+          forLoggedIn: true,
+        },
+      },
+      {
+        path: "/works/:id",
+        name: "work",
+        component: () => import("@/components/Work/WorkPage.vue"),
+        meta: {
+          forLoggedIn: false,
+        },
+      },
+      {
+        path: "/works/:id/edit",
+        name: "workEdit",
+        component: () => import("@/components/Work/WorkEditPage.vue"),
+        meta: {
+          forLoggedIn: true,
+        },
+      },
+      {
+        path: "/works/create",
+        name: "workCreate",
+        component: () => import("@/components/Work/WorkCreatePage.vue"),
+        meta: {
+          forLoggedIn: true,
+        },
+      },
   {
-    path: "/advertisements/create",
-    name: "advertisementCreate",
-    component: () => import("@/components/Advertisement/AdvertisementCreatePage.vue"),
-    meta: {
-      forLoggedIn: true,
-    },
-  },
-  {
-    path: "/advertisements/:id",
-    name: "advertisement",
-    component: () => import("@/components/Advertisement/AdvertisementPage.vue"),
-    meta: {
-      forLoggedIn: false,
-    },
-  },
-  {
-    path: "/advertisements/:id/edit",
-    name: "advertisementEdit",
-    component: () => import("@/components/Advertisement/AdvertisementEditPage.vue"),
-    meta: {
-      forLoggedIn: true,
-    },
-  },
-  {
-    path: "/works",
-    name: "works",
-    component: () => import("@/components/Work/WorksList.vue"),
-    meta: {
-      forLoggedIn: false,
-    },
-  },
-  {
-    path: "/works/:id",
-    name: "work",
-    component: () => import("@/components/Work/WorkPage.vue"),
-    meta: {
-      forLoggedIn: false,
-    },
-  },
-  {
-    path: "/works/:id/edit",
-    name: "workEdit",
-    component: () => import("@/components/Work/WorkEditPage.vue"),
-    meta: {
-      forLoggedIn: true,
-    },
-  },
-  {
-    path: "/works/create",
-    name: "workCreate",
-    component: () => import("@/components/Work/WorkCreatePage.vue"),
-    meta: {
-      forLoggedIn: true,
-    },
+    path: "/services",
+    name: "services",
+    component: ()=>import("@/components/ServicesPage.vue")
   },
   {
     path: "/me",

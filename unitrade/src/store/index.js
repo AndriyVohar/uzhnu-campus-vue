@@ -3,11 +3,12 @@ import Token from "@/token-usage";
 import { itemById } from "@/DbOperations";
 export default createStore({
   state() {
-    return{
+    return {
       user: {},
       accessToken: Token.getAccessTokenFromCookie(),
-      userGoogleId: Token.getGoogleIdFromCookie()
-    }
+      userGoogleId: Token.getGoogleIdFromCookie(),
+      dormitoryNumber: localStorage.getItem("defaultDormitoryNumber"),
+    };
   },
   getters: {
     user: ({ user }) => {
@@ -27,14 +28,18 @@ export default createStore({
     changeAccessToken(state, value) {
       state.accessToken = value;
     },
+    changeDormitoryNumber(state, number) {
+      state.dormitoryNumber = number;
+      localStorage.setItem("defaultDormitoryNumber", number);
+    },
   },
   actions: {
-    loadUser({commit},$google_id){
-      itemById('users', $google_id).then((response)=>{
-        commit('changeUser',response)
+    loadUser({ commit }, $google_id) {
+      itemById("users", $google_id).then((response) => {
+        commit("changeUser", response);
         console.log(response);
         return response;
-      })
-    }
+      });
+    },
   },
 });

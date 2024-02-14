@@ -1,86 +1,10 @@
-<script>
-import data from "../../dormitory_data.json";
-import InfoComponent from "./InfoComponent.vue";
-import { loadItemsListByDormitory } from "@/DbOperations";
-
-export default {
-  name: "Info",
-  components: {
-    InfoComponent,
-  },
-  computed: {
-    selector_bg() {
-      if (this.selected_dormitory == 1) {
-        return "dorm-1";
-      } else if (this.selected_dormitory == 2) {
-        return "dorm-2";
-      } else if (this.selected_dormitory == 3) {
-        return "dorm-3";
-      } else if (this.selected_dormitory == 4) {
-        return "dorm-4";
-      } else {
-        return "dorm-5";
-      }
-    },
-  },
-  watch: {
-    selected_dormitory(newValue) {
-      localStorage.setItem("defaultDormitory", newValue);
-      let dorm = data.filter(
-        (dorm) => parseInt(this.selected_dormitory) === dorm.dormitory_num
-      )[0];
-      this.dormitory_data = dorm.workers;
-      this.loadItems();
-    },
-  },
-  methods: {
-    loadItems() {
-      loadItemsListByDormitory("infos", this.selected_dormitory)
-        .then((list) => {
-          this.attentionList = list;
-        })
-        .catch(() => {
-          console.log("some error");
-        });
-    },
-  },
-  mounted() {
-    this.loadItems();
-    let dorm = data.filter(
-      (dorm) =>
-        parseInt(localStorage.getItem("defaultDormitory")) ===
-        dorm.dormitory_num
-    )[0];
-    this.dormitory_data = dorm.workers;
-  },
-  data() {
-    return {
-      dormitory_data: [],
-      attentionList: [],
-      selected_dormitory: localStorage.getItem("defaultDormitory"),
-    };
-  },
-};
-</script>
-
-
 <template>
   <div class="info-page">
     <div class="about-page">
       <h4>{{ $t("info.about.title") }}</h4>
       <p>{{ $t("info.about.text") }}</p>
     </div>
-    <div class="dormitory-selector" :class="selector_bg">
-      <span>{{ $t("global.select") }}</span>
-      <select v-model="selected_dormitory">
-        <option value="1">{{ $t("global.dormitory") }} №1</option>
-        <option value="2">{{ $t("global.dormitory") }} №2</option>
-        <option value="3">{{ $t("global.dormitory") }} №3</option>
-        <option value="4">{{ $t("global.dormitory") }} №4</option>
-        <option value="5">{{ $t("global.dormitory") }} №5</option>
-      </select>
-    </div>
-
+    <selector-component class="selector"></selector-component>
     <div class="alert-holder">
       <info-component
         :attention="attention"
@@ -102,9 +26,65 @@ export default {
   </div>
 </template>
 
+<script>
+import SelectorComponent from "@/components/Sections/SelectorComponent.vue";
+import data from "../../dormitory_data.json";
+import InfoComponent from "./InfoComponent.vue";
+import { loadItemsListByDormitory } from "@/DbOperations";
+
+export default {
+  name: "Info",
+  components: {
+    InfoComponent,
+    SelectorComponent,
+  },
+  methods: {
+    loadItems() {
+      loadItemsListByDormitory("infos", this.dormitoryNumber)
+        .then((list) => {
+          this.attentionList = list;
+        })
+        .catch(() => {
+          console.log("some error");
+        });
+    },
+    dormitoryWorkersFromJSON(){
+      let dorm = data.filter(
+      (dorm) => parseInt(this.dormitoryNumber) === dorm.dormitory_num
+    )[0];
+    return dorm.workers;
+    }
+  },
+  mounted() {
+    this.loadItems();
+    this.dormitory_data = this.dormitoryWorkersFromJSON();
+  },
+  computed: {
+    dormitoryNumber() {
+      return this.$store.state.dormitoryNumber;
+    },
+  },
+  data() {
+    return {
+      dormitory_data: [],
+      attentionList: [],
+    };
+  },
+  watch: {
+    dormitoryNumber() {
+      this.loadItems();
+      this.dormitory_data = this.dormitoryWorkersFromJSON();
+    },
+  },
+};
+</script>
 
 <style scoped lang="scss">
+.selector{
+  margin-top: 15px;
+}
 .alert-holder {
+  margin-top: 15px;
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -137,72 +117,12 @@ export default {
     font-size: 10px;
   }
 }
-
-.dorm-1 {
-  background: url("../../assets/dormitory_img/dormitory-1.jpg");
-}
-
-.dorm-2 {
-  background: url("../../assets/dormitory_img/dormitory-2.jpg");
-}
-
-.dorm-3 {
-  background: url("../../assets/dormitory_img/dormitory-3.jpg");
-}
-
-.dorm-4 {
-  background: url("../../assets/dormitory_img/dormitory-4.jpg");
-}
-
-.dorm-5 {
-  background: url("../../assets/dormitory_img/dormitory-5.jpg");
-}
-
-.dormitory-selector {
-  width: 90vw;
-  background-size: cover;
-  margin: 15px 0px;
-  aspect-ratio: 1.3/1;
-  //height: calc(90vw / 130 * 100);
-  //min-height: calc(90vw / 130 * 100);
-  border-radius: 15px;
-  transition: background ease-out 0.3s;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: start;
-
-  span {
-    font-weight: 700;
-    font-size: 14px;
-    margin-top: 15px;
-    margin-left: 15px;
-    color: #ffffff;
-  }
-
-  select {
-    height: 20px;
-    background: transparent;
-    font-weight: 500;
-    font-size: 10px;
-    outline: none;
-    border: none;
-    color: #ffffff;
-    margin-left: 15px;
-  }
-
-  option {
-    color: #2c3e50;
-    font-weight: bold;
-  }
-}
-
 .info-page {
   width: 90vw;
   padding: 0 5vw;
   padding-bottom: 50px;
   margin-bottom: 15px;
-  background-color: #D3DFE3;
+  background-color: #d3dfe3;
   min-height: calc(100vh - 67px);
   display: flex;
   flex-direction: column;

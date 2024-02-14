@@ -3,12 +3,14 @@
         "dormitory": "Dormitory",
         "room": "Room",
         "advertisement": "Advertisement",
+        "post": "Post",
         "work": "Work",
         "save": "Save",
         "cancel": "Cancel",
         "select": "Select",
         "info": "Information",
-        "loading":"Loading"
+        "loading":"Loading",
+        "service":"Service"
     },
     "footer": {
         "main": "Main",
@@ -85,8 +87,8 @@
         "edit": "Edit work"
     },
     "post": {
-        "create": "Create new advertisement",
-        "edit": "Edit advertisement"
+        "create": "Create new post",
+        "edit": "Edit post"
     },
     "form": {
         "name": "Title",
