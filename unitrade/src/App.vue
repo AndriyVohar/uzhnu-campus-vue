@@ -79,7 +79,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: $border-default;
-  background-color: $background;
+  background-color: $main-gray;
 }
 
 button,
@@ -121,7 +121,7 @@ input {
   height: 2px;
   width: 100%;
   border-radius: 5px;
-  background-color: #b8dedc;
+  background-color: $main;
 }
 
 body {

@@ -48,6 +48,7 @@ body {
   background-color: $bg-secondary;
 }
 header {
+  background-color: $background;
   display: flex;
   flex-direction: column;
   align-items: center;

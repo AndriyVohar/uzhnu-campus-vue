@@ -89,6 +89,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "@/assets/main_colors.scss";
 .disclaimer {
   cursor: pointer;
   text-align: left;
@@ -158,7 +159,7 @@ export default {
   .login-notification {
     width: 100%;
     text-align: left;
-    background-color: #b8dedc;
+    background-color: $main;
     border-radius: 15px;
     height: 130px;
     display: flex;

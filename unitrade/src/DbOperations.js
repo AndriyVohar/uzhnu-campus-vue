@@ -153,7 +153,7 @@ export function deleteItem(name, id, userGoogleId) {
 
 //===========================
 //Special methods
-export function advertisementsByUser(id, userGoogleId) {
+export function postsByUser(id, userGoogleId) {
   return axios
     .get(`${databaseApiUrl}/users/${id}/advertisements`, {
       headers: {

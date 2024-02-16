@@ -22,7 +22,7 @@ export default {
 @import "../assets/main_colors";
 
 .page {
-  background-color: $background;
+  background-color: $main-gray;
   display: flex;
   width: 100vw;
   height: calc(100vh - 57px);
