@@ -4,6 +4,7 @@
       <div class="text-part">
         <h4>{{ $t("main.titles.greeting") }}</h4>
         <p>{{ $t("main.text.greeting") }}</p>
+        <p>{{ $t("auth.rules") }}</p>
       </div>
       <Auth_btn />
     </div>

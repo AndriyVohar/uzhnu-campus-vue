@@ -9,8 +9,14 @@
         "cancel": "Cancel",
         "select": "Select",
         "info": "Information",
-        "loading":"Loading",
-        "service":"Service"
+        "loading": "Loading",
+        "service": "Service",
+        "worker":{
+            "plumber":"Plumber",
+            "joiner":"Joiner",
+            "electrician":"Electrician"            
+        },
+        "send":"Send"
     },
     "footer": {
         "main": "Main",
@@ -23,7 +29,8 @@
         "text": {
             "notLogged": "It looks like you are not logged in",
             "functions": "To access these functions, you need to log in from your corporate email"
-        }
+        },
+        "rules": "*By logging in to this platform, you confirm that you are familiar with the rules of use"
     },
     "main": {
         "titles": {
@@ -90,6 +97,14 @@
         "create": "Create new post",
         "edit": "Edit post"
     },
+    "services": {
+        "about": {
+            "title": "Services",
+            "text": "On this page you can use the services provided by your dormitory. You can make an appointment for laundry, or send a request for repairs from a plumber, carpenter or electrician"
+        },
+        "send-problem":"Send the problem to",
+        "washing-appointment": "Making an appointment for laundry"
+    },
     "form": {
         "name": "Title",
         "tag": "Category",
@@ -98,6 +113,9 @@
         "submit": "Submit",
         "cancel": "Cancel",
         "title": "Title",
-        "content": "Description"
+        "content": "Description",
+        "textarea":{
+            "problem-description":"Describe your problem. Please do not write the room number or your surname, as it will automatically be displayed according to your profile data"
+        }
     }
 }

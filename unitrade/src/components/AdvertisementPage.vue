@@ -77,7 +77,7 @@ export default {
         font-size: 11px;
         font-weight: 400;
         height: 25px;
-        border-radius: 3px;
+        border-radius: $mobile-container-border-radius-small;
         border: none;
         padding-left: 10px;
       }

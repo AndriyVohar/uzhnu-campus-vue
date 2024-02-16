@@ -58,7 +58,7 @@ export default {
 
 .selected {
   transition: all ease-out 0.3s;
-  background-color: #b8dedc !important;
+  background-color: $main-gray !important;
 
   span {
     font-weight: 700;

@@ -80,6 +80,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "../../assets/main_colors";
 .selector{
   margin-top: 15px;
 }
@@ -104,7 +105,7 @@ export default {
   text-align: left;
   width: calc(100vw - 50px);
   padding: 10px;
-  border-radius: 10px;
+  border-radius: $mobile-container-border-radius;
   background-color: #f6eae6;
 
   h4 {
