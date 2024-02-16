@@ -57,7 +57,6 @@ export default {
   },
   mounted() {
     this.loadItems();
-    this.dormitory_data = this.dormitoryWorkersFromJSON();
   },
   computed: {
     dormitoryNumber() {
@@ -66,7 +65,9 @@ export default {
   },
   data() {
     return {
-      dormitory_data: [],
+      dormitory_data: data.filter(
+        (dorm) => parseInt(this.dormitoryNumber) === dorm.dormitory_num
+      )[0].workers,
       attentionList: [],
       studmistechkoWorkers: data.filter(
         (stud) => stud.dormitory_num === "studmistechko"

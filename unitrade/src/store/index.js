@@ -7,7 +7,7 @@ export default createStore({
       user: {},
       accessToken: Token.getAccessTokenFromCookie(),
       userGoogleId: Token.getGoogleIdFromCookie(),
-      dormitoryNumber: localStorage.getItem("defaultDormitoryNumber"),
+      dormitoryNumber: localStorage.getItem("defaultDormitoryNumber")||4,
     };
   },
   getters: {

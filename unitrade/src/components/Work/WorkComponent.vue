@@ -1,31 +1,39 @@
 <template>
-  <div class="work" @click="openWork()">
-    <img :src="work.imgURL" alt="Фото поста" />
-    <div class="post-data">
-      <div class="text">
-        <p class="post-name">{{ work.title }}</p>
-      </div>
-      <p style="font-size: 10px">
-        {{ work.created_at }}
-      </p>
-      <div style="font-size: 14px">{{ work.salary }}₴</div>
-      <div class="post-bottom">
-        <div class="tag">
-          <span>{{ work.tag }}</span>
+  <router-link
+    class="router-link"
+    :to="{
+      name: 'work',
+      params: { id: this.work.id },
+    }"
+  >
+    <div class="work">
+      <img :src="work.imgURL" alt="Фото поста" />
+      <div class="post-data">
+        <div class="text">
+          <p class="post-name">{{ work.title }}</p>
         </div>
-        <div class="buttons" v-if="user.role == 'admin'">
-          <font-awesome-icon
-            :icon="['fas', 'pen']"
-            @click.stop="updateWork()"
-          />
-          <font-awesome-icon
-            :icon="['fas', 'trash']"
-            @click.stop="deleteWork()"
-          />
+        <p style="font-size: 10px">
+          {{ work.created_at }}
+        </p>
+        <div style="font-size: 14px">{{ work.salary }}₴</div>
+        <div class="post-bottom">
+          <div class="tag">
+            <span>{{ work.tag }}</span>
+          </div>
+          <div class="buttons" v-if="user.role == 'admin'">
+            <font-awesome-icon
+              :icon="['fas', 'pen']"
+              @click.stop="updateWork()"
+            />
+            <font-awesome-icon
+              :icon="['fas', 'trash']"
+              @click.stop="deleteWork()"
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -42,9 +50,6 @@ export default {
   methods: {
     updateWork() {
       this.$router.push({ name: "workEdit", params: { id: this.work.id } });
-    },
-    openWork() {
-      this.$router.push({ name: "work", params: { id: this.work.id } });
     },
     deleteWork() {
       if (confirm("Видалити оголошення ?")) {

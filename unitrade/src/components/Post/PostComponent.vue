@@ -1,40 +1,48 @@
 <template>
-  <div class="post" @click="openPost()">
-    <img :src="post.imgURL" alt="Фото поста" />
-    <div class="post-data">
-      <div class="text">
-        <div class="post-name-icon">
-          <span class="post-name">{{ post.title }}</span>
-          <img :src="post.creator.imgURL" alt="" class="user-profile" />
+  <router-link
+    class="router-link"
+    :to="{
+      name: 'post',
+      params: { id: this.post.id },
+    }"
+  >
+    <div class="post">
+      <img :src="post.imgURL" alt="Фото поста" />
+      <div class="post-data">
+        <div class="text">
+          <div class="post-name-icon">
+            <span class="post-name">{{ post.title }}</span>
+            <img :src="post.creator.imgURL" alt="" class="user-profile" />
+          </div>
+          <p class="address">
+            {{ $t("global.dormitory") }} №{{ post.creator.dormitory }}
+            {{ post.creator.room }}
+          </p>
+          <p class="address">
+            {{ post.created_at }}
+          </p>
         </div>
-        <p class="address">
-          {{ $t("global.dormitory") }} №{{ post.creator.dormitory }}
-          {{ post.creator.room }}
-        </p>
-        <p class="address">
-          {{ post.created_at }}
-        </p>
-      </div>
-      <div class="post-bottom">
-        <div class="tag">
-          <span>{{ post.tag }}</span>
-        </div>
-        <div
-          class="buttons"
-          v-if="user.id == post.creator.id || user.role == 'admin'"
-        >
-          <font-awesome-icon
-            :icon="['fas', 'pen']"
-            @click.stop="updatePost()"
-          />
-          <font-awesome-icon
-            :icon="['fas', 'trash']"
-            @click.stop="deletePost()"
-          />
+        <div class="post-bottom">
+          <div class="tag">
+            <span>{{ post.tag }}</span>
+          </div>
+          <div
+            class="buttons"
+            v-if="user.id == post.creator.id || user.role == 'admin'"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'pen']"
+              @click.stop="updatePost()"
+            />
+            <font-awesome-icon
+              :icon="['fas', 'trash']"
+              @click.stop="deletePost()"
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -49,12 +57,6 @@ export default {
     ...mapGetters(["user"]),
   },
   methods: {
-    openPost() {
-      this.$router.push({
-        name: "post",
-        params: { id: this.post.id },
-      });
-    },
     updatePost() {
       this.$router.push({
         name: "postEdit",

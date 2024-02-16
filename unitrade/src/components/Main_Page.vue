@@ -131,7 +131,7 @@ export default {
     },
   },
   watch: {
-    dormitoryNumber() {
+    selected_dormitory() {
       this.dormitory_data = this.dormitoryWorkersFromJSON();
     },
   },

@@ -10,46 +10,51 @@ export default {
 
 <template>
   <div class="footer">
-    <div
-      class="footer-element"
-      :class="{ selected: $route.path === '/' }"
-      @click="pushLink('/')"
-    >
-      <img src="@/assets/svg/home.svg" alt="" />
-      <span>{{ $t("footer.main") }}</span>
-    </div>
-    <div
-      class="footer-element"
-      :class="{ selected: $route.path === '/posts' }"
-      @click="pushLink('/posts')"
-    >
-      <img src="@/assets/svg/browse.svg" alt="" />
-      <span>{{ $t("global.advertisement") }}</span>
-    </div>
-    <div
-      class="footer-element"
-      :class="{ selected: $route.path === '/info' }"
-      @click="pushLink('/info')"
-    >
-      <img src="@/assets/svg/info.svg" alt="" />
-      <span>{{ $t("footer.information") }}</span>
-    </div>
-    <div
-      class="footer-element"
-      :class="{ selected: $route.path === '/services' }"
-      @click="pushLink('/services')"
-    >
-      <img src="@/assets/svg/service.svg" alt="" />
-      <span>{{ $t("global.service") }}</span>
-    </div>
-    <div
-      class="footer-element"
-      :class="{ selected: $route.path === '/me' }"
-      @click="pushLink('/me')"
-    >
-      <img src="@/assets/svg/person.svg" alt="" />
-      <span>{{ $t("footer.account") }}</span>
-    </div>
+    <router-link to="/" class="router-link">
+      <div
+        class="footer-element"
+        :class="{ selected: $route.path === '/' }"
+      >
+        <img src="@/assets/svg/home.svg" alt="" />
+        <span>{{ $t("footer.main") }}</span>
+      </div>
+    </router-link>
+    <router-link to="/posts" class="router-link">
+      <div
+        class="footer-element"
+        :class="{ selected: $route.path === '/posts' }"
+      >
+        <img src="@/assets/svg/browse.svg" alt="" />
+        <span>{{ $t("global.advertisement") }}</span>
+      </div>
+    </router-link>
+    <router-link to="/info" class="router-link">
+      <div
+        class="footer-element"
+        :class="{ selected: $route.path === '/info' }"
+      >
+        <img src="@/assets/svg/info.svg" alt="" />
+        <span>{{ $t("footer.information") }}</span>
+      </div>
+    </router-link>
+    <router-link to="/services" class="router-link">
+      <div
+        class="footer-element"
+        :class="{ selected: $route.path === '/services' }"
+      >
+        <img src="@/assets/svg/service.svg" alt="" />
+        <span>{{ $t("global.service") }}</span>
+      </div>
+    </router-link>
+    <router-link to="/me" class="router-link">
+      <div
+        class="footer-element"
+        :class="{ selected: $route.path === '/me' }"
+      >
+        <img src="@/assets/svg/person.svg" alt="" />
+        <span>{{ $t("footer.account") }}</span>
+      </div>
+    </router-link>
   </div>
 </template>
 
