@@ -46,8 +46,8 @@
       <span>{{ $t("profile.show") }}</span>
       <div class="select-group">
         <select v-model="toggle">
-          <option value="advertisements">
-            {{ $t("global.advertisement") }}
+          <option value="posts">
+            {{ $t("global.post") }}
           </option>
           <option value="works">{{ $t("global.work") }}</option>
           <option value="infos">{{ $t("global.info") }}</option>
@@ -67,10 +67,10 @@
       </button>
       <button
         id="create-post"
-        v-if="toggle == 'advertisements'"
+        v-if="toggle == 'posts'"
         @click="createBtn(toggle)"
       >
-        {{ $t("profile.createAdvertisement") }}
+        {{ $t("profile.createPost") }}
       </button>
       <button
         id="create-work"
@@ -84,8 +84,8 @@
       </button>
     </div>
     <div class="spacer"></div>
-    <div class="list" v-if="toggle == 'advertisements'">
-      <advertisement-component
+    <div class="list" v-if="toggle == 'posts'">
+      <post-component
         :post="post"
         v-for="post in posts_list"
         :key="post.id"
@@ -192,21 +192,21 @@
 
 <script>
 import Token from "@/token-usage.js";
-import AdvertisementComponent from "@/components/Advertisement/AdvertisementComponent.vue";
+import PostComponent from "@/components/Post/PostComponent.vue";
 import WorkComponent from "@/components/Work/WorkComponent.vue";
 import InfoComponent from "@/components/Info/InfoComponent.vue";
 import {
   loadItemsList,
   itemById,
   updateItem,
-  advertisementsByUser,
+  postsByUser,
 } from "@/DbOperations";
 
 export default {
-  components: { WorkComponent, AdvertisementComponent, InfoComponent },
+  components: { WorkComponent, PostComponent, InfoComponent },
   data() {
     return {
-      toggle: "advertisements",
+      toggle: "posts",
       user: {},
       posts_list: [],
       works_list: [],
@@ -222,9 +222,9 @@ export default {
       this.user = user;
       this.$store.commit("changeUser", user);
 
-      advertisementsByUser(this.user.id, this.user.google_id).then(
-        (advertisements) => {
-          this.posts_list = advertisements;
+      postsByUser(this.user.id, this.user.google_id).then(
+        (posts) => {
+          this.posts_list = posts;
         }
       );
     });
@@ -241,11 +241,11 @@ export default {
           });
     },
     toggle(newValue) {
-      if (newValue == "advertisements" && this.posts_list.length < 1) {
-        advertisementsByUser(this.user.id, this.user.google_id).then(
-          (advertisements) => {
-            console.log(advertisements);
-            this.posts_list = advertisements;
+      if (newValue == "posts" && this.posts_list.length < 1) {
+        postsByUser(this.user.id, this.user.google_id).then(
+          (posts) => {
+            console.log(posts);
+            this.posts_list = posts;
           }
         );
       } else if (newValue == "works" && this.works_list.length < 1) {

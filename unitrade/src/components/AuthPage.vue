@@ -4,6 +4,7 @@
       <h3>{{ $t('auth.oops') }}...</h3>
       <p>{{ $t('auth.text.notLogged') }}</p>
       <p>{{ $t('auth.text.functions') }}</p>
+      <p>{{ $t("auth.rules") }}</p>
       <Auth_btn/>
     </div>
   </div>

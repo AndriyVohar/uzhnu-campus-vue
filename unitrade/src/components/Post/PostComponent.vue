@@ -51,13 +51,13 @@ export default {
   methods: {
     openPost() {
       this.$router.push({
-        name: "advertisement",
+        name: "post",
         params: { id: this.post.id },
       });
     },
     updatePost() {
       this.$router.push({
-        name: "advertisementEdit",
+        name: "postEdit",
         params: { id: this.post.id },
       });
     },

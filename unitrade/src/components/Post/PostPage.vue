@@ -86,15 +86,14 @@ export default {
 
 /* Component: .mobile-form-container */
 .mobile-form-container {
-  background-color: $bg-green;
+  background-color: $main-gray;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100vw;
   max-width: 100vw;
-  min-height: calc(100vh - 68px - 50px);
-  margin-top: 10px;
+  min-height: calc(100vh - 50px - 50px);
   overflow: hidden;
 }
 

@@ -87,13 +87,14 @@ export default {
 }
 
 .container {
-  background-color: #D3DFE3;
+  background-color: #d3dfe3;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  overflow: hidden;
+  overflow-y: auto;
   justify-content: space-between;
+  margin-bottom: 50px;
   .works-spacer {
     width: calc(100vw - 30px);
     height: 1px;

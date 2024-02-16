@@ -11,44 +11,44 @@ export default {
 <template>
   <div class="footer">
     <div
-        class="footer-element"
-        :class="{ selected: $route.path === '/' }"
-        @click="pushLink('/')"
+      class="footer-element"
+      :class="{ selected: $route.path === '/' }"
+      @click="pushLink('/')"
     >
-      <img src="@/assets/svg/home.svg" alt=""/>
-      <span>{{$t('footer.main')}}</span>
+      <img src="@/assets/svg/home.svg" alt="" />
+      <span>{{ $t("footer.main") }}</span>
     </div>
     <div
-        class="footer-element"
-        :class="{ selected: $route.path === '/advertisements' }"
-        @click="pushLink('/advertisements')"
+      class="footer-element"
+      :class="{ selected: $route.path === '/posts' }"
+      @click="pushLink('/posts')"
     >
-      <img src="@/assets/svg/browse.svg" alt=""/>
-      <span>{{$t('global.advertisement')}}</span>
+      <img src="@/assets/svg/browse.svg" alt="" />
+      <span>{{ $t("global.advertisement") }}</span>
     </div>
     <div
-        class="footer-element"
-        :class="{ selected: $route.path === '/info' }"
-        @click="pushLink('/info')"
+      class="footer-element"
+      :class="{ selected: $route.path === '/info' }"
+      @click="pushLink('/info')"
     >
-      <img src="@/assets/svg/info.svg" alt=""/>
-      <span>{{$t('footer.information')}}</span>
+      <img src="@/assets/svg/info.svg" alt="" />
+      <span>{{ $t("footer.information") }}</span>
     </div>
     <div
-        class="footer-element"
-        :class="{ selected: $route.path === '/works' }"
-        @click="pushLink('/works')"
+      class="footer-element"
+      :class="{ selected: $route.path === '/services' }"
+      @click="pushLink('/services')"
     >
-      <img src="@/assets/svg/work.svg" alt=""/>
-      <span>{{$t('global.work')}}</span>
+      <img src="@/assets/svg/service.svg" alt="" />
+      <span>{{ $t("global.service") }}</span>
     </div>
     <div
-        class="footer-element"
-        :class="{ selected: $route.path === '/me' }"
-        @click="pushLink('/me')"
+      class="footer-element"
+      :class="{ selected: $route.path === '/me' }"
+      @click="pushLink('/me')"
     >
-      <img src="@/assets/svg/person.svg" alt=""/>
-      <span>{{$t('footer.account')}}</span>
+      <img src="@/assets/svg/person.svg" alt="" />
+      <span>{{ $t("footer.account") }}</span>
     </div>
   </div>
 </template>
@@ -58,7 +58,7 @@ export default {
 
 .selected {
   transition: all ease-out 0.3s;
-  background-color: #b8dedc !important;
+  background-color: $main-gray !important;
 
   span {
     font-weight: 700;

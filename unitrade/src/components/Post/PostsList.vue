@@ -1,21 +1,8 @@
 <template>
   <div class="container">
-    <div class="menu">
-      <select v-model="dormitoryNumber">
-        <option value="1">{{ $t("global.dormitory") }} №1</option>
-        <option value="2">{{ $t("global.dormitory") }} №2</option>
-        <option value="3">{{ $t("global.dormitory") }} №3</option>
-        <option value="4">{{ $t("global.dormitory") }} №4</option>
-        <option value="5">{{ $t("global.dormitory") }} №5</option>
-      </select>
-    </div>
     <div class="posts-spacer"></div>
-    <div class="posts_list" v-if="postsList&&postsList.length>0">
-      <advertisement-component
-        :post="post"
-        v-for="post in postsList"
-        :key="post.id"
-      />
+    <div class="posts_list" v-if="postsList && postsList.length > 0">
+      <post-component :post="post" v-for="post in postsList" :key="post.id" />
       <div class="page-selector">
         <font-awesome-icon
           icon="arrow-left"
@@ -37,12 +24,11 @@
 </template>
 
 <script>
-import AdvertisementComponent from "@/components/Advertisement/AdvertisementComponent.vue";
+import PostComponent from "@/components/Post/PostComponent.vue";
 import { loadItemsListByDormitory } from "@/DbOperations";
-
 export default {
   name: "Posts_list",
-  components: { AdvertisementComponent },
+  components: { PostComponent },
   methods: {
     subPage() {
       if (this.page_index > 1) {
@@ -70,17 +56,21 @@ export default {
     return {
       page_index: 1,
       search: undefined,
-      dormitoryNumber: localStorage.getItem("defaultDormitory"),
       postsList: null, //[]
       lastPage: 1,
     };
+  },
+  computed: {
+    dormitoryNumber() {
+      return this.$store.state.dormitoryNumber;
+    },
   },
   watch: {
     page_index(newValue) {
       this.loadPostsList(this.dormitoryNumber, newValue);
     },
     dormitoryNumber(newValue) {
-      localStorage.setItem("defaultDormitory", newValue);
+      // this.$store.commit('changeDormitoryNumber',newValue);
       this.page_index = 1;
       this.loadPostsList(newValue, this.page_index);
     },
@@ -88,6 +78,7 @@ export default {
   mounted() {
     this.loadPostsList(this.dormitoryNumber, this.page_index);
   },
+  created() {},
 };
 </script>
 
@@ -109,35 +100,15 @@ export default {
 }
 
 .container {
-  background-color: #D3DFE3;
+  background-color: #d3dfe3;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  overflow: hidden;
+  // overflow: hidden;
+  overflow-y: auto;
   justify-content: space-between;
-
-  .menu {
-    width: calc(100vw - 30px);
-    height: 25px;
-    margin: 15px 0;
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    gap: 30px;
-    justify-content: space-between;
-    select {
-      background-color: white;
-      outline: none;
-      flex: 1;
-      font-size: 11px;
-      font-weight: 400;
-      height: 25px;
-      border-radius: 3px;
-      border: none;
-      padding-left: 10px;
-    }
-  }
+  margin-bottom:50px;
 
   .posts-spacer {
     width: calc(100vw - 30px);
@@ -150,7 +121,7 @@ export default {
     min-height: calc(
       100vh - 75px - 68px
     ); // $2 це селектор $3 це верхнє меню + 1px (1px height spacer)
-    padding-top: 20px;
+    margin-top: 15px;
     width: calc(100vw - 30px);
     display: flex;
     padding-bottom: 60px;
