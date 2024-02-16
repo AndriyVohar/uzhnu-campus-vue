@@ -1,11 +1,38 @@
 [
   {
+    "dormitory_num": "studmistechko",
+    "workers":[
+      {
+        "phone":"64-34-67",
+        "email":"example@gmail.com",
+        "fullName": "КЕПИЧ Василь Георгійович",
+        "position": "Директор студмістечка",
+        "image":"KepichVasil.jpeg"
+      },
+      {
+        "phone":"64-34-67",
+        "email":"example@gmail.com",
+        "fullName": "НЕКАЧАЙЛО Валерій Вікторович",
+        "position": "Заступник директора студмістечка",
+        "image":"BobikYurii.jpeg"
+      },
+      {
+        "phone":"64-34-67",
+        "email":"example@gmail.com",
+        "fullName": "БУРДЮХ Іван Іванович",
+        "position": "Заступник директора по експлуатації",
+        "image":"BobikYurii.jpeg"
+      }
+    ] 
+  },
+  {
     "dormitory_num": 1,
     "workers": [
       {
-        "num":"64-34-67",
+        "phone":"64-34-67",
         "fullName": "БІЛЕЙ Світлана Петрівна",
-        "position": "Комендант гуртожитку"
+        "position": "Комендант гуртожитку",
+        "image":"BobikYurii.jpeg"
       }
     ]
   },
@@ -13,9 +40,10 @@
     "dormitory_num": 2,
     "workers": [
       {
-        "num": "64-36-97",
+        "phone": "64-36-97",
         "fullName": "БЕЦАЛА Марія Іванівна",
-        "position": "Комендант гуртожитку"
+        "position": "Комендант гуртожитку",
+        "image":"BobikYurii.jpeg"
       }
     ]
   },
@@ -23,9 +51,10 @@
     "dormitory_num": 3,
     "workers": [
       {
-        "num": "64-33-73",
+        "phone": "64-33-73",
         "fullName": "МІШУРА Тамара Корніївна",
-        "position": "Комендант гуртожитку"
+        "position": "Комендант гуртожитку",
+        "image":"BobikYurii.jpeg"
       }
     ]
   },
@@ -33,18 +62,21 @@
     "dormitory_num": 4,
     "workers": [
       {
-        "num": "64-26-69",
+        "phone": "64-26-69",
         "fullName": "ТРОХИМЕЦЬ Ірина Михайлівна",
-        "position": "Завідувач гуртожитку"
+        "position": "Завідувач гуртожитку",
+        "image":"BobikYurii.jpeg"
       },
       {
-        "num": "64-26-69",
+        "phone": "64-26-69",
         "fullName": "БОБИК Юрій Юрійович",
-        "position": "Комендант гуртожитку"
+        "position": "Комендант гуртожитку",
+        "image":"BobikYurii.jpeg"
       },{
-        "num": "64-26-69",
+        "phone": "64-26-69",
         "fullName": "ТАНЦЮРА Галина Григорівна",
-        "position": "Комендант гуртожитку"
+        "position": "Комендант гуртожитку",
+        "image":"TantsiuraHalina.jpeg"
       }
     ]
   },
@@ -52,9 +84,10 @@
     "dormitory_num": 5,
     "workers": [
       {
-        "num": "64-35-72",
+        "phone": "64-35-72",
         "fullName": "БУРИШИН-ОЛІЙНИК Тетяна Іванівна",
-        "position": "Комендант гуртожитку"
+        "position": "Комендант гуртожитку",
+        "image":"BobikYurii.jpeg"
       }
     ]
   }

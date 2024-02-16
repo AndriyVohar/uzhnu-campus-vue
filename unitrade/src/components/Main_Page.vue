@@ -56,14 +56,43 @@
         referrerpolicy="no-referrer-when-downgrade"
       ></iframe>
     </div>
-    <div class="disclaimer about-us" @click="this.$router.push('/about-us')">
-      <p>{{ $t("main.titles.aboutUs") }}</p>
-      <span>{{ $t("main.text.aboutUs") }}</span>
+    <div
+      class="workers-data"
+      v-for="worker in studmistechkoWorkers"
+      :key="worker"
+    >
+      <img :src="require(`../assets/dormitory_img/workers/${worker.image}`)" :alt="worker.fullName"/>
+      <span>
+        <p class="worker-position">{{ worker.position }}</p>
+        <p class="worker-fullname">{{ worker.fullName }}</p>
+        <p class="worker-phone">{{ worker.phone }}</p>
+      </span>
     </div>
-    <div class="disclaimer rules" @click="this.$router.push('/rules')">
-      <p>{{ $t("main.titles.rules") }}</p>
-      <span>{{ $t("main.text.rules") }}</span>
+    <div
+      class="workers-data"
+      v-for="worker in dormitory_data"
+      :key="worker"
+    >
+      <img :src="require(`../assets/dormitory_img/workers/${worker.image}`)" :alt="worker.fullName"/>
+      <span>
+        <p class="worker-position">{{ worker.position }}</p>
+        <p class="worker-fullname">{{ worker.fullName }}</p>
+        <p class="worker-phone">{{ worker.phone }}</p>
+      </span>
     </div>
+    <div class="spacer"></div>
+    <router-link class="router-link" to="/about-us">
+      <div class="disclaimer about-us">
+        <p>{{ $t("main.titles.aboutUs") }}</p>
+        <span>{{ $t("main.text.aboutUs") }}</span>
+      </div>
+    </router-link>
+    <router-link class="router-link" to="/rules">
+      <div class="disclaimer rules">
+        <p>{{ $t("main.titles.rules") }}</p>
+        <span>{{ $t("main.text.rules") }}</span>
+      </div>
+    </router-link>
     <div class="space"></div>
   </div>
 </template>
@@ -72,18 +101,42 @@
 import Auth_btn from "@/components/Auth_btn.vue";
 import SelectorComponent from "@/components/Sections/SelectorComponent.vue";
 import Token from "@/token-usage.js";
+import data from "../dormitory_data.json";
 
 export default {
   name: "Main_Page",
   components: { Auth_btn, SelectorComponent },
-  methods: {},
+  data() {
+    return {
+      dormitory_data: [],
+      studmistechkoWorkers: data.filter(
+        (stud) => stud.dormitory_num === "studmistechko"
+      )[0].workers,
+    };
+  },
   computed: {
-    selected_dormitory(){
-      return this.$store.state.dormitoryNumber
+    selected_dormitory() {
+      return this.$store.state.dormitoryNumber;
     },
     isLoggedIn() {
       return Token.getAccessTokenFromCookie();
     },
+  },
+  methods: {
+    dormitoryWorkersFromJSON() {
+      let dorm = data.filter(
+        (dorm) => parseInt(this.selected_dormitory) === dorm.dormitory_num
+      )[0];
+      return dorm.workers;
+    },
+  },
+  watch: {
+    dormitoryNumber() {
+      this.dormitory_data = this.dormitoryWorkersFromJSON();
+    },
+  },
+  mounted() {
+    this.dormitory_data = this.dormitoryWorkersFromJSON();
   },
 };
 </script>
@@ -128,7 +181,42 @@ export default {
     width: 100%;
   }
 }
-
+.workers-data {
+  display: flex;
+  text-align: left;
+  width: calc(100% - 20px);
+  padding: 10px;
+  border-radius: $mobile-container-border-radius;
+  background-color: white;
+  gap: 10px;
+  img{
+    width: 96px;
+    height: 120px;
+    max-height: 120px;
+    max-width: 96px;
+    border-radius: $mobile-container-border-radius-small;
+  }
+  span{
+    display:block;
+    align-items: auto;
+    .worker-position {
+      margin-bottom: 5px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+  
+    .worker-fullname {
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    .worker-phone{
+      font-size:12px;
+      font-weight:550;
+      margin-top: 15px;
+    }
+  }
+}
 .about-us {
   background: rgb(246, 234, 230);
   background: linear-gradient(

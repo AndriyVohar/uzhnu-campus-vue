@@ -118,7 +118,7 @@ input {
 
 .spacer {
   margin-top: 5px;
-  height: 2px;
+  height: 1px;
   width: 100%;
   border-radius: 5px;
   background-color: $main;
@@ -137,5 +137,9 @@ html {
   height: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+.router-link{
+  text-decoration: none;
+  color: black;
 }
 </style>
