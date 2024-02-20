@@ -1,37 +1,39 @@
 <template>
-  <div class="form-container" @submit.prevent="createInfo()">
-    <form class="form-content">
-      <h2 class="form-title">{{ $t("info.create") }}</h2>
-      <div class="input-group">
-        <input
-          type="text"
-          id="title"
-          v-model="formData.title"
-          :placeholder="$t('form.title')"
-          class="input-field"
-          required
-        />
-        <textarea
-          style="resize: none"
-          v-model="formData.description"
-          :placeholder="$t('form.description')"
-          class="input-field"
-          required
-        ></textarea>
-      </div>
-      <div class="button-group">
-        <button class="save-button" type="submit">
-          {{ $t("form.submit") }}
-        </button>
-        <button
-          type="button"
-          class="cancel-button"
-          @click="$router.push('/me')"
-        >
-          {{ $t("form.cancel") }}
-        </button>
-      </div>
-    </form>
+  <div>
+    <div class="form-container" @submit.prevent="createInfo()">
+      <form class="form-content">
+        <h2 class="form-title">{{ $t("info.create") }}</h2>
+        <div class="input-group">
+          <input
+            type="text"
+            id="title"
+            v-model="formData.title"
+            :placeholder="$t('form.title')"
+            class="input-field"
+            required
+          />
+          <textarea
+            style="resize: none;"
+            v-model="formData.description"
+            :placeholder="$t('form.description')"
+            class="input-field"
+            required
+          ></textarea>
+        </div>
+        <div class="button-group">
+          <button class="save-button" type="submit">
+            {{ $t("form.submit") }}
+          </button>
+          <button
+            type="button"
+            class="cancel-button"
+            @click="$router.push('/me')"
+          >
+            {{ $t("form.cancel") }}
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 

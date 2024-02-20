@@ -23,11 +23,11 @@
           <div class="buttons" v-if="user.role == 'admin'">
             <font-awesome-icon
               :icon="['fas', 'pen']"
-              @click.stop="updateWork()"
+              @click.prevent="updateWork()"
             />
             <font-awesome-icon
               :icon="['fas', 'trash']"
-              @click.stop="deleteWork()"
+              @click.prevent="deleteWork()"
             />
           </div>
         </div>

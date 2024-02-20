@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    <RouterView></RouterView>
+    <RouterView class="router-view-main"></RouterView>
     <Footer />
   </div>
 </template>
@@ -54,6 +54,9 @@ export default {
 <style lang="scss">
 @import "assets/main_colors";
 
+.router-view-main{
+  min-height: calc(100vh - 100px);
+}
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }

@@ -57,6 +57,7 @@ export default {
   },
   mounted() {
     this.loadItems();
+    this.dormitory_data = this.dormitoryWorkersFromJSON();
   },
   computed: {
     dormitoryNumber() {
@@ -65,13 +66,11 @@ export default {
   },
   data() {
     return {
-      dormitory_data: data.filter(
-        (dorm) => parseInt(this.dormitoryNumber) === dorm.dormitory_num
-      )[0].workers,
+      dormitory_data:[],
       attentionList: [],
       studmistechkoWorkers: data.filter(
         (stud) => stud.dormitory_num === "studmistechko"
-      )[0].workers
+      )[0].workers,
     };
   },
   watch: {
@@ -125,7 +124,7 @@ export default {
 .info-page {
   width: 90vw;
   padding: 0 5vw;
-  padding-bottom: 50px;
+  padding-bottom: 30px;
   margin-bottom: 15px;
   background-color: #d3dfe3;
   min-height: calc(100vh - 67px);

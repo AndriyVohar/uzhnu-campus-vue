@@ -32,11 +32,11 @@
           >
             <font-awesome-icon
               :icon="['fas', 'pen']"
-              @click.stop="updatePost()"
+              @click.prevent="updatePost()"
             />
             <font-awesome-icon
               :icon="['fas', 'trash']"
-              @click.stop="deletePost()"
+              @click.prevent="deletePost()"
             />
           </div>
         </div>

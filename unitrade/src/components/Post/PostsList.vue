@@ -105,10 +105,9 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  // overflow: hidden;
   overflow-y: auto;
   justify-content: space-between;
-  margin-bottom:50px;
+  margin-bottom:43px;
 
   .posts-spacer {
     width: calc(100vw - 30px);
@@ -119,17 +118,16 @@ export default {
   .posts_list {
     gap: 15px;
     min-height: calc(
-      100vh - 75px - 68px
-    ); // $2 це селектор $3 це верхнє меню + 1px (1px height spacer)
+      100vh - 170px
+    );
     margin-top: 15px;
     width: calc(100vw - 30px);
     display: flex;
-    padding-bottom: 60px;
     flex-direction: column;
   }
 
   .page-selector {
-    margin-bottom: 50px;
+    padding-bottom: 10px;
     width: 100%;
     display: flex;
     border-top: 1px solid $border-default;

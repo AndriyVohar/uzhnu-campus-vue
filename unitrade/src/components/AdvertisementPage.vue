@@ -27,7 +27,7 @@
         >
       </div>
     </div>
-    <router-view></router-view>
+    <router-view class="router-view-advertisement"></router-view>
   </div>
 </template>
 
@@ -54,9 +54,9 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  // overflow-y: auto;
-  min-height: calc(100vh - 75px - 68px);
-  // margin-bottom:60px;
+  // overflow-y: hidden;
+  // min-height: calc(100vh - 250px);
+  // margin-bottom:50px;
   .menu {
     width: calc(100vw - 30px);
     height: 25px;

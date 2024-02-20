@@ -33,7 +33,7 @@ const routes = [
     },
   },
   {
-    path: "/info/create",
+    path: "/infos/create",
     name: "infoCreate",
     component: () => import("@/components/Info/InfoCreate.vue"),
     meta: {
@@ -41,7 +41,7 @@ const routes = [
     },
   },
   {
-    path: "/info/:id/edit",
+    path: "/infos/:id/edit",
     name: "infoEdit",
     component: () => import("@/components/Info/InfoEdit.vue"),
     meta: {

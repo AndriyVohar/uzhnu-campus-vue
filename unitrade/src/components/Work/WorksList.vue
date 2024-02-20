@@ -94,7 +94,7 @@ export default {
   width: 100vw;
   overflow-y: auto;
   justify-content: space-between;
-  margin-bottom: 50px;
+  margin-bottom: 43px;
   .works-spacer {
     width: calc(100vw - 30px);
     height: 1px;
@@ -102,18 +102,17 @@ export default {
   }
   .works_list {
     gap: 15px;
-    padding-top: 20px;
+    margin-top: 15px;
     min-height: calc(
-      100vh - 75px - 68px
-    ); // $2 це селектор $3 це верхнє меню + 1px (1px height spacer)
+      100vh - 170px
+    );
     width: calc(100vw - 30px);
     display: flex;
     flex-direction: column;
-    padding-bottom: 60px;
   }
 
   .page-selector {
-    margin-bottom: 50px;
+    padding-bottom: 10px;
     width: 100%;
     display: flex;
     border-top: 1px solid $border-default;

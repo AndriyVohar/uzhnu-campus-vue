@@ -718,7 +718,7 @@ export default {
       select {
         border: none;
         outline: none;
-        font-size: 10px;
+        font-size: 14px;
         background-color: $main;
         text-align: right;
       }
