@@ -1,60 +1,62 @@
 <template>
-  <div class="form-container" v-if="formData">
-    <form class="form-content">
-      <h2 class="form-title">{{ $t("work.edit") }}</h2>
-      <div class="input-group">
-        <input
-          type="file"
-          id="photo"
-          @change="checkFileSize"
-          accept="image/*"
-          class="input-field"
-        />
-        <input
-          type="text"
-          id="title"
-          v-model="formData.title"
-          :placeholder="$t('form.name')"
-          class="input-field"
-          required
-        />
-        <input
-          type="text"
-          id="tag"
-          v-model="formData.tag"
-          :placeholder="$t('form.tag')"
-          class="input-field"
-          required
-        />
-        <input
-          type="number"
-          id="salary"
-          v-model="formData.salary"
-          :placeholder="$t('form.salary')"
-          class="input-field"
-          required
-        />
-        <textarea
-          style="resize: none"
-          v-model="formData.description"
-          :placeholder="$t('form.description')"
-          class="input-field"
-          required
-        ></textarea>
-      </div>
-      <div class="button-group">
-        <button type="submit" class="save-button" @click="updateWork()">
-          {{ $t("form.submit") }}
-        </button>
-        <button
-          type="button"
-          class="cancel-button"
-          @click="this.$router.push('/me')"
-        >
-          {{ $t("form.cancel") }}
-        </button>
-      </div>
-    </form>
+  <div>
+    <div class="form-container" v-if="formData">
+      <form class="form-content">
+        <h2 class="form-title">{{ $t("work.edit") }}</h2>
+        <div class="input-group">
+          <input
+            type="file"
+            id="photo"
+            @change="checkFileSize"
+            accept="image/*"
+            class="input-field"
+          />
+          <input
+            type="text"
+            id="title"
+            v-model="formData.title"
+            :placeholder="$t('form.name')"
+            class="input-field"
+            required
+          />
+          <input
+            type="text"
+            id="tag"
+            v-model="formData.tag"
+            :placeholder="$t('form.tag')"
+            class="input-field"
+            required
+          />
+          <input
+            type="number"
+            id="salary"
+            v-model="formData.salary"
+            :placeholder="$t('form.salary')"
+            class="input-field"
+            required
+          />
+          <textarea
+            style="resize: none"
+            v-model="formData.description"
+            :placeholder="$t('form.description')"
+            class="input-field"
+            required
+          ></textarea>
+        </div>
+        <div class="button-group">
+          <button type="submit" class="save-button" @click="updateWork()">
+            {{ $t("form.submit") }}
+          </button>
+          <button
+            type="button"
+            class="cancel-button"
+            @click="this.$router.push('/me')"
+          >
+            {{ $t("form.cancel") }}
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
     

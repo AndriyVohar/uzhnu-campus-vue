@@ -1,38 +1,40 @@
 <template>
-  <div class="form-container" @submit.prevent="updateInfo()">
-    <form class="form-content">
-      <h2 class="form-title">{{ $t("info.edit") }}</h2>
-      <div class="input-group">
-        <input
-          type="text"
-          id="title"
-          v-model="formData.title"
-          :placeholder="$t('form.title')"
-          class="input-field"
-          required
-        />
-        <input
-          type="text"
-          id="tag"
-          v-model="formData.description"
-          :placeholder="$t('form.content')"
-          class="input-field"
-          required
-        />
-      </div>
-      <div class="button-group">
-        <button class="save-button">
-          {{ $t("form.submit") }}
-        </button>
-        <button
-          type="button"
-          class="cancel-button"
-          @click="$router.push('/me')"
-        >
-          {{ $t("form.cancel") }}
-        </button>
-      </div>
-    </form>
+  <div>
+    <div class="form-container" @submit.prevent="updateInfo()">
+      <form class="form-content">
+        <h2 class="form-title">{{ $t("info.edit") }}</h2>
+        <div class="input-group">
+          <input
+            type="text"
+            id="title"
+            v-model="formData.title"
+            :placeholder="$t('form.title')"
+            class="input-field"
+            required
+          />
+          <input
+            type="text"
+            id="tag"
+            v-model="formData.description"
+            :placeholder="$t('form.content')"
+            class="input-field"
+            required
+          />
+        </div>
+        <div class="button-group">
+          <button class="save-button">
+            {{ $t("form.submit") }}
+          </button>
+          <button
+            type="button"
+            class="cancel-button"
+            @click="$router.push('/me')"
+          >
+            {{ $t("form.cancel") }}
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
   
@@ -51,7 +53,12 @@ export default {
   },
   methods: {
     updateInfo() {
-      updateItem("infos", this.$route.params.id, this.formData, this.user.google_id)
+      updateItem(
+        "infos",
+        this.$route.params.id,
+        this.formData,
+        this.user.google_id
+      )
         .then(() => {
           this.$router.push("/me");
         })

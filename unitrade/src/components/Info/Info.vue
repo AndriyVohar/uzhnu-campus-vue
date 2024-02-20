@@ -13,15 +13,15 @@
       ></info-component>
     </div>
     <div class="posts-spacer"></div>
-    <div class="data">
-      <h4>Директор студмістечка</h4>
-      <p>КЕПИЧ Василь Георгієвич</p>
-      <p>0953769613 (з 8.00 по 17.00 в робочі дні)</p>
+    <div class="data" v-for="worker in studmistechkoWorkers" :key="worker.id">
+      <h4>{{ worker.position }}</h4>
+      <p>{{ worker.fullName }}</p>
+      <p>{{ worker.phone }}</p>
     </div>
     <div class="data" v-for="worker in dormitory_data" :key="worker.id">
       <h4>{{ worker.position }}</h4>
       <p>{{ worker.fullName }}</p>
-      <p>{{ worker.num }}</p>
+      <p>{{ worker.phone }}</p>
     </div>
   </div>
 </template>
@@ -48,12 +48,12 @@ export default {
           console.log("some error");
         });
     },
-    dormitoryWorkersFromJSON(){
+    dormitoryWorkersFromJSON() {
       let dorm = data.filter(
-      (dorm) => parseInt(this.dormitoryNumber) === dorm.dormitory_num
-    )[0];
-    return dorm.workers;
-    }
+        (dorm) => parseInt(this.dormitoryNumber) === dorm.dormitory_num
+      )[0];
+      return dorm.workers;
+    },
   },
   mounted() {
     this.loadItems();
@@ -66,8 +66,11 @@ export default {
   },
   data() {
     return {
-      dormitory_data: [],
+      dormitory_data:[],
       attentionList: [],
+      studmistechkoWorkers: data.filter(
+        (stud) => stud.dormitory_num === "studmistechko"
+      )[0].workers,
     };
   },
   watch: {
@@ -81,7 +84,7 @@ export default {
 
 <style scoped lang="scss">
 @import "../../assets/main_colors";
-.selector{
+.selector {
   margin-top: 15px;
 }
 .alert-holder {
@@ -121,7 +124,7 @@ export default {
 .info-page {
   width: 90vw;
   padding: 0 5vw;
-  padding-bottom: 50px;
+  padding-bottom: 30px;
   margin-bottom: 15px;
   background-color: #d3dfe3;
   min-height: calc(100vh - 67px);

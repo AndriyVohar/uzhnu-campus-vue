@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    <RouterView></RouterView>
+    <RouterView class="router-view-main"></RouterView>
     <Footer />
   </div>
 </template>
@@ -54,6 +54,9 @@ export default {
 <style lang="scss">
 @import "assets/main_colors";
 
+.router-view-main{
+  min-height: calc(100vh - 100px);
+}
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
@@ -79,7 +82,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: $border-default;
-  background-color: $background;
+  background-color: $main-gray;
 }
 
 button,
@@ -118,10 +121,10 @@ input {
 
 .spacer {
   margin-top: 5px;
-  height: 2px;
+  height: 1px;
   width: 100%;
   border-radius: 5px;
-  background-color: #b8dedc;
+  background-color: $main;
 }
 
 body {
@@ -137,5 +140,9 @@ html {
   height: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+.router-link{
+  text-decoration: none;
+  color: black;
 }
 </style>

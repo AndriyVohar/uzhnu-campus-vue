@@ -1,46 +1,48 @@
 <template>
-  <div class="form-container">
-    <form @submit.prevent="createPost()" class="form-content">
-      <h2 class="form-title">{{ $t("post.create") }}</h2>
-      <div class="input-group">
-        <input
-          type="file"
-          @change="checkFileSize"
-          id="photo"
-          accept="image/*"
-          class="input-field"
-          required
-        />
-        <input
-          type="text"
-          id="title"
-          v-model="formData.title"
-          :placeholder="$t('form.name')"
-          class="input-field"
-          required
-        />
-        <input
-          type="text"
-          id="tag"
-          v-model="formData.tag"
-          :placeholder="$t('form.tag')"
-          class="input-field"
-          required
-        />
-      </div>
-      <div class="button-group">
-        <button type="submit" class="save-button">
-          {{ $t("form.submit") }}
-        </button>
-        <button
-          type="button"
-          class="cancel-button"
-          @click="this.$router.push('/me')"
-        >
-          {{ $t("form.cancel") }}
-        </button>
-      </div>
-    </form>
+  <div>
+    <div class="form-container">
+      <form @submit.prevent="createPost()" class="form-content">
+        <h2 class="form-title">{{ $t("post.create") }}</h2>
+        <div class="input-group">
+          <input
+            type="file"
+            @change="checkFileSize"
+            id="photo"
+            accept="image/*"
+            class="input-field"
+            required
+          />
+          <input
+            type="text"
+            id="title"
+            v-model="formData.title"
+            :placeholder="$t('form.name')"
+            class="input-field"
+            required
+          />
+          <input
+            type="text"
+            id="tag"
+            v-model="formData.tag"
+            :placeholder="$t('form.tag')"
+            class="input-field"
+            required
+          />
+        </div>
+        <div class="button-group">
+          <button type="submit" class="save-button">
+            {{ $t("form.submit") }}
+          </button>
+          <button
+            type="button"
+            class="cancel-button"
+            @click="this.$router.push('/me')"
+          >
+            {{ $t("form.cancel") }}
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 

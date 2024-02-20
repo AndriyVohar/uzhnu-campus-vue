@@ -337,7 +337,7 @@ export default {
 .spacer {
   width: 100%;
   height: 2px;
-  background-color: #b8dedc;
+  background-color: $main;
 }
 
 .user-actions {
@@ -351,7 +351,7 @@ export default {
   button {
     border: none;
     outline: none;
-    background-color: #b8dedc;
+    background-color: $main;
     font-size: 12px;
     border-radius: 10px;
     padding: 5px 15px;
@@ -399,7 +399,7 @@ export default {
       img {
         width: 60px;
         height: 60px;
-        border-radius: 50px;
+        border-radius: 15px;
       }
 
       .edit-pen {
@@ -562,7 +562,7 @@ export default {
         img {
           width: 60px;
           height: 60px;
-          border-radius: 50px;
+          border-radius: 15px;
         }
 
         .edit-pen {
@@ -695,7 +695,7 @@ export default {
   }
 
   .user-selector {
-    background-color: #b8dedc;
+    background-color: $main;
     border-radius: 15px;
     padding: 0 15px;
     height: 40px;
@@ -718,8 +718,8 @@ export default {
       select {
         border: none;
         outline: none;
-        font-size: 10px;
-        background-color: #b8dedc;
+        font-size: 14px;
+        background-color: $main;
         text-align: right;
       }
 
