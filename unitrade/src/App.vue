@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Header />
+    <Header/>
     <RouterView class="router-view-main"></RouterView>
-    <Footer />
+    <Footer/>
   </div>
 </template>
 
@@ -11,7 +11,8 @@
 import Header from "./components/UpperMenu.vue";
 import Footer from "@/components/Footer.vue";
 
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
+
 export default {
   name: "App",
   data() {
@@ -54,9 +55,12 @@ export default {
 <style lang="scss">
 @import "assets/main_colors";
 
-.router-view-main{
+.router-view-main {
   min-height: calc(100vh - 100px);
+  max-width: 100vw;
+  overflow-x: hidden;
 }
+
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
@@ -141,7 +145,8 @@ html {
   overflow-x: hidden;
   overflow-y: scroll;
 }
-.router-link{
+
+.router-link {
   text-decoration: none;
   color: black;
 }

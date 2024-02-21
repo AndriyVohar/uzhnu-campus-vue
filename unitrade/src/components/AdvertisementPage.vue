@@ -13,17 +13,19 @@
       <div v-else></div>
       <div class="toggle">
         <router-link
-          to="/posts"
-          class="router-link"
-          :class="{ toggle_active: $route.path == '/posts' }"
-          >{{ $t("global.post") }}и</router-link
+            to="/posts"
+            class="router-link"
+            :class="{ toggle_active: $route.path == '/posts' }"
+        >{{ $t("global.post") }}и
+        </router-link
         >
         <span style="font-weight: 550"> | </span>
         <router-link
-          to="/works"
-          class="router-link"
-          :class="{ toggle_active: $route.path == '/works' }"
-          >{{ $t("global.work") }}</router-link
+            to="/works"
+            class="router-link"
+            :class="{ toggle_active: $route.path == '/works' }"
+        >{{ $t("global.work") }}
+        </router-link
         >
       </div>
     </div>
@@ -49,14 +51,15 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/main_colors.scss";
+
 .page {
   background-color: $main-gray;
   flex-direction: column;
   align-items: center;
+  justify-content: start;
+  max-width: 100vw;
   width: 100vw;
-  // overflow-y: hidden;
-  // min-height: calc(100vh - 250px);
-  // margin-bottom:50px;
+
   .menu {
     width: calc(100vw - 30px);
     height: 25px;
@@ -65,11 +68,13 @@ export default {
     justify-content: space-between;
     padding-bottom: 15px;
     border-bottom: 1px solid black;
+
     .select-dormitory {
       height: 25px;
       flex-direction: row;
       gap: 30px;
       justify-content: space-between;
+
       select {
         background-color: white;
         outline: none;
@@ -82,17 +87,20 @@ export default {
         padding-left: 10px;
       }
     }
+
     .toggle {
       .router-link {
         text-decoration: none;
         color: black;
       }
+
       display: flex;
       align-items: center;
       font-size: 14px;
       height: 25px;
       gap: 5px;
     }
+
     .toggle_active {
       font-size: 16px;
       font-weight: 550;

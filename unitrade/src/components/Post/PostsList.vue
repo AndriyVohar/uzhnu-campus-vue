@@ -105,7 +105,6 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  overflow-y: auto;
   justify-content: space-between;
   margin-bottom:43px;
 
@@ -138,6 +137,11 @@ export default {
     height: 40px;
     gap: 10px;
     font-weight: 500;
+  }
+}
+@media (min-width: 1000px) {
+  .container{
+
   }
 }
 </style>
