@@ -61,6 +61,7 @@ export default {
 .dorm-5 {
   background: url("../../assets/dormitory_img/dormitory-5.jpg");
 }
+
 .dormitory-selector {
   width: 100%;
   background-size: cover;
@@ -89,6 +90,7 @@ export default {
     border: none;
     color: #ffffff;
     margin-left: 15px;
+
     &:hover {
       cursor: pointer;
     }
@@ -97,6 +99,13 @@ export default {
   option {
     color: #2c3e50;
     font-weight: bold;
+  }
+}
+
+@media (min-width: 1000px) {
+  .dormitory-selector {
+    max-height: 400px;
+    aspect-ratio: 1/0.5;
   }
 }
 </style>

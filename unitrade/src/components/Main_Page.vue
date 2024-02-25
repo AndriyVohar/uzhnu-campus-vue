@@ -184,13 +184,15 @@ export default {
     width: 100%;
   }
 }
-.workers-holder{
+
+.workers-holder {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: start;
   gap: 15px;
 }
+
 .workers-data {
   display: flex;
   text-align: left;
@@ -252,12 +254,12 @@ export default {
 
 .main-page-container {
   width: 90vw;
-  transition: all ease-out 0.4s;
-  margin-left: 5vw;
+  transition: width ease-out 0.4s;
+  margin: auto;
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-top: 10px;
+  margin-top: 10px !important;
   min-height: calc(100vh - 67px);
 
   .login-notification {
@@ -293,23 +295,21 @@ export default {
 @media (min-width: 1000px) {
   .main-page-container {
     width: 60vw;
-    max-width: 60vw;
-    margin-left: 20vw;
-    transition: all ease-out 0.4s;
+    transition: width ease-out 0.4s;
 
-    .dormitory-selector {
-      aspect-ratio: 1/0.5;
-    }
 
     .iframe-container {
       aspect-ratio: 1/0.5;
+      max-height: 400px;
     }
-    .workers-holder{
+
+    .workers-holder {
       flex-direction: row;
       max-width: 100%;
       justify-content: space-evenly;
       flex-wrap: wrap;
-      .workers-data{
+
+      .workers-data {
         width: calc(30vw - 40px);
       }
     }

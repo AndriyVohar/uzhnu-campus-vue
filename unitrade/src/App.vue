@@ -54,7 +54,10 @@ export default {
 
 <style lang="scss">
 @import "assets/main_colors";
-
+.space-mono{
+  font-family: "Space Mono", monospace;
+  font-style: normal;
+}
 .router-view-main {
   min-height: calc(100vh - 100px);
   max-width: 100vw;

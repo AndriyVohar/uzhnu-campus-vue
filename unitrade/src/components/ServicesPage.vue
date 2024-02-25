@@ -4,34 +4,38 @@
       <h4>{{ $t("services.about.title") }}</h4>
       <p>{{ $t("services.about.text") }}</p>
     </div>
-    <div class="form-send-problem">
+    <div class="form-send-problem space-mono">
       <h4>{{ $t("services.send-problem") }}</h4>
-      <select name="worker" id="" v-model="worker">
-        <option value="plumber">{{ $t("global.worker.plumber") }}</option>
-        <option value="joiner">{{ $t("global.worker.joiner") }}</option>
-        <option value="electrician">
-          {{ $t("global.worker.electrician") }}
-        </option>
-      </select>
-      <textarea
-          name=""
-          id=""
-          :placeholder="$t('form.textarea.problem-description')"
-      ></textarea>
-      <button>{{ $t("global.send") }}</button>
+      <div class="selectors">
+        <select name="worker" id="" v-model="worker">
+          <option value="plumber">{{ $t("global.worker.plumber") }}</option>
+          <option value="joiner">{{ $t("global.worker.joiner") }}</option>
+          <option value="electrician">
+            {{ $t("global.worker.electrician") }}
+          </option>
+        </select>
+        <div class="additional-requst-data">
+        <textarea
+            name=""
+            id=""
+            :placeholder="$t('form.textarea.problem-description')"
+        ></textarea>
+          <button>{{ $t("global.send") }}</button>
+        </div>
+      </div>
     </div>
     <div class="washing-appointment">
       <span class="top">
-        <h4>{{ $t("services.washing-appointment") }}</h4>
+        <h4 class="space-mono">{{ $t("services.washing-appointment") }}</h4>
         <span class="arrows">
-          <p @click="changeDay(0)">&lt;</p>
-          <p @click="changeDay(1)">&gt;</p>
+          <p @click="changeDay(0)"><font-awesome-icon :icon="['fas', 'chevron-left']"/></p>
+          <p @click="changeDay(1)"><font-awesome-icon :icon="['fas', 'chevron-right']"/></p>
         </span>
       </span>
-      <p style="font-size: 12px; text-align: center">
+      <p style="font-size: 12px; text-align: center" class="space-mono">
         {{ washDay }}
       </p>
-      <div v-for="index in 16" :key="index" class="wash-hour">
+      <div v-for="index in 16" :key="index" class="wash-hour space-mono">
         {{ index + 7 }}:00-{{ index + 8 }}:00
       </div>
     </div>
@@ -106,8 +110,9 @@ export default {
 
 .services-page {
   width: 90vw;
-  padding: 0 5vw;
-  padding-bottom: 50px;
+  transition: width ease-out .2s, margin ease-out .2s;
+  margin: auto;
+  padding-bottom: 50px !important;
   margin-bottom: 15px !important;
   background-color: #d3dfe3;
   min-height: calc(100vh - 67px);
@@ -120,7 +125,7 @@ export default {
     border-radius: $mobile-container-border-radius;
     padding: 10px;
     text-align: left;
-    width: calc(100vw - 50px);
+    width: calc(100% - 20px);
   }
 
   h4 {
@@ -138,43 +143,79 @@ export default {
   }
 
   .form-send-problem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: width ease-out .2s;
     background-color: $main;
+    width: calc(100% - 20px);
 
-    select {
-      height: 25px;
-      background-color: $bg-secondary;
-      outline: none;
-      font-size: 12px;
-      font-weight: 400;
-      justify-content: center;
-      border-radius: 3px;
-      border: none;
+    h4 {
       width: 100%;
-      cursor: pointer;
+      text-align: start;
     }
 
-    textarea {
-      margin-top: 10px;
-      width: calc(100% - 20px);
-      font-size: 12px;
-      resize: none;
-      padding: 10px;
-      min-height: 50px;
-      border: none;
-      border-radius: $mobile-container-border-radius-small;
-      background-color: $bg-secondary;
-    }
+    .selectors {
+      display: flex;
+      flex-direction: row;
+      align-items: start;
+      justify-content: space-between;
 
-    button {
-      margin-top: 10px;
-      background-color: #006d77;
-      border: none;
-      border-radius: $mobile-container-border-radius-small;
-      width: 100%;
-      font-size: 14px;
-      padding: 3px;
-      cursor: pointer;
-      color: white;
+
+      select {
+        width: 30%;
+        height: 25px;
+        background-color: $bg-secondary;
+        outline: none;
+        font-size: 12px;
+        font-weight: 400;
+        justify-content: center;
+        border-radius: 3px;
+        border: none;
+        cursor: pointer;
+      }
+
+      .additional-requst-data {
+        display: flex;
+        margin: unset;
+        padding: unset;
+        gap: 10px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: start;
+        width: 70%;
+
+        textarea {
+          font-size: 12px;
+          resize: none;
+          width: 90%;
+          min-height: 50px;
+          padding: 10px;
+          margin: unset;
+          border: none;
+          border-radius: $mobile-container-border-radius-small;
+          background-color: $bg-secondary;
+        }
+
+        button {
+          background-color: #006d77;
+          border: none;
+          border-radius: $mobile-container-border-radius-small;
+          width: 30%;
+          font-size: 14px;
+          padding: 3px;
+          cursor: pointer;
+          transition: all ease-out .2s;
+          color: white;
+
+          &:hover {
+            width: 40%;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all ease-out .2s;
+          }
+        }
+      }
     }
   }
 
@@ -212,11 +253,17 @@ export default {
 @media (min-width: 1000px) {
   .services-page {
     width: 60vw;
-    transition: width ease-out .2s;
+    padding: 0px 20px;
+    transition: width ease-out .2s, margin ease-out .2s;
     margin: auto;
 
     div {
       width: 100%;
+    }
+
+    .form-send-problem {
+      width: 100%;
+      transition: width ease-out .2s;
     }
   }
 }

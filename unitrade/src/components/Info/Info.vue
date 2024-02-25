@@ -99,10 +99,11 @@ export default {
 }
 
 .posts-spacer {
-  width: calc(100vw - 30px);
+  width: calc(100% - 20px);
   transition: width ease-out .2s;
   height: 1px;
   margin: 15px 0;
+  padding: 0 10px;
   background-color: #006d77;
 }
 
@@ -110,7 +111,7 @@ export default {
   margin-bottom: 15px;
   text-align: left;
   transition: width ease-out .2s;
-  width: calc(100vw - 50px);
+  width: calc(100% - 20px);
   padding: 10px;
   border-radius: $mobile-container-border-radius;
   background-color: #f6eae6;
@@ -129,8 +130,9 @@ export default {
 .info-page {
   width: 90vw;
   transition: width ease-out .2s;
-  padding: 0 5vw;
-  padding-bottom: 30px;
+  padding: 0 20px;
+  margin: auto;
+  padding-bottom: 30px !important;
   margin-bottom: 15px !important;
   background-color: #d3dfe3;
   min-height: calc(100vh - 67px);
@@ -145,7 +147,7 @@ export default {
     padding: 10px;
     text-align: left;
     transition: width ease-out .2s;
-    width: calc(100vw - 50px);
+    width: calc(100% - 20px);
 
     h4 {
       font-size: 14px;
@@ -160,13 +162,16 @@ export default {
 }
 
 @media (min-width: 1000px) {
-  .data {
-    transition: width ease-out .2s;
-    width: 100%;
-  }
   .posts-spacer {
     width: 100%;
     transition: width ease-out .2s;
+  }
+  .selector{
+    width: 100%;
+    padding: 0 10px;
+  }
+  .data{
+    width: 100%;
   }
   .info-page {
     width: 60vw;
