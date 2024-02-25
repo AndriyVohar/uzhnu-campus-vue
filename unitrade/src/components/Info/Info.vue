@@ -7,9 +7,9 @@
     <selector-component class="selector"></selector-component>
     <div class="alert-holder">
       <info-component
-        :attention="attention"
-        v-for="attention in attentionList"
-        :key="attention"
+          :attention="attention"
+          v-for="attention in attentionList"
+          :key="attention"
       ></info-component>
     </div>
     <div class="posts-spacer"></div>
@@ -30,7 +30,7 @@
 import SelectorComponent from "@/components/Sections/SelectorComponent.vue";
 import data from "../../dormitory_data.json";
 import InfoComponent from "./InfoComponent.vue";
-import { loadItemsListByDormitory } from "@/DbOperations";
+import {loadItemsListByDormitory} from "@/DbOperations";
 
 export default {
   name: "Info",
@@ -41,16 +41,16 @@ export default {
   methods: {
     loadItems() {
       loadItemsListByDormitory("infos", this.dormitoryNumber)
-        .then((list) => {
-          this.attentionList = list;
-        })
-        .catch(() => {
-          console.log("some error");
-        });
+          .then((list) => {
+            this.attentionList = list;
+          })
+          .catch(() => {
+            console.log("some error");
+          });
     },
     dormitoryWorkersFromJSON() {
       let dorm = data.filter(
-        (dorm) => parseInt(this.dormitoryNumber) === dorm.dormitory_num
+          (dorm) => parseInt(this.dormitoryNumber) === dorm.dormitory_num
       )[0];
       return dorm.workers;
     },
@@ -66,10 +66,10 @@ export default {
   },
   data() {
     return {
-      dormitory_data:[],
+      dormitory_data: [],
       attentionList: [],
       studmistechkoWorkers: data.filter(
-        (stud) => stud.dormitory_num === "studmistechko"
+          (stud) => stud.dormitory_num === "studmistechko"
       )[0].workers,
     };
   },
@@ -84,9 +84,11 @@ export default {
 
 <style scoped lang="scss">
 @import "../../assets/main_colors";
+
 .selector {
   margin-top: 15px;
 }
+
 .alert-holder {
   margin-top: 15px;
   display: flex;
@@ -98,6 +100,7 @@ export default {
 
 .posts-spacer {
   width: calc(100vw - 30px);
+  transition: width ease-out .2s;
   height: 1px;
   margin: 15px 0;
   background-color: #006d77;
@@ -106,6 +109,7 @@ export default {
 .data {
   margin-bottom: 15px;
   text-align: left;
+  transition: width ease-out .2s;
   width: calc(100vw - 50px);
   padding: 10px;
   border-radius: $mobile-container-border-radius;
@@ -121,11 +125,13 @@ export default {
     font-size: 10px;
   }
 }
+
 .info-page {
   width: 90vw;
+  transition: width ease-out .2s;
   padding: 0 5vw;
   padding-bottom: 30px;
-  margin-bottom: 15px;
+  margin-bottom: 15px !important;
   background-color: #d3dfe3;
   min-height: calc(100vh - 67px);
   display: flex;
@@ -138,6 +144,7 @@ export default {
     background-color: #f6eae6;
     padding: 10px;
     text-align: left;
+    transition: width ease-out .2s;
     width: calc(100vw - 50px);
 
     h4 {
@@ -151,4 +158,26 @@ export default {
     }
   }
 }
+
+@media (min-width: 1000px) {
+  .data {
+    transition: width ease-out .2s;
+    width: 100%;
+  }
+  .posts-spacer {
+    width: 100%;
+    transition: width ease-out .2s;
+  }
+  .info-page {
+    width: 60vw;
+    transition: width ease-out .2s;
+    margin: auto;
+
+    .about-page {
+      transition: width ease-out .2s;
+      width: 100%;
+    }
+  }
+}
+
 </style>

@@ -14,9 +14,9 @@
         </option>
       </select>
       <textarea
-        name=""
-        id=""
-        :placeholder="$t('form.textarea.problem-description')"
+          name=""
+          id=""
+          :placeholder="$t('form.textarea.problem-description')"
       ></textarea>
       <button>{{ $t("global.send") }}</button>
     </div>
@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       worker: "plumber",
-      washDay:"",
+      washDay: "",
       dayIndex: 0,
     };
   },
@@ -84,18 +84,18 @@ export default {
 
       return `${dayOfWeek} ${dayOfMonth}.${month}.${year}`;
     },
-    changeDay(num){
-      if(num==0){
-        if(this.dayIndex>0){
+    changeDay(num) {
+      if (num == 0) {
+        if (this.dayIndex > 0) {
           this.dayIndex--;
         }
-      }else{
+      } else {
         this.dayIndex++;
       }
       this.washDay = this.formatDateForDay(this.dayIndex);
     }
   },
-  mounted () {
+  mounted() {
     this.washDay = this.formatDateForDay();
   },
 };
@@ -103,11 +103,12 @@ export default {
 
 <style lang="scss" scoped>
 @import "../assets/main_colors";
+
 .services-page {
   width: 90vw;
   padding: 0 5vw;
   padding-bottom: 50px;
-  margin-bottom: 15px;
+  margin-bottom: 15px !important;
   background-color: #d3dfe3;
   min-height: calc(100vh - 67px);
   display: flex;
@@ -130,6 +131,7 @@ export default {
 
   .about-page {
     background-color: #f6eae6;
+
     p {
       font-size: 10px;
     }
@@ -137,6 +139,7 @@ export default {
 
   .form-send-problem {
     background-color: $main;
+
     select {
       height: 25px;
       background-color: $bg-secondary;
@@ -149,16 +152,19 @@ export default {
       width: 100%;
       cursor: pointer;
     }
+
     textarea {
       margin-top: 10px;
-      width: 100%;
+      width: calc(100% - 20px);
       font-size: 12px;
       resize: none;
+      padding: 10px;
       min-height: 50px;
       border: none;
       border-radius: $mobile-container-border-radius-small;
       background-color: $bg-secondary;
     }
+
     button {
       margin-top: 10px;
       background-color: #006d77;
@@ -171,29 +177,46 @@ export default {
       color: white;
     }
   }
+
   .washing-appointment {
     background-color: $background;
-    .top{
-      width:90%;
+
+    .top {
+      width: 90%;
       margin: auto;
-      display:flex;
+      display: flex;
       justify-content: space-between;
-      .arrows{
-        p{
+
+      .arrows {
+        p {
           cursor: pointer;
         }
+
         font-size: 20px;
-        margin-top:0;
+        margin-top: 0;
         display: flex;
-        gap:20px;
+        gap: 20px;
       }
     }
+
     .wash-hour {
       margin-top: 10px;
       font-size: 10px;
       border-radius: $mobile-container-border-radius-small;
       width: calc(100% - 20px);
       background-color: white;
+    }
+  }
+}
+
+@media (min-width: 1000px) {
+  .services-page {
+    width: 60vw;
+    transition: width ease-out .2s;
+    margin: auto;
+
+    div {
+      width: 100%;
     }
   }
 }
