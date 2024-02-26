@@ -13,20 +13,18 @@
       <div v-else></div>
       <div class="toggle">
         <router-link
-            to="/posts"
-            class="router-link"
-            :class="{ toggle_active: $route.path == '/posts' }"
-        >{{ $t("global.post") }}и
-        </router-link
-        >
+          to="/posts"
+          class="router-link"
+          :class="{ toggle_active: $route.path == '/posts' }"
+          >{{ $t("global.post") }}
+        </router-link>
         <span style="font-weight: 550"> | </span>
         <router-link
-            to="/works"
-            class="router-link"
-            :class="{ toggle_active: $route.path == '/works' }"
-        >{{ $t("global.work") }}
-        </router-link
-        >
+          to="/works"
+          class="router-link"
+          :class="{ toggle_active: $route.path == '/works' }"
+          >{{ $t("global.work") }}
+        </router-link>
       </div>
     </div>
     <router-view class="router-view-advertisement"></router-view>
@@ -34,7 +32,6 @@
 </template>
 
 <script>
-// TODO: Умерла прокрутка. Вернути на місце
 export default {
   data() {
     return {
@@ -59,6 +56,10 @@ export default {
   justify-content: start;
   max-width: 100vw;
   width: 100vw;
+
+  overflow: auto;
+  scrollbar-width: none; //Firefox
+  -ms-overflow-style: none; //Internet explorer
 
   .menu {
     width: calc(100vw - 30px);
@@ -106,5 +107,8 @@ export default {
       font-weight: 550;
     }
   }
+}
+.page::-webkit-scrollbar {
+  display: none;
 }
 </style>

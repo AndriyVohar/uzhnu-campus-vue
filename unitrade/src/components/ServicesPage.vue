@@ -15,45 +15,62 @@
           </option>
         </select>
         <div class="additional-requst-data">
-        <textarea
+          <textarea
             name=""
             id=""
             :placeholder="$t('form.textarea.problem-description')"
-        ></textarea>
+          ></textarea>
           <button>{{ $t("global.send") }}</button>
         </div>
       </div>
     </div>
     <div class="washing-appointment">
       <span class="top">
+        <p @click="changeDay(0)" class="arrows">
+          <font-awesome-icon :icon="['fas', 'chevron-left']" />
+        </p>
         <h4 class="space-mono">{{ $t("services.washing-appointment") }}</h4>
-        <span class="arrows">
-          <p @click="changeDay(0)"><font-awesome-icon :icon="['fas', 'chevron-left']"/></p>
-          <p @click="changeDay(1)"><font-awesome-icon :icon="['fas', 'chevron-right']"/></p>
-        </span>
+        <p @click="changeDay(1)" class="arrows">
+          <font-awesome-icon :icon="['fas', 'chevron-right']" />
+        </p>
       </span>
       <p style="font-size: 12px; text-align: center" class="space-mono">
         {{ washDay }}
       </p>
-      <div v-for="index in 16" :key="index" class="wash-hour space-mono">
-        {{ index + 7 }}:00-{{ index + 8 }}:00
+      <div
+        v-for="index in defaultHours"
+        :key="index"
+        class="wash-hour space-mono"
+        :class="{ 'wash-done': washes[index + 7] }"
+        @click="clickHour(index + 7)"
+      >
+        <div>{{ index + 7 }}:00-{{ index + 8 }}:00</div>
+        <div v-if="washes[index + 7]">
+          {{ washes[index + 7].creator.room }}.{{
+            washes[index + 7].creator.name
+          }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getWashings } from "@/DbOperations";
 // TODO: BACKEND
+//TODO: CRUD for washes
 export default {
   data() {
     return {
       worker: "plumber",
       washDay: "",
       dayIndex: 0,
+      washes: [],
+      defaultHours: 16,
     };
   },
   methods: {
-    formatDateForDay(offset = 0) {
+    formatDateForDay(offset = 0, specialDate = false) {
       const daysOfWeek = [
         "Неділя",
         "Понеділок",
@@ -85,7 +102,9 @@ export default {
       const dayOfMonth = currentDate.getDate();
       const month = months[currentDate.getMonth()];
       const year = currentDate.getFullYear();
-
+      if (specialDate) {
+        return `${year}-${month}-${dayOfMonth}`;
+      }
       return `${dayOfWeek} ${dayOfMonth}.${month}.${year}`;
     },
     changeDay(num) {
@@ -96,11 +115,35 @@ export default {
       } else {
         this.dayIndex++;
       }
+      getWashings(4, 1, this.formatDateForDay(this.dayIndex, true)).then(
+        (washings) => {
+          this.washes = [];
+          for (let wash of washings) {
+            let { hour, ...rest } = wash;
+            this.washes[hour] = { ...rest };
+          }
+        }
+      );
       this.washDay = this.formatDateForDay(this.dayIndex);
-    }
+    },
+    clickHour(index) {
+      if (this.washes[index]) {
+        alert("Вже записалися");
+      } else {
+        alert("Бажаєте записатися?");
+      }
+    },
   },
+
   mounted() {
     this.washDay = this.formatDateForDay();
+    getWashings(4, 1, this.formatDateForDay(0, true)).then((washings) => {
+      this.washes = [];
+      for (let wash of washings) {
+        let { hour, ...rest } = wash;
+        this.washes[hour] = { ...rest };
+      }
+    });
   },
 };
 </script>
@@ -110,7 +153,7 @@ export default {
 
 .services-page {
   width: 90vw;
-  transition: width ease-out .2s, margin ease-out .2s;
+  transition: width ease-out 0.2s, margin ease-out 0.2s;
   margin: auto;
   padding-bottom: 50px !important;
   margin-bottom: 15px !important;
@@ -146,7 +189,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: width ease-out .2s;
+    transition: width ease-out 0.2s;
     background-color: $main;
     width: calc(100% - 20px);
 
@@ -160,7 +203,6 @@ export default {
       flex-direction: row;
       align-items: start;
       justify-content: space-between;
-
 
       select {
         width: 30%;
@@ -205,14 +247,14 @@ export default {
           font-size: 14px;
           padding: 3px;
           cursor: pointer;
-          transition: all ease-out .2s;
+          transition: all ease-out 0.2s;
           color: white;
 
           &:hover {
             width: 40%;
             cursor: pointer;
             font-weight: bold;
-            transition: all ease-out .2s;
+            transition: all ease-out 0.2s;
           }
         }
       }
@@ -229,14 +271,9 @@ export default {
       justify-content: space-between;
 
       .arrows {
-        p {
-          cursor: pointer;
-        }
-
+        cursor: pointer;
         font-size: 20px;
         margin-top: 0;
-        display: flex;
-        gap: 20px;
       }
     }
 
@@ -246,6 +283,18 @@ export default {
       border-radius: $mobile-container-border-radius-small;
       width: calc(100% - 20px);
       background-color: white;
+      cursor: pointer;
+      div {
+        margin-top: 0;
+        border-radius: $mobile-container-border-radius;
+        padding: 0;
+        text-align: left;
+        width: calc(100% - 20px);
+      }
+    }
+    .wash-done {
+      background-color: #006d77;
+      color: white;
     }
   }
 }
@@ -254,7 +303,7 @@ export default {
   .services-page {
     width: 60vw;
     padding: 0px 20px;
-    transition: width ease-out .2s, margin ease-out .2s;
+    transition: width ease-out 0.2s, margin ease-out 0.2s;
     margin: auto;
 
     div {
@@ -263,7 +312,7 @@ export default {
 
     .form-send-problem {
       width: 100%;
-      transition: width ease-out .2s;
+      transition: width ease-out 0.2s;
     }
   }
 }

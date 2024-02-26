@@ -113,8 +113,6 @@
           class="page-toggle"
         />
       </div>
-
-      <!-- TODO: Index page -->
     </div>
     <div class="list" v-else>
       <info-component

@@ -169,3 +169,26 @@ export function postsByUser(id, userGoogleId) {
       console.error(error);
     });
 }
+/**
+ * Видаляє запис з бази даних за допомогою HTTP DELETE запиту.
+ *
+ * @param {number} day - Назва ендпоінту або шляху до ресурсу бази даних (infos/advertisements/works/users).
+ * @param {number|string} id - Ідентифікатор об'єкта для видалення.
+ * @returns {Promise} - Обіцянка (Promise), яка вирішиться результатом HTTP запиту.
+ *                     Успішна обіцянка містить об'єкт відповіді сервера, інакше вона відхиляється з помилкою.
+ */
+export function getWashings(dormitory,washingMachineNum=1,day){
+  return axios
+    .get(`${databaseApiUrl}/washings/${dormitory}/${washingMachineNum}/${day}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true",
+      },
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}

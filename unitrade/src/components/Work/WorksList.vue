@@ -22,7 +22,6 @@
   </div>
 </template>
 <script>
-// TODO: Page index
 import WorkComponent from "@/components/Work/WorkComponent.vue";
 import { loadItemsList } from "@/DbOperations";
 export default {
@@ -92,7 +91,7 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  overflow-y: auto;
+  // overflow-y: auto;
   justify-content: space-between;
   margin-bottom: 43px;
   .works-spacer {
