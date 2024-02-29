@@ -10,10 +10,19 @@ import {
     faArrowRight,
     faUserSecret,
     faPlus,
-    faExclamation, faPhone, faPen, faMapLocation, faBuilding, faPersonShelter, faTrash, faChevronLeft, faChevronRight
+    faExclamation,
+    faPhone,
+    faPen,
+    faMapLocation,
+    faBuilding,
+    faPersonShelter,
+    faTrash,
+    faChevronLeft,
+    faChevronRight,
+    faCircleCheck, faTriangleExclamation, faBomb
 } from '@fortawesome/free-solid-svg-icons'
 import {faFlag, faEnvelope} from '@fortawesome/free-regular-svg-icons';
 import {faInstagram, faTelegram} from "@fortawesome/free-brands-svg-icons";
 
-library.add(faUserSecret, faArrowLeft, faArrowRight, faFlag, faPlus, faExclamation, faEnvelope, faInstagram, faPen,faMapLocation,faChevronLeft,faChevronRight, faTelegram, faPhone, faBuilding, faPersonShelter, faTrash)
+library.add(faUserSecret, faArrowLeft, faArrowRight, faFlag, faPlus, faExclamation, faEnvelope, faInstagram, faPen, faMapLocation, faChevronLeft, faChevronRight, faCircleCheck, faTriangleExclamation, faBomb, faTelegram, faPhone, faBuilding, faPersonShelter, faTrash)
 createApp(App).use(store).use(router).use(i18n).component('font-awesome-icon', FontAwesomeIcon).mount('#app')

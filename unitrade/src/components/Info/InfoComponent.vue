@@ -53,7 +53,7 @@ export default {
 @import "../../assets/main_colors";
 .custom-alert {
   border-radius: 10px;
-  width: calc(100vw - 50px);
+  width: 100%;
   display: flex;
   flex-direction: row;
   padding: 10px;

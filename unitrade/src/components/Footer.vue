@@ -76,6 +76,7 @@ export default {
   overflow: hidden;
   width: 100vw;
   display: flex;
+  z-index: 11;
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;

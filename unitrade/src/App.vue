@@ -1,5 +1,6 @@
 <template>
   <div>
+    <custom-confirm :title="confirm_obj.title" :description="confirm_obj.description" :type="confirm_obj.type" v-if="show_confirm"/>
     <Header/>
     <RouterView class="router-view-main"></RouterView>
     <Footer/>
@@ -12,13 +13,22 @@ import Header from "./components/UpperMenu.vue";
 import Footer from "@/components/Footer.vue";
 
 import {mapGetters} from "vuex";
+import CustomConfirm from "@/components/customConfirm.vue";
 
 export default {
   name: "App",
   data() {
-    return {};
+    return {
+      show_confirm: false,
+      confirm_obj: {
+        title: '',
+        description: '',
+        type: 'success'
+      }
+    };
   },
   components: {
+    CustomConfirm,
     Footer,
     Header,
   },
@@ -26,6 +36,18 @@ export default {
     ...mapGetters("user", ["isLoggedIn"]),
   },
   mounted() {
+    window.showCustomConfirm = (title, description, type) => {
+      this.confirm_obj.title = title;
+      this.confirm_obj.description = description;
+      this.confirm_obj.type = type;
+      this.show_confirm = true
+    }
+    window.hideCustomConfirm = () => {
+      this.confirm_obj.title = '';
+      this.confirm_obj.description = '';
+      this.confirm_obj.type = 'success';
+      this.show_confirm = false
+    }
     window.stopScroll = (value) => {
       let val = "";
       if (!value) {
@@ -54,10 +76,12 @@ export default {
 
 <style lang="scss">
 @import "assets/main_colors";
-.space-mono{
+
+.space-mono {
   font-family: "Space Mono", monospace;
   font-style: normal;
 }
+
 .router-view-main {
   min-height: calc(100vh - 100px);
   max-width: 100vw;

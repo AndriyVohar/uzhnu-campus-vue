@@ -10,6 +10,7 @@
           :attention="attention"
           v-for="attention in attentionList"
           :key="attention"
+          class="info-comp"
       ></info-component>
     </div>
     <div class="posts-spacer"></div>
@@ -84,6 +85,11 @@ export default {
 
 <style scoped lang="scss">
 @import "../../assets/main_colors";
+
+.info-comp {
+  width: calc(100% - 20px);
+  transition: width ease-out .2s;
+}
 
 .selector {
   margin-top: 15px;
@@ -162,15 +168,19 @@ export default {
 }
 
 @media (min-width: 1000px) {
+  .info-comp {
+    width: 100%;
+    transition: width ease-out .2s;
+  }
   .posts-spacer {
     width: 100%;
     transition: width ease-out .2s;
   }
-  .selector{
+  .selector {
     width: 100%;
     padding: 0 10px;
   }
-  .data{
+  .data {
     width: 100%;
   }
   .info-page {
