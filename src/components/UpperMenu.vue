@@ -26,8 +26,8 @@ export default {
     };
   },
   mounted() {
-    (this.$i18n.locale = localStorage.getItem("selectedLanguage")),
-      (this.selectedLanguage = localStorage.getItem("selectedLanguage"));
+    this.$i18n.locale = localStorage.getItem("selectedLanguage")||'ua',
+    this.selectedLanguage = localStorage.getItem("selectedLanguage")||'ua'
   },
   computed: {
     ...mapGetters("user", ["user"]),
