@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <div class="posts-spacer"></div>
     <div class="posts_list" v-if="postsList && postsList.length > 0">
       <post-component :post="post" v-for="post in postsList" :key="post.id" />
       <div class="page-selector">
@@ -107,12 +106,6 @@ export default {
   width: 100vw;
   justify-content: space-between;
   margin-bottom:43px;
-
-  .posts-spacer {
-    width: calc(100vw - 30px);
-    height: 1px;
-    background-color: #006d77;
-  }
 
   .posts_list {
     gap: 15px;

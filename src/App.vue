@@ -11,8 +11,9 @@
 // import Token from "@/token-usage.js";
 import Header from "./components/UpperMenu.vue";
 import Footer from "@/components/Footer.vue";
+import Token from "@/token-usage.js";
 
-import {mapGetters} from "vuex";
+import {mapGetters, mapActions} from "vuex";
 import CustomConfirm from "@/components/customConfirm.vue";
 
 export default {
@@ -34,6 +35,9 @@ export default {
   },
   computed: {
     ...mapGetters("user", ["isLoggedIn"]),
+  },
+  methods: {
+    ...mapActions(['loadUser'])
   },
   mounted() {
     window.showCustomConfirm = (title, description, type) => {
@@ -63,14 +67,8 @@ export default {
     if (!localStorage.getItem("selectedLanguage")) {
       localStorage.setItem("selectedLanguage", "ua");
     }
+    this.loadUser(Token.getGoogleIdFromCookie())
   },
-  // methods: {
-  //   changeIsLoggedIn() {
-  //     this.$store.commit('changeIsLoggedIn');
-
-  //     this.isLoggedIn ? this.$router.push('/') : this.$router.push('/auth');
-  //   }
-  // }
 };
 </script>
 

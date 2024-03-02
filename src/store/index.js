@@ -36,9 +36,11 @@ export default createStore({
   actions: {
     loadUser({ commit }, $google_id) {
       itemById("users", $google_id).then((response) => {
-        commit("changeUser", response);
-        console.log(response);
-        return response;
+        if(response){
+          commit("changeUser", response);
+          console.log(response);
+          return response;
+        }
       });
     },
   },

@@ -7,20 +7,23 @@
     <div class="form-send-problem space-mono">
       <h4>{{ $t("services.send-problem") }}</h4>
       <div class="selectors">
-        <select name="worker" id="" v-model="worker">
+        <select name="worker" id="" v-model="formData.worker">
           <option value="plumber">{{ $t("global.worker.plumber") }}</option>
           <option value="joiner">{{ $t("global.worker.joiner") }}</option>
           <option value="electrician">
             {{ $t("global.worker.electrician") }}
           </option>
         </select>
-        <div class="additional-requst-data">
+        <div class="additional-request-data">
           <textarea
             name=""
             id=""
             :placeholder="$t('form.textarea.problem-description')"
+            v-model="formData.description"
           ></textarea>
-          <button>{{ $t("global.send") }}</button>
+          <button @click.prevent="sendProblem()">
+            {{ $t("global.send") }}
+          </button>
         </div>
       </div>
     </div>
@@ -56,20 +59,54 @@
 </template>
 
 <script>
-import { getWashings } from "@/DbOperations";
-// TODO: BACKEND
-//TODO: CRUD for washes
+import { mapGetters } from "vuex";
+import { getWashings, addItem, deleteItem } from "@/DbOperations";
 export default {
   data() {
     return {
-      worker: "plumber",
+      formData: {
+        worker: "plumber",
+      },
       washDay: "",
       dayIndex: 0,
       washes: [],
       defaultHours: 16,
     };
   },
+  computed: {
+    ...mapGetters(["user"]),
+  },
+  watch: {
+    user: {
+      immediate: true,
+      deep: true,
+      handler(newValue) {
+        getWashings(newValue.dormitory, 1, this.formatDateForDay(0, true)).then(
+          (washings) => {
+            this.washes = [];
+            for (let wash of washings) {
+              let { hour, ...rest } = wash;
+              this.washes[hour] = { ...rest };
+            }
+          }
+        );
+      },
+    },
+  },
   methods: {
+    loadWashings() {
+      getWashings(
+        this.user.dormitory,
+        1,
+        this.formatDateForDay(this.dayIndex, true)
+      ).then((washings) => {
+        this.washes = [];
+        for (let wash of washings) {
+          let { hour, ...rest } = wash;
+          this.washes[hour] = { ...rest };
+        }
+      });
+    },
     formatDateForDay(offset = 0, specialDate = false) {
       const daysOfWeek = [
         "Неділя",
@@ -115,35 +152,71 @@ export default {
       } else {
         this.dayIndex++;
       }
-      getWashings(4, 1, this.formatDateForDay(this.dayIndex, true)).then(
-        (washings) => {
-          this.washes = [];
-          for (let wash of washings) {
-            let { hour, ...rest } = wash;
-            this.washes[hour] = { ...rest };
-          }
-        }
-      );
+      this.loadWashings();
       this.washDay = this.formatDateForDay(this.dayIndex);
     },
     clickHour(index) {
-      if (this.washes[index]) {
-        alert("Вже записалися");
-      } else {
-        alert("Бажаєте записатися?");
+      if (this.user.id) {
+        if (
+          this.washes[index] &&
+          this.washes[index].creator.id != this.user.id
+        ) {
+          alert("Година зайнята");
+          console.log("userId = " + this.user.id);
+          console.log(this.washings[index].creator);
+        } else if (
+          this.washes[index] &&
+          this.washes[index].creator.id == this.user.id
+        ) {
+          // TODO: custom confirm
+          let conf = confirm(
+            `Бажаєте видалити запис ${index}:00-${index + 1}:00?`
+          );
+          if (conf) {
+            deleteItem(
+              "washings",
+              this.washes[index].id,
+              this.user.google_id
+            ).then(this.loadWashings());
+          }
+        } else {
+          // TODO: localization
+          // TODO:custom confirm
+          //TODO: washing machine num
+          let conf = confirm(
+            `Бажаєте записатися на ${index}:00-${index + 1}:00`
+          );
+          if (conf) {
+            let dataWashings = {
+              day: this.formatDateForDay(this.dayIndex, true),
+              dormitory: this.user.dormitory,
+              washing_machine_num: 1,
+              hour: index,
+              user_id: this.user.id,
+            };
+            addItem("washings", dataWashings, this.user.google_id).then(() => {
+              this.loadWashings();
+            });
+          }
+        }
+      }
+    },
+    sendProblem() {
+      let conf = confirm(`Впевнені, що хочете надіслати запис?`);
+      if (conf) {
+        this.formData.user_id = this.user.id;
+        addItem("worker-tasks", this.formData, this.user.google_id).then(() => {
+          this.formData.description = "";
+          alert("Надіслано");
+        });
       }
     },
   },
-
   mounted() {
     this.washDay = this.formatDateForDay();
-    getWashings(4, 1, this.formatDateForDay(0, true)).then((washings) => {
-      this.washes = [];
-      for (let wash of washings) {
-        let { hour, ...rest } = wash;
-        this.washes[hour] = { ...rest };
-      }
-    });
+    if (this.user.id) {
+      this.loadWashings();
+    }
   },
 };
 </script>
@@ -199,13 +272,16 @@ export default {
     }
 
     .selectors {
+      width: 100%;
+      padding:0;
+      margin-top:0;
       display: flex;
-      flex-direction: row;
-      align-items: start;
+      flex-direction: column;
+      align-items: center;
       justify-content: space-between;
 
       select {
-        width: 30%;
+        padding: 0 10px;
         height: 25px;
         background-color: $bg-secondary;
         outline: none;
@@ -215,23 +291,23 @@ export default {
         border-radius: 3px;
         border: none;
         cursor: pointer;
+        width: 100%;
       }
 
-      .additional-requst-data {
+      .additional-request-data {
+        padding:0;
         display: flex;
-        margin: unset;
-        padding: unset;
         gap: 10px;
         flex-direction: column;
         align-items: center;
         justify-content: start;
-        width: 70%;
+        width: calc(100% - 20px);
 
         textarea {
           font-size: 12px;
           resize: none;
-          width: 90%;
-          min-height: 50px;
+          width: 100%;
+          min-height: 70px;
           padding: 10px;
           margin: unset;
           border: none;
@@ -243,19 +319,12 @@ export default {
           background-color: #006d77;
           border: none;
           border-radius: $mobile-container-border-radius-small;
-          width: 30%;
+          width: 100%;
           font-size: 14px;
           padding: 3px;
           cursor: pointer;
           transition: all ease-out 0.2s;
           color: white;
-
-          &:hover {
-            width: 40%;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all ease-out 0.2s;
-          }
         }
       }
     }
@@ -313,6 +382,37 @@ export default {
     .form-send-problem {
       width: 100%;
       transition: width ease-out 0.2s;
+      .selectors {
+        flex-direction: row;
+        align-items: start;
+
+        select {
+          width: 30%;
+        }
+
+        .additional-request-data {
+          margin: unset;
+          padding: unset;
+          width: 70%;
+
+          textarea {
+            width: 90%;
+            min-height: 50px;
+            padding: 10px;
+          }
+
+          button {
+            width: 30%;
+            
+            &:hover {
+              width: 40%;
+              cursor: pointer;
+              font-weight: bold;
+              transition: all ease-out 0.2s;
+            }
+          }
+        }
+      }
     }
   }
 }
