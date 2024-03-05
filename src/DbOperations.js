@@ -192,3 +192,18 @@ export function getWashings(dormitory,washingMachineNum=1,day){
       console.error(error);
     });
 }
+export function getWorkerTasks(dormitory,worker){
+  return axios
+    .get(`${databaseApiUrl}/${dormitory}/worker-tasks/${worker}`,{
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true",
+      },
+    })
+    .then((response)=>{
+      return response.data.data;
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+}
