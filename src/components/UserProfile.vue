@@ -1,5 +1,5 @@
 <template>
-  <div class="user-profile" v-if="!edit_state">
+  <div class="user-profile" v-if="!edit_state&&user.id">
     <div class="user-data">
       <div class="main-data">
         <div class="profile-photo">
@@ -42,23 +42,71 @@
         </div>
       </div>
     </div>
-    <div class="user-selector" v-if="user.role == 'admin'">
+    <div class="user-selector" v-if="user.role != 'student'">
       <span>{{ $t("profile.show") }}</span>
       <div class="select-group">
         <select v-model="toggle">
           <option value="posts">
             {{ $t("global.post") }}
           </option>
-          <option value="works">{{ $t("global.work") }}</option>
-          <option value="infos">{{ $t("global.info") }}</option>
+          <option
+            value="works"
+            v-if="['admin', 'commandant'].includes(user.role)"
+          >
+            {{ $t("global.work") }}
+          </option>
+          <option
+            value="infos"
+            v-if="['admin', 'commandant'].includes(user.role)"
+          >
+            {{ $t("global.info") }}
+          </option>
+          <option
+            value="joiner"
+            v-if="['admin', 'commandant', 'plumber'].includes(user.role)"
+          >
+            {{ $t("global.plumber") }}
+          </option>
+          <option
+            value="plumber"
+            v-if="['admin', 'commandant', 'joiner'].includes(user.role)"
+          >
+            {{ $t("global.joiner") }}
+          </option>
+          <option
+            value="electrician"
+            v-if="['admin', 'commandant', 'electrician'].includes(user.role)"
+          >
+            {{ $t("global.electrician") }}
+          </option>
         </select>
         <img
           src="@/assets/svg/browse.svg"
           alt=""
           v-if="toggle == 'adverisements'"
         />
+        <img
+          src="@/assets/svg/browse.svg"
+          alt=""
+          v-else-if="toggle == 'posts'"
+        />
         <img src="@/assets/svg/work.svg" alt="" v-else-if="toggle == 'works'" />
-        <img src="@/assets/svg/info.svg" alt="" v-else />
+        <img src="@/assets/svg/info.svg" alt="" v-else-if="toggle == 'infos'" />
+        <img
+          src="@/assets/svg/info.svg"
+          alt=""
+          v-else-if="toggle == 'joiner'"
+        />
+        <img
+          src="@/assets/svg/info.svg"
+          alt=""
+          v-else-if="toggle == 'plumber'"
+        />
+        <img
+          src="@/assets/svg/info.svg"
+          alt=""
+          v-else-if="toggle == 'electrician'"
+        />
       </div>
     </div>
     <div class="user-actions">
@@ -79,17 +127,17 @@
       >
         {{ $t("profile.createWork") }}
       </button>
-      <button id="create-info" v-else @click="createBtn(toggle)">
+      <button
+        id="create-info"
+        v-else-if="toggle == 'infos'"
+        @click="createBtn(toggle)"
+      >
         {{ $t("profile.createInfo") }}
       </button>
     </div>
     <div class="spacer"></div>
     <div class="list" v-if="toggle == 'posts'">
-      <post-component
-        :post="post"
-        v-for="post in posts_list"
-        :key="post.id"
-      />
+      <post-component :post="post" v-for="post in posts_list" :key="post.id" />
     </div>
     <div class="list" v-else-if="toggle == 'works'">
       <work-component
@@ -114,7 +162,7 @@
         />
       </div>
     </div>
-    <div class="list" v-else>
+    <div class="list" v-else-if="toggle == 'infos'">
       <info-component
         :attention="attention"
         :user="user"
@@ -122,8 +170,18 @@
         :key="attention.title"
       />
     </div>
+    <div
+      class="list"
+      v-else-if="['plumber', 'joiner', 'electrician'].includes(toggle)"
+    >
+      <worker-task-component
+        :task="task"
+        v-for="task in workerTaskList"
+        :key="task"
+      />
+    </div>
   </div>
-  <div class="user-edit" v-else>
+  <div class="user-edit" v-else-if="user.id">
     <div class="main-data">
       <div class="profile-photo">
         <img :src="user.imgURL" alt="Фото профілю" />
@@ -193,50 +251,58 @@ import Token from "@/token-usage.js";
 import PostComponent from "@/components/Post/PostComponent.vue";
 import WorkComponent from "@/components/Work/WorkComponent.vue";
 import InfoComponent from "@/components/Info/InfoComponent.vue";
+import WorkerTaskComponent from "@/components/Sections/WorkerTaskComponent.vue";
 import {
   loadItemsList,
-  itemById,
   updateItem,
   postsByUser,
+  getWorkerTasks
 } from "@/DbOperations";
+import { mapGetters } from 'vuex';
 
 export default {
-  components: { WorkComponent, PostComponent, InfoComponent },
+  components: { WorkComponent, PostComponent, InfoComponent, WorkerTaskComponent },
   data() {
     return {
       toggle: "posts",
-      user: {},
       posts_list: [],
       works_list: [],
       attentionList: [],
+      workerTaskList: [],
       edit_state: false,
       page_index: 1,
       lastPage: 1,
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters(['user'])
+  },
   mounted() {
-    itemById("users", Token.getGoogleIdFromCookie()).then((user) => {
-      this.user = user;
-      this.$store.commit("changeUser", user);
-
+    if(this.user.id){
       postsByUser(this.user.id, this.user.google_id).then(
         (posts) => {
           this.posts_list = posts;
         }
-      );
-    });
+      ).catch(()=>{});
+    }
   },
   watch: {
+    user(newValue){
+      postsByUser(newValue.id, newValue.google_id).then(
+        (posts) => {
+          this.posts_list = posts;
+        }
+      );
+    },
     page_index(newValue) {
       loadItemsList("works", newValue)
-          .then((response) => {
-            this.works_list = response.data;
-            this.lastPage = response.last_page;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        .then((response) => {
+          this.works_list = response.data;
+          this.lastPage = response.last_page;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
     toggle(newValue) {
       if (newValue == "posts" && this.posts_list.length < 1) {
@@ -263,6 +329,14 @@ export default {
           .catch((error) => {
             console.error(error);
           });
+      } else if (['plumber','joiner','electrician'].includes(newValue)){
+        getWorkerTasks(this.user.dormitory,newValue)
+          .then((response)=>{
+            this.workerTaskList = response;
+          })
+          .catch((error)=>{
+            console.log(error);
+          })
       }
     },
   },

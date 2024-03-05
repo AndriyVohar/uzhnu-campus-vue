@@ -38,7 +38,7 @@ export default createStore({
       itemById("users", $google_id).then((response) => {
         if(response){
           commit("changeUser", response);
-          console.log(response);
+          // console.log(response);
           return response;
         }
       });
