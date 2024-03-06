@@ -156,6 +156,7 @@ export default {
       this.washDay = this.formatDateForDay(this.dayIndex);
     },
     clickHour(index) {
+      // TODO: Після того як у роутах заблокуємо цю сторінку не авторизованим користувачав - заберемо перевірку
       if (this.user.id) {
         if (
           this.washes[index] &&
@@ -199,16 +200,21 @@ export default {
             });
           }
         }
+      }else{
+        alert('Авторизуйтеся')
       }
     },
     sendProblem() {
-      let conf = confirm(`Впевнені, що хочете надіслати запис?`);
-      if (conf) {
-        this.formData.user_id = this.user.id;
-        addItem("worker-tasks", this.formData, this.user.google_id).then(() => {
-          this.formData.description = "";
-          alert("Надіслано");
-        });
+      // TODO: Після того як у роутах заблокуємо цю сторінку не авторизованим користувачав - заберемо перевірку
+      if(this.user.id){
+        let conf = confirm(`Впевнені, що хочете надіслати запис?`);
+        if (conf) {
+          this.formData.user_id = this.user.id;
+          addItem("worker-tasks", this.formData, this.user.google_id).then(() => {
+            this.formData.description = "";
+            alert("Надіслано");
+          });
+        }
       }
     },
   },

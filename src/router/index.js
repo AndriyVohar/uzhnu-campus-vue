@@ -122,7 +122,11 @@ const routes = [
   {
     path: "/services",
     name: "services",
-    component: ()=>import("@/components/ServicesPage.vue")
+    component: ()=>import("@/components/ServicesPage.vue"),
+    // TODO: Uncomment after project done
+    // meta: {
+    //   forLoggedIn: true,
+    // }
   },
   {
     path: "/me",

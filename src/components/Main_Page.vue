@@ -1,6 +1,6 @@
 <template>
   <div class="main-page-container">
-    <div class="login-notification" v-if="!isLoggedIn">
+    <div class="login-notification" v-if="!user.id">
       <div class="text-part">
         <h4>{{ $t("main.titles.greeting") }}</h4>
         <p>{{ $t("main.text.greeting") }}</p>
@@ -102,8 +102,8 @@
 <script>
 import Auth_btn from "@/components/Auth_btn.vue";
 import SelectorComponent from "@/components/Sections/SelectorComponent.vue";
-import Token from "@/token-usage.js";
 import data from "../dormitory_data.json";
+import {mapGetters} from 'vuex';
 
 export default {
   name: "Main_Page",
@@ -120,9 +120,7 @@ export default {
     selected_dormitory() {
       return this.$store.state.dormitoryNumber;
     },
-    isLoggedIn() {
-      return Token.getAccessTokenFromCookie();
-    },
+    ...mapGetters(['user']),
   },
   methods: {
     dormitoryWorkersFromJSON() {
