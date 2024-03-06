@@ -1,15 +1,14 @@
 <script>
-// TODO: After done project uncomment comments. They mean user verification to show/not show the services page
-// import {mapGetters} from 'vuex';
+import {mapGetters} from 'vuex';
 export default {
   methods: {
     pushLink(link) {
       this.$router.push(link);
     },
   },
-  // computed: {
-  //   ...mapGetters(['user']),
-  // },
+  computed: {
+    ...mapGetters(['user']),
+  },
 };
 </script>
 
@@ -42,7 +41,6 @@ export default {
         <span>{{ $t("footer.information") }}</span>
       </div>
     </router-link>
-    <!-- v-if="user.id" -->
     <router-link to="/services" class="router-link" >
       <div
         class="footer-element"
@@ -57,7 +55,8 @@ export default {
         class="footer-element"
         :class="{ selected: $route.path === '/me' }"
       >
-        <img src="@/assets/svg/person.svg" alt="" />
+        <img :src="user.imgURL" v-if="user.id" style="border: 0.5px solid black; border-radius: 10px"> 
+        <img src="@/assets/svg/person.svg" v-else alt="" />
         <span>{{ $t("footer.account") }}</span>
       </div>
     </router-link>

@@ -67,9 +67,9 @@ class Token {
     const pastDate = new Date(1970, 0, 1).toUTCString(); // Встановлюємо дату у минуле
 
     if (window.location.protocol === "https:") {
-      document.cookie = `access_token=; expires=${pastDate}; path=/; Secure; SameSite=None;`; // Додаємо атрибути Secure та SameSite для HTTPS
+      document.cookie = `google_id=; expires=${pastDate}; path=/; Secure; SameSite=None;`; // Додаємо атрибути Secure та SameSite для HTTPS
     } else {
-      document.cookie = `access_token=; expires=${pastDate}; path=/;`; // Встановлюємо куку без атрибутів для HTTP
+      document.cookie = `google_id=; expires=${pastDate}; path=/;`; // Встановлюємо куку без атрибутів для HTTP
     }
   }
 

@@ -4,9 +4,11 @@ import Token from "@/token-usage";
 // const dbCollection = collection(firebaseDB, "users");
 import hello from "hellojs";
 import { addItem } from "@/DbOperations";
+import {mapActions} from 'vuex';
 export default {
   name: "Auth_btn",
   methods: {
+    ...mapActions(['loadUser']),
     signInWithGoogle() {
       hello.init({
         google: process.env.VUE_APP_GOOGLE_CLIENT_ID,
@@ -31,7 +33,11 @@ export default {
                   };
                   console.log(dataToBackend);
                   addItem("users", dataToBackend, response.id).then(() => {
-                    this.$router.push("/me");
+                    this.loadUser(response.id).then(()=>{
+                      if(this.$route.query.redirect){
+                        this.$router.push(this.$route.query.redirect);
+                      }
+                    })
                   });
                 },
                 (error) => {

@@ -258,7 +258,7 @@ import {
   postsByUser,
   getWorkerTasks
 } from "@/DbOperations";
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   components: { WorkComponent, PostComponent, InfoComponent, WorkerTaskComponent },
@@ -341,6 +341,7 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(['changeUser']),
     subPage() {
       if (this.page_index > 1) {
         this.page_index -= 1;
@@ -357,6 +358,7 @@ export default {
     signOutMethod() {
       Token.removeGoogleIdCookie();
       Token.removeAccessTokenCookie();
+      this.changeUser({});
       this.$router.push("/");
     },
     setUser() {
