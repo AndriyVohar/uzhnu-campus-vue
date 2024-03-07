@@ -1,5 +1,6 @@
 import axios from "axios";
 const databaseApiUrl = process.env.VUE_APP_DATABASE_API_URL;
+// const databaseApiUrl = 'http://localhost:8000/api';
 /**
  * Завантажує список даних з бази даних за допомогою HTTP GET запиту.
  *
@@ -195,6 +196,21 @@ export function getWashings(dormitory,washingMachineNum=1,day){
 export function getWorkerTasks(dormitory,worker){
   return axios
     .get(`${databaseApiUrl}/${dormitory}/worker-tasks/${worker}`,{
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true",
+      },
+    })
+    .then((response)=>{
+      return response.data.data;
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+}
+export function loadPostsListApprove(dormitory){
+  return axios
+    .get(`${databaseApiUrl}/${dormitory}/advertisements/approve`,{
       headers: {
         "Content-Type": "application/json",
         "ngrok-skip-browser-warning": "true",

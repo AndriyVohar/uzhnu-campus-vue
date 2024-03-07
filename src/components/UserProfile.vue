@@ -1,5 +1,5 @@
 <template>
-  <div class="user-profile" v-if="!edit_state&&user.id">
+  <div class="user-profile" v-if="!edit_state && user.id">
     <div class="user-data">
       <div class="main-data">
         <div class="profile-photo">
@@ -50,6 +50,12 @@
             {{ $t("global.post") }}
           </option>
           <option
+            value="posts-approve"
+            v-if="['admin', 'commandant'].includes(user.role)"
+          >
+            {{ $t("global.post-approve") }}
+          </option>
+          <option
             value="works"
             v-if="['admin', 'commandant'].includes(user.role)"
           >
@@ -80,15 +86,11 @@
             {{ $t("global.electrician") }}
           </option>
         </select>
+        <img src="@/assets/svg/browse.svg" alt="" v-if="toggle == 'posts'" />
         <img
           src="@/assets/svg/browse.svg"
           alt=""
-          v-if="toggle == 'adverisements'"
-        />
-        <img
-          src="@/assets/svg/browse.svg"
-          alt=""
-          v-else-if="toggle == 'posts'"
+          v-if="toggle == 'posts-approve'"
         />
         <img src="@/assets/svg/work.svg" alt="" v-else-if="toggle == 'works'" />
         <img src="@/assets/svg/info.svg" alt="" v-else-if="toggle == 'infos'" />
@@ -137,7 +139,21 @@
     </div>
     <div class="spacer"></div>
     <div class="list" v-if="toggle == 'posts'">
-      <post-component :post="post" v-for="post in posts_list" :key="post.id" />
+      <post-component
+        :post="post"
+        @reloadPostsList="reloadPostsList"
+        v-for="post in posts_list"
+        :key="post.id"
+      />
+    </div>
+    <div class="list" v-else-if="toggle == 'posts-approve'">
+      <post-component
+        :post="post"
+        :post-approve="true"
+        @reloadApproveList="reloadPostsListApprove"
+        v-for="post in posts_list"
+        :key="post.id"
+      />
     </div>
     <div class="list" v-else-if="toggle == 'works'">
       <work-component
@@ -181,67 +197,69 @@
       />
     </div>
   </div>
-  <div class="user-edit" v-else-if="user.id">
-    <div class="main-data">
-      <div class="profile-photo">
-        <img :src="user.imgURL" alt="Фото профілю" />
+  <div v-else-if="user.id">
+    <div class="user-edit">
+      <div class="main-data">
+        <div class="profile-photo">
+          <img :src="user.imgURL" alt="Фото профілю" />
+        </div>
+        <div class="data">
+          <p id="fullname">{{ user.name }}</p>
+          <p id="creationdate">
+            {{ $t("profile.dateOfJoining") }}: {{ user.created_at }}
+          </p>
+        </div>
       </div>
-      <div class="data">
-        <p id="fullname">{{ user.name }}</p>
-        <p id="creationdate">
-          {{ $t("profile.dateOfJoining") }}: {{ user.created_at }}
-        </p>
+      <div class="inputs">
+        <div class="input-row">
+          <font-awesome-icon :icon="['fas', 'building']" />
+          <input
+            type="number"
+            v-model="user.dormitory"
+            max="5"
+            min="1"
+            placeholder="Номер гуртожитку. Приклад: 4"
+          />
+        </div>
+        <div class="input-row">
+          <font-awesome-icon :icon="['fas', 'person-shelter']" />
+          <input
+            type="text"
+            v-model="user.room"
+            placeholder="Номер кімнати. Приклад: 82/4"
+          />
+        </div>
+        <div class="input-row">
+          <font-awesome-icon :icon="['fas', 'phone']" />
+          <input
+            type="text"
+            v-model="user.phone"
+            placeholder="Приклад: +380950990019"
+          />
+        </div>
+        <div class="input-row">
+          <font-awesome-icon :icon="['fab', 'instagram']" />
+          <input
+            type="text"
+            v-model="user.instagram"
+            placeholder="Приклад: uzhnu"
+          />
+        </div>
+        <div class="input-row">
+          <font-awesome-icon :icon="['fab', 'telegram']" />
+          <input
+            type="text"
+            v-model="user.telegram"
+            placeholder="Приклад: uzhnu"
+          />
+        </div>
       </div>
-    </div>
-    <div class="inputs">
-      <div class="input-row">
-        <font-awesome-icon :icon="['fas', 'building']" />
-        <input
-          type="number"
-          v-model="user.dormitory"
-          max="5"
-          min="1"
-          placeholder="Номер гуртожитку. Приклад: 4"
-        />
+      <div class="actions">
+        <button id="save" @click="setUser()">{{ $t("global.save") }}</button>
+        <button id="cancel" @click="this.edit_state = false">
+          {{ $t("global.cancel") }}
+        </button>
       </div>
-      <div class="input-row">
-        <font-awesome-icon :icon="['fas', 'person-shelter']" />
-        <input
-          type="text"
-          v-model="user.room"
-          placeholder="Номер кімнати. Приклад: 82/4"
-        />
-      </div>
-      <div class="input-row">
-        <font-awesome-icon :icon="['fas', 'phone']" />
-        <input
-          type="text"
-          v-model="user.phone"
-          placeholder="Приклад: +380950990019"
-        />
-      </div>
-      <div class="input-row">
-        <font-awesome-icon :icon="['fab', 'instagram']" />
-        <input
-          type="text"
-          v-model="user.instagram"
-          placeholder="Приклад: uzhnu"
-        />
-      </div>
-      <div class="input-row">
-        <font-awesome-icon :icon="['fab', 'telegram']" />
-        <input
-          type="text"
-          v-model="user.telegram"
-          placeholder="Приклад: uzhnu"
-        />
-      </div>
-    </div>
-    <div class="actions">
-      <button id="save" @click="setUser()">{{ $t("global.save") }}</button>
-      <button id="cancel" @click="this.edit_state = false">
-        {{ $t("global.cancel") }}
-      </button>
     </div>
   </div>
 </template>
@@ -256,7 +274,8 @@ import {
   loadItemsList,
   updateItem,
   postsByUser,
-  getWorkerTasks
+  getWorkerTasks,
+  loadPostsListApprove
 } from "@/DbOperations";
 import { mapGetters, mapMutations } from 'vuex';
 
@@ -278,6 +297,7 @@ export default {
     ...mapGetters(['user'])
   },
   mounted() {
+    this.toggle = localStorage.getItem('user-toggle')||"posts";
     if(this.user.id){
       postsByUser(this.user.id, this.user.google_id).then(
         (posts) => {
@@ -305,13 +325,9 @@ export default {
         });
     },
     toggle(newValue) {
+      localStorage.setItem('user-toggle',newValue);
       if (newValue == "posts" && this.posts_list.length < 1) {
-        postsByUser(this.user.id, this.user.google_id).then(
-          (posts) => {
-            console.log(posts);
-            this.posts_list = posts;
-          }
-        );
+        this.reloadPostsList()
       } else if (newValue == "works" && this.works_list.length < 1) {
         loadItemsList("works", this.page_index)
           .then((response) => {
@@ -337,11 +353,30 @@ export default {
           .catch((error)=>{
             console.log(error);
           })
+      } else if (newValue=="posts-approve"){
+        this.reloadPostsListApprove();
       }
     },
   },
   methods: {
     ...mapMutations(['changeUser']),
+    reloadPostsListApprove(){
+      loadPostsListApprove(this.user.dormitory)
+          .then((response) => {
+            this.posts_list = response;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+    },
+    reloadPostsList(){
+      postsByUser(this.user.id, this.user.google_id).then(
+          (posts) => {
+            console.log(posts);
+            this.posts_list = posts;
+          }
+        );
+    },
     subPage() {
       if (this.page_index > 1) {
         this.page_index -= 1;

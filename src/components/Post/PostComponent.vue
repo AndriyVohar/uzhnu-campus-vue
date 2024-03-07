@@ -28,7 +28,7 @@
           </div>
           <div
             class="buttons"
-            v-if="user.id == post.creator.id || user.role == 'admin'"
+            v-if="(user.id == post.creator.id || user.role == 'admin')&&postApprove==false"
           >
             <font-awesome-icon
               :icon="['fas', 'pen']"
@@ -39,6 +39,9 @@
               @click.prevent="deletePost()"
             />
           </div>
+          <div class="buttons" v-if="postApprove==true" @click.prevent="approve()">
+            <img src="@/assets/svg/done-icon.png" alt="Done" class="done-button" />
+          </div>
         </div>
       </div>
     </div>
@@ -47,11 +50,15 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { deleteItem } from "@/DbOperations";
+import { deleteItem, updateItem } from "@/DbOperations";
 export default {
   name: "Post_comp",
   props: {
     post: Object,
+    postApprove: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     ...mapGetters(["user"]),
@@ -67,13 +74,28 @@ export default {
       if (confirm("Видалити оголошення ?")) {
         deleteItem("advertisements", this.post.id)
           .then(() => {
-            location.reload();
+            this.$emit('reloadPostsList');
           })
           .catch((error) => {
             console.log(error);
           });
       }
     },
+    approve(){
+      let postUpdate ={
+        id:this.post.id,
+        user_id: this.user.id,
+        status: 1  
+      };
+      console.log(postUpdate)
+      updateItem('advertisements',this.post.id, postUpdate,this.user.google_id)
+        .then(()=>{
+          this.$emit('reloadApproveList')
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   },
 };
 </script>
@@ -164,6 +186,13 @@ export default {
       .buttons {
         display: flex;
         gap: 15px;
+        .done-button {
+          height: 20px;
+          width: 25px;
+          cursor: pointer;
+          margin-left: auto;
+          margin-right: 10px;
+        }
       }
     }
   }

@@ -95,6 +95,8 @@ export default {
     createPost() {
       this.formData.user_id = this.user.id;
       addItem("advertisements", this.formData, this.userGoogleId).then(() => {
+        //TODO: Custom alert
+        alert("Очікуйте на підтвердження посту комендантом");
         this.$router.push("/me");
       });
     },

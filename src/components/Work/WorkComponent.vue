@@ -55,7 +55,7 @@ export default {
       if (confirm("Видалити оголошення ?")) {
         deleteItem("works", this.work.id)
           .then(() => {
-            location.reload();
+            this.$emit('reloadWorksList')
           })
           .catch((error) => {
             console.log(error);

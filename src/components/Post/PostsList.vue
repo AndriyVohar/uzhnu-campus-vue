@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="posts_list" v-if="postsList && postsList.length > 0">
-      <post-component :post="post" v-for="post in postsList" :key="post.id" />
+      <post-component :post="post" @reloadPostsList="loadPostsList" v-for="post in postsList" :key="post.id" />
       <div class="page-selector">
         <font-awesome-icon
           icon="arrow-left"
@@ -39,8 +39,8 @@ export default {
         this.page_index += 1;
       }
     },
-    loadPostsList(dormitoryNumber, pageIndex) {
-      loadItemsListByDormitory("advertisements", dormitoryNumber, pageIndex)
+    loadPostsList() {
+      loadItemsListByDormitory("advertisements", this.dormitoryNumber, this.page_index)
         .then((response) => {
           this.postsList = response.data;
           this.lastPage = response.last_page;
@@ -65,17 +65,17 @@ export default {
     },
   },
   watch: {
-    page_index(newValue) {
-      this.loadPostsList(this.dormitoryNumber, newValue);
+    page_index() {
+      this.loadPostsList();
     },
-    dormitoryNumber(newValue) {
+    dormitoryNumber() {
       // this.$store.commit('changeDormitoryNumber',newValue);
       this.page_index = 1;
-      this.loadPostsList(newValue, this.page_index);
+      this.loadPostsList();
     },
   },
   mounted() {
-    this.loadPostsList(this.dormitoryNumber, this.page_index);
+    this.loadPostsList();
   },
   created() {},
 };

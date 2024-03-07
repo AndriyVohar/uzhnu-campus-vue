@@ -398,11 +398,12 @@ export default {
 
         .additional-request-data {
           margin: unset;
-          padding: unset;
-          width: 70%;
+          padding-right: 10px;
+          width: 65%;
+          
 
           textarea {
-            width: 90%;
+            width: 100%;
             min-height: 50px;
             padding: 10px;
           }

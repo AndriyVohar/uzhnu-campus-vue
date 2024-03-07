@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="works_list" v-if="worksList.length > 0">
-      <work-component :work="work" v-for="work in worksList" :key="work" />
+      <work-component :work="work" @reloadWorksList="loadList(this.page_index)" v-for="work in worksList" :key="work" />
       <div class="page-selector">
         <font-awesome-icon
           icon="arrow-left"
