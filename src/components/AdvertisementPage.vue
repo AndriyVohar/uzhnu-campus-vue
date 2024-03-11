@@ -62,7 +62,7 @@ export default {
   -ms-overflow-style: none; //Internet explorer
 
   .menu {
-    width: calc(100vw - 30px);
+    width: calc(100% - 30px);
     height: 25px;
     margin: 15px 15px 0 15px;
     display: flex;
@@ -107,8 +107,34 @@ export default {
       font-weight: 550;
     }
   }
+  .router-view-advertisement {
+    width: 100%;
+  }
 }
 .page::-webkit-scrollbar {
   display: none;
+}
+@media (min-width: 1000px) {
+  .page {
+    width: 60vw;
+    max-width: 60vw;
+    margin: auto;
+    
+    .menu {
+      width:100%;
+      margin: 15px 0 0 0;
+    }
+  }
+}
+@media (min-width: 800px) and (max-width: 1000px){
+  .page {
+    width: 80vw;
+    max-width: 80vw;
+    margin: auto;
+    .menu {
+      width:100%;
+      margin: 15px 0 0 0;
+    }
+  }
 }
 </style>

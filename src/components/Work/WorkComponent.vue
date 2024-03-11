@@ -22,10 +22,12 @@
           </div>
           <div class="buttons" v-if="user.role == 'admin'">
             <font-awesome-icon
+              class="done-button"
               :icon="['fas', 'pen']"
               @click.prevent="updateWork()"
             />
             <font-awesome-icon
+              class="done-button"
               :icon="['fas', 'trash']"
               @click.prevent="deleteWork()"
             />
@@ -133,13 +135,20 @@ export default {
   .post-bottom {
     display: flex;
     gap: 25px;
+    width: 100%;
     align-items: center;
     justify-content: space-between;
     flex-direction: row;
     .buttons {
-      display: flex;
-      gap: 15px;
-    }
+        display: flex;
+        gap: 5px;
+        .done-button {
+          height: 20px;
+          width: 25px;
+          cursor: pointer;
+          margin-left: auto;
+        }
+      }
   }
 }
 

@@ -71,19 +71,19 @@
             value="joiner"
             v-if="['admin', 'commandant', 'plumber'].includes(user.role)"
           >
-            {{ $t("global.plumber") }}
+            {{ $t("global.worker.plumber") }}
           </option>
           <option
             value="plumber"
             v-if="['admin', 'commandant', 'joiner'].includes(user.role)"
           >
-            {{ $t("global.joiner") }}
+            {{ $t("global.worker.joiner") }}
           </option>
           <option
             value="electrician"
             v-if="['admin', 'commandant', 'electrician'].includes(user.role)"
           >
-            {{ $t("global.electrician") }}
+            {{ $t("global.worker.electrician") }}
           </option>
         </select>
         <img src="@/assets/svg/browse.svg" alt="" v-if="toggle == 'posts'" />
@@ -275,15 +275,20 @@ import {
   updateItem,
   postsByUser,
   getWorkerTasks,
-  loadPostsListApprove
+  loadPostsListApprove,
 } from "@/DbOperations";
-import { mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
-  components: { WorkComponent, PostComponent, InfoComponent, WorkerTaskComponent },
+  components: {
+    WorkComponent,
+    PostComponent,
+    InfoComponent,
+    WorkerTaskComponent,
+  },
   data() {
     return {
-      toggle: "posts",
+      toggle: localStorage.getItem("user-toggle")||"posts",
       posts_list: [],
       works_list: [],
       attentionList: [],
@@ -294,25 +299,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(["user"]),
   },
   mounted() {
-    this.toggle = localStorage.getItem('user-toggle')||"posts";
-    if(this.user.id){
-      postsByUser(this.user.id, this.user.google_id).then(
-        (posts) => {
-          this.posts_list = posts;
-        }
-      ).catch(()=>{});
-    }
+    this.loadForUser();
   },
   watch: {
-    user(newValue){
-      postsByUser(newValue.id, newValue.google_id).then(
-        (posts) => {
-          this.posts_list = posts;
-        }
-      );
+    user() {
+      this.loadForUser();
     },
     page_index(newValue) {
       loadItemsList("works", newValue)
@@ -325,57 +319,59 @@ export default {
         });
     },
     toggle(newValue) {
-      localStorage.setItem('user-toggle',newValue);
-      if (newValue == "posts" && this.posts_list.length < 1) {
-        this.reloadPostsList()
-      } else if (newValue == "works" && this.works_list.length < 1) {
-        loadItemsList("works", this.page_index)
-          .then((response) => {
-            this.works_list = response.data;
-            this.lastPage = response.last_page;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      } else if (newValue == "infos" && this.attentionList.length < 1) {
-        loadItemsList("infos")
-          .then((response) => {
-            this.attentionList = response;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      } else if (['plumber','joiner','electrician'].includes(newValue)){
-        getWorkerTasks(this.user.dormitory,newValue)
-          .then((response)=>{
-            this.workerTaskList = response;
-          })
-          .catch((error)=>{
-            console.log(error);
-          })
-      } else if (newValue=="posts-approve"){
-        this.reloadPostsListApprove();
-      }
+      localStorage.setItem("user-toggle", newValue);
+      this.loadForUser();
     },
   },
   methods: {
-    ...mapMutations(['changeUser']),
-    reloadPostsListApprove(){
+    ...mapMutations(["changeUser"]),
+    reloadPostsListApprove() {
       loadPostsListApprove(this.user.dormitory)
-          .then((response) => {
-            this.posts_list = response;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        .then((response) => {
+          this.posts_list = response;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
-    reloadPostsList(){
-      postsByUser(this.user.id, this.user.google_id).then(
-          (posts) => {
-            console.log(posts);
-            this.posts_list = posts;
-          }
-        );
+    reloadPostsList() {
+      postsByUser(this.user.id, this.user.google_id).then((posts) => {
+        this.posts_list = posts;
+      });
+    },
+    loadForUser() {
+      if (this.user.id) {
+        if (this.toggle === "posts") {
+          this.reloadPostsList();
+        } else if (this.toggle == "works") {
+          loadItemsList("works", this.page_index)
+            .then((response) => {
+              this.works_list = response.data;
+              this.lastPage = response.last_page;
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } else if (this.toggle == "infos") {
+          loadItemsList("infos")
+            .then((response) => {
+              this.attentionList = response;
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } else if (["plumber", "joiner", "electrician"].includes(this.toggle)) {
+          getWorkerTasks(this.user.dormitory, this.toggle)
+            .then((response) => {
+              this.workerTaskList = response;
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else if (this.toggle == "posts-approve") {
+          this.reloadPostsListApprove();
+        }
+      }
     },
     subPage() {
       if (this.page_index > 1) {

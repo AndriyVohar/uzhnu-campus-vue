@@ -103,8 +103,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
-  justify-content: space-between;
+  width: 100%;
+  justify-content: center;
   margin-bottom:43px;
 
   .posts_list {
@@ -113,7 +113,7 @@ export default {
       100vh - 170px
     );
     margin-top: 15px;
-    width: calc(100vw - 30px);
+    width: calc(100% - 30px);
     display: flex;
     flex-direction: column;
   }
@@ -132,9 +132,23 @@ export default {
     font-weight: 500;
   }
 }
-@media (min-width: 1000px) {
+@media (min-width: 800px) {
   .container{
-
+    display: block;
+    justify-content:center;
+    .posts_list {
+      gap: 15px;
+      min-height: calc(
+        100vh - 170px
+      );
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    .page-selector{
+      margin-left: auto;
+    }
   }
 }
 </style>

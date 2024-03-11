@@ -423,4 +423,53 @@ export default {
     }
   }
 }
+@media (min-width: 800px) and (max-width: 1000px) {
+  .services-page {
+    width: 80vw;
+    padding: 0px 20px;
+    transition: width ease-out 0.2s, margin ease-out 0.2s;
+    margin: auto;
+
+    div {
+      width: 100%;
+    }
+
+    .form-send-problem {
+      width: 100%;
+      transition: width ease-out 0.2s;
+      .selectors {
+        flex-direction: row;
+        align-items: start;
+
+        select {
+          width: 30%;
+        }
+
+        .additional-request-data {
+          margin: unset;
+          padding-right: 10px;
+          width: 65%;
+          
+
+          textarea {
+            width: 100%;
+            min-height: 50px;
+            padding: 10px;
+          }
+
+          button {
+            width: 30%;
+            
+            &:hover {
+              width: 40%;
+              cursor: pointer;
+              font-weight: bold;
+              transition: all ease-out 0.2s;
+            }
+          }
+        }
+      }
+    }
+  }
+}
 </style>

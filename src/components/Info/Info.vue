@@ -15,13 +15,13 @@
     </div>
     <div class="posts-spacer"></div>
     <div class="data" v-for="worker in studmistechkoWorkers" :key="worker.id">
-      <h4>{{ worker.position }}</h4>
-      <p>{{ worker.fullName }}</p>
+      <h4>{{ $t(worker.position) }}</h4>
+      <p>{{ $t(worker.fullName) }}</p>
       <p>{{ worker.phone }}</p>
     </div>
     <div class="data" v-for="worker in dormitory_data" :key="worker.id">
-      <h4>{{ worker.position }}</h4>
-      <p>{{ worker.fullName }}</p>
+      <h4>{{ $t(worker.position) }}</h4>
+      <p>{{ $t(worker.fullName) }}</p>
       <p>{{ worker.phone }}</p>
     </div>
   </div>
@@ -185,6 +185,33 @@ export default {
   }
   .info-page {
     width: 60vw;
+    transition: width ease-out .2s;
+    margin: auto;
+
+    .about-page {
+      transition: width ease-out .2s;
+      width: 100%;
+    }
+  }
+}
+@media (min-width: 800px) and (max-width: 1000px){
+  .info-comp {
+    width: 100%;
+    transition: width ease-out .2s;
+  }
+  .posts-spacer {
+    width: 100%;
+    transition: width ease-out .2s;
+  }
+  .selector {
+    width: 100%;
+    padding: 0 10px;
+  }
+  .data {
+    width: 100%;
+  }
+  .info-page {
+    width: 80vw;
     transition: width ease-out .2s;
     margin: auto;
 

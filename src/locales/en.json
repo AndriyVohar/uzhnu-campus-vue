@@ -11,6 +11,7 @@
         "info": "Information",
         "loading": "Loading",
         "service": "Service",
+        "post-approve":"Approve post",
         "worker":{
             "plumber":"Plumber",
             "joiner":"Joiner",
@@ -116,6 +117,27 @@
         "content": "Description",
         "textarea":{
             "problem-description":"Describe your problem. Please do not write the room number or your surname, as it will automatically be displayed according to your profile data"
+        }
+    },
+    "dormitory-workers":{
+        "position":{
+            "campus-director":"Director of the campus",
+            "deputy-campus-director":"Deputy director of the campus",
+            "deputy-operations-campus-director":"Deputy director for operation",
+            "commandant":"Commandant of the dormitory",
+            "head-dormitory":"Head of the dormitory"
+        },
+        "fullname":{
+            "Kepich_V_G":"KEPICH Vasyl Georgievich",
+            "Nekachailo_V_V":"NEKACHAILO Valery Viktorovich",
+            "Burdyukh_I_I":"BURDYUKH Ivan Ivanovich",
+            "Bilei_S_P":"BILEI Svitlana Petrivna",
+            "Betsala_M_I":"BETSALA Maria Ivanivna",
+            "Voron_T_I":"VORON Tatyana Ivanivna",
+            "Trokhimets_I_M":"TROKHIMETS Irina Mikhailivna",
+            "Bobik_Y_Y":"BOBIK Yuriy Yuriyovych",
+            "Tantsiura_G_G":"TANTSIURA Galina Grigoriivna",
+            "Burishin-Oliynik_T_I":"BURISHIN-OLIYNIK Tatyana Ivanivna"
         }
     }
 }

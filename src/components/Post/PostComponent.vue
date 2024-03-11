@@ -31,16 +31,23 @@
             v-if="(user.id == post.creator.id || user.role == 'admin')&&postApprove==false"
           >
             <font-awesome-icon
+              class="done-button"
               :icon="['fas', 'pen']"
               @click.prevent="updatePost()"
             />
             <font-awesome-icon
+              class="done-button"
               :icon="['fas', 'trash']"
               @click.prevent="deletePost()"
             />
           </div>
           <div class="buttons" v-if="postApprove==true" @click.prevent="approve()">
             <img src="@/assets/svg/done-icon.png" alt="Done" class="done-button" />
+            <font-awesome-icon
+              class="done-button"
+              :icon="['fas', 'trash']"
+              @click.prevent="deletePost()"
+            />
           </div>
         </div>
       </div>
@@ -87,7 +94,6 @@ export default {
         user_id: this.user.id,
         status: 1  
       };
-      console.log(postUpdate)
       updateItem('advertisements',this.post.id, postUpdate,this.user.google_id)
         .then(()=>{
           this.$emit('reloadApproveList')
@@ -178,6 +184,7 @@ export default {
 
     .post-bottom {
       display: flex;
+      width:100%;
       gap: 25px;
       align-items: center;
       justify-content: space-between;
@@ -185,13 +192,12 @@ export default {
 
       .buttons {
         display: flex;
-        gap: 15px;
+        gap: 5px;
         .done-button {
           height: 20px;
           width: 25px;
           cursor: pointer;
           margin-left: auto;
-          margin-right: 10px;
         }
       }
     }
@@ -212,5 +218,8 @@ export default {
       font-size: 10px;
     }
   }
+}
+@media (min-width: 1000px) {
+
 }
 </style>

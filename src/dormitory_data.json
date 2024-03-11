@@ -1,38 +1,38 @@
 [
   {
     "dormitory_num": "studmistechko",
-    "workers":[
+    "workers": [
       {
-        "phone":"64-34-67",
-        "email":"example@gmail.com",
-        "fullName": "КЕПИЧ Василь Георгійович",
-        "position": "Директор студмістечка",
-        "image":"KepichVasil.jpeg"
+        "phone": "64-34-67",
+        "email": "example@gmail.com",
+        "fullName": "dormitory-workers.fullname.Kepich_V_G",
+        "position": "dormitory-workers.position.campus-director",
+        "image": "KepichVasil.jpeg"
       },
       {
-        "phone":"64-34-67",
-        "email":"example@gmail.com",
-        "fullName": "НЕКАЧАЙЛО Валерій Вікторович",
-        "position": "Заступник директора студмістечка",
-        "image":"BobikYurii.jpeg"
+        "phone": "64-34-67",
+        "email": "example@gmail.com",
+        "fullName": "dormitory-workers.fullname.Nekachailo_V_V",
+        "position": "dormitory-workers.position.deputy-campus-director",
+        "image": "unknow_male.png"
       },
       {
-        "phone":"64-34-67",
-        "email":"example@gmail.com",
-        "fullName": "БУРДЮХ Іван Іванович",
-        "position": "Заступник директора по експлуатації",
-        "image":"BobikYurii.jpeg"
+        "phone": "64-34-67",
+        "email": "example@gmail.com",
+        "fullName": "dormitory-workers.fullname.Burdyukh_I_I",
+        "position": "dormitory-workers.position.deputy-operations-campus-director",
+        "image": "unknow_male.png"
       }
-    ] 
+    ]
   },
   {
     "dormitory_num": 1,
     "workers": [
       {
-        "phone":"64-34-67",
-        "fullName": "БІЛЕЙ Світлана Петрівна",
-        "position": "Комендант гуртожитку",
-        "image":"BobikYurii.jpeg"
+        "phone": "64-34-67",
+        "fullName": "dormitory-workers.fullname.Bilei_S_P",
+        "position": "dormitory-workers.position.commandant",
+        "image": "unknow_female.png"
       }
     ]
   },
@@ -41,9 +41,9 @@
     "workers": [
       {
         "phone": "64-36-97",
-        "fullName": "БЕЦАЛА Марія Іванівна",
-        "position": "Комендант гуртожитку",
-        "image":"BobikYurii.jpeg"
+        "fullName": "dormitory-workers.fullname.Betsala_M_I",
+        "position": "dormitory-workers.position.commandant",
+        "image": "unknow_female.png"
       }
     ]
   },
@@ -52,9 +52,9 @@
     "workers": [
       {
         "phone": "64-33-73",
-        "fullName": "МІШУРА Тамара Корніївна",
-        "position": "Комендант гуртожитку",
-        "image":"BobikYurii.jpeg"
+        "fullName": "dormitory-workers.fullname.Voron_T_I",
+        "position": "dormitory-workers.position.commandant",
+        "image": "unknow_female.png"
       }
     ]
   },
@@ -63,20 +63,21 @@
     "workers": [
       {
         "phone": "64-26-69",
-        "fullName": "ТРОХИМЕЦЬ Ірина Михайлівна",
-        "position": "Завідувач гуртожитку",
-        "image":"BobikYurii.jpeg"
+        "fullName": "dormitory-workers.fullname.Trokhimets_I_M",
+        "position": "dormitory-workers.position.head-dormitory",
+        "image": "unknow_female.png"
       },
       {
         "phone": "64-26-69",
-        "fullName": "БОБИК Юрій Юрійович",
-        "position": "Комендант гуртожитку",
-        "image":"BobikYurii.jpeg"
-      },{
+        "fullName": "dormitory-workers.fullname.Bobik_Y_Y",
+        "position": "dormitory-workers.position.commandant",
+        "image": "BobikYurii.jpeg"
+      },
+      {
         "phone": "64-26-69",
-        "fullName": "ТАНЦЮРА Галина Григорівна",
-        "position": "Комендант гуртожитку",
-        "image":"TantsiuraHalina.jpeg"
+        "fullName": "dormitory-workers.fullname.Tantsiura_G_G",
+        "position": "dormitory-workers.position.commandant",
+        "image": "TantsiuraHalina.jpeg"
       }
     ]
   },
@@ -85,9 +86,9 @@
     "workers": [
       {
         "phone": "64-35-72",
-        "fullName": "БУРИШИН-ОЛІЙНИК Тетяна Іванівна",
-        "position": "Комендант гуртожитку",
-        "image":"BobikYurii.jpeg"
+        "fullName": "dormitory-workers.fullname.Burishin-Oliynik_T_I",
+        "position": "dormitory-workers.position.commandant",
+        "image": "unknow_female.png"
       }
     ]
   }

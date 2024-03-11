@@ -90,12 +90,12 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
+  width: 100%;
   // overflow-y: auto;
   justify-content: space-between;
   margin-bottom: 43px;
   .works-spacer {
-    width: calc(100vw - 30px);
+    width: calc(100% - 30px);
     height: 1px;
     background-color: #006d77;
   }
@@ -105,7 +105,7 @@ export default {
     min-height: calc(
       100vh - 170px
     );
-    width: calc(100vw - 30px);
+    width: calc(100% - 30px);
     display: flex;
     flex-direction: column;
   }
@@ -122,6 +122,25 @@ export default {
     gap: 10px;
     font-size: 14px;
     font-weight: 500;
+  }
+}
+@media (min-width: 800px) {
+  .container{
+    display: block;
+    justify-content:center;
+    .works_list {
+      gap: 15px;
+      min-height: calc(
+        100vh - 170px
+      );
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    .page-selector{
+      margin-left: auto;
+    }
   }
 }
 </style>
