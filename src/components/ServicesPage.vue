@@ -83,10 +83,12 @@ export default {
       handler(newValue) {
         getWashings(newValue.dormitory, 1, this.formatDateForDay(0, true)).then(
           (washings) => {
-            this.washes = [];
-            for (let wash of washings) {
-              let { hour, ...rest } = wash;
-              this.washes[hour] = { ...rest };
+            if(washings){
+              this.washes = [];
+              for (let wash of washings) {
+                let { hour, ...rest } = wash;
+                this.washes[hour] = { ...rest };
+              }
             }
           }
         );
