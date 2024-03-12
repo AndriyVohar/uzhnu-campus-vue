@@ -198,67 +198,69 @@
     </div>
   </div>
   <div v-else-if="user.id">
-    <div class="user-edit">
-      <div class="main-data">
-        <div class="profile-photo">
-          <img :src="user.imgURL" alt="Фото профілю" />
+    <div>
+      <div class="user-edit">
+        <div class="main-data">
+          <div class="profile-photo">
+            <img :src="user.imgURL" alt="Фото профілю" />
+          </div>
+          <div class="data">
+            <p id="fullname">{{ user.name }}</p>
+            <p id="creationdate">
+              {{ $t("profile.dateOfJoining") }}: {{ user.created_at }}
+            </p>
+          </div>
         </div>
-        <div class="data">
-          <p id="fullname">{{ user.name }}</p>
-          <p id="creationdate">
-            {{ $t("profile.dateOfJoining") }}: {{ user.created_at }}
-          </p>
+        <div class="inputs">
+          <div class="input-row">
+            <font-awesome-icon :icon="['fas', 'building']" />
+            <input
+              type="number"
+              v-model="user.dormitory"
+              max="5"
+              min="1"
+              placeholder="Номер гуртожитку. Приклад: 4"
+            />
+          </div>
+          <div class="input-row">
+            <font-awesome-icon :icon="['fas', 'person-shelter']" />
+            <input
+              type="text"
+              v-model="user.room"
+              placeholder="Номер кімнати. Приклад: 82/4"
+            />
+          </div>
+          <div class="input-row">
+            <font-awesome-icon :icon="['fas', 'phone']" />
+            <input
+              type="text"
+              v-model="user.phone"
+              placeholder="Приклад: +380950990019"
+            />
+          </div>
+          <div class="input-row">
+            <font-awesome-icon :icon="['fab', 'instagram']" />
+            <input
+              type="text"
+              v-model="user.instagram"
+              placeholder="Приклад: uzhnu"
+            />
+          </div>
+          <div class="input-row">
+            <font-awesome-icon :icon="['fab', 'telegram']" />
+            <input
+              type="text"
+              v-model="user.telegram"
+              placeholder="Приклад: uzhnu"
+            />
+          </div>
         </div>
-      </div>
-      <div class="inputs">
-        <div class="input-row">
-          <font-awesome-icon :icon="['fas', 'building']" />
-          <input
-            type="number"
-            v-model="user.dormitory"
-            max="5"
-            min="1"
-            placeholder="Номер гуртожитку. Приклад: 4"
-          />
+        <div class="actions">
+          <button id="save" @click="setUser()">{{ $t("global.save") }}</button>
+          <button id="cancel" @click="this.edit_state = false">
+            {{ $t("global.cancel") }}
+          </button>
         </div>
-        <div class="input-row">
-          <font-awesome-icon :icon="['fas', 'person-shelter']" />
-          <input
-            type="text"
-            v-model="user.room"
-            placeholder="Номер кімнати. Приклад: 82/4"
-          />
-        </div>
-        <div class="input-row">
-          <font-awesome-icon :icon="['fas', 'phone']" />
-          <input
-            type="text"
-            v-model="user.phone"
-            placeholder="Приклад: +380950990019"
-          />
-        </div>
-        <div class="input-row">
-          <font-awesome-icon :icon="['fab', 'instagram']" />
-          <input
-            type="text"
-            v-model="user.instagram"
-            placeholder="Приклад: uzhnu"
-          />
-        </div>
-        <div class="input-row">
-          <font-awesome-icon :icon="['fab', 'telegram']" />
-          <input
-            type="text"
-            v-model="user.telegram"
-            placeholder="Приклад: uzhnu"
-          />
-        </div>
-      </div>
-      <div class="actions">
-        <button id="save" @click="setUser()">{{ $t("global.save") }}</button>
-        <button id="cancel" @click="this.edit_state = false">
-          {{ $t("global.cancel") }}
-        </button>
       </div>
     </div>
   </div>
@@ -288,7 +290,7 @@ export default {
   },
   data() {
     return {
-      toggle: localStorage.getItem("user-toggle")||"posts",
+      toggle: localStorage.getItem("user-toggle") || "posts",
       posts_list: [],
       works_list: [],
       attentionList: [],
@@ -460,6 +462,7 @@ export default {
     font-size: 12px;
     border-radius: 10px;
     padding: 5px 15px;
+    width: 60%;
 
     &:hover {
       cursor: pointer;
@@ -834,6 +837,100 @@ export default {
         padding: 2.5px;
       }
     }
+  }
+}
+@media (min-width: 800px) {
+  .user-profile {
+    width: 80vw;
+
+    .user-data {
+      .main-data {
+        align-items: start;
+        .profile-photo {
+          height: 120px;
+          width: 120px;
+
+          img {
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+          }
+
+          .edit-pen {
+            height: 30px;
+            top: -120px;
+            width: 30px;
+            border-radius: 10px;
+
+            svg {
+              height: 20px;
+              width: 20px;
+            }
+          }
+        }
+
+        .data {
+          #fullname {
+            font-size: 16px;
+            font-weight: 600;
+          }
+
+          #dormitory {
+            font-size: 14px;
+          }
+
+          #creationdate {
+            font-size: 12px;
+          }
+        }
+      }
+
+      .contacts {
+        .left-part {
+          font-size: 12px;
+
+          svg {
+            height: 20px;
+            width: 20px;
+          }
+        }
+
+        .right-part {
+          .links {
+            svg {
+              height: 20px;
+              width: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .user-edit {
+    width:80vw;
+    .inputs {
+
+      .input-row {
+
+        svg {
+          width: 25px;
+          height: 25px;
+        }
+
+        input {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+@media (min-width: 1000px) {
+  .user-profile {
+    width: 60vw;
+  }
+  .user-edit {
+    width:60vw;
   }
 }
 </style>
