@@ -42,7 +42,7 @@
         </div>
       </div>
     </div>
-    <div class="user-selector" v-if="user.role != 'student'">
+    <div class="user-selector">
       <span>{{ $t("profile.show") }}</span>
       <div class="select-group">
         <select v-model="toggle">
@@ -57,9 +57,14 @@
           </option>
           <option
             value="works"
-            v-if="['admin', 'commandant'].includes(user.role)"
           >
             {{ $t("global.work") }}
+          </option>
+          <option
+            value="works-approve"
+            v-if="['admin', 'commandant'].includes(user.role)"
+          >
+            {{ $t("global.work-approve") }}
           </option>
           <option
             value="infos"
@@ -86,29 +91,9 @@
             {{ $t("global.worker.electrician") }}
           </option>
         </select>
-        <img src="@/assets/svg/browse.svg" alt="" v-if="toggle == 'posts'" />
-        <img
-          src="@/assets/svg/browse.svg"
-          alt=""
-          v-if="toggle == 'posts-approve'"
-        />
-        <img src="@/assets/svg/work.svg" alt="" v-else-if="toggle == 'works'" />
-        <img src="@/assets/svg/info.svg" alt="" v-else-if="toggle == 'infos'" />
-        <img
-          src="@/assets/svg/info.svg"
-          alt=""
-          v-else-if="toggle == 'joiner'"
-        />
-        <img
-          src="@/assets/svg/info.svg"
-          alt=""
-          v-else-if="toggle == 'plumber'"
-        />
-        <img
-          src="@/assets/svg/info.svg"
-          alt=""
-          v-else-if="toggle == 'electrician'"
-        />
+        <img src="@/assets/svg/browse.svg" alt="" v-if="['posts','posts-approve'].includes(toggle)" />
+        <img src="@/assets/svg/work.svg" alt="" v-else-if="['works','works-approve'].includes(toggle)" />
+        <img src="@/assets/svg/info.svg" alt="" v-else-if="['infos','joiner','plumber','electrician'].includes(toggle)" /> 
       </div>
     </div>
     <div class="user-actions">
@@ -155,10 +140,9 @@
         :key="post.id"
       />
     </div>
-    <div class="list" v-else-if="toggle == 'works'">
+    <div class="list" v-else-if="toggle == 'works'&&['admin','commandant'].includes(user.role)">
       <work-component
         :work="work"
-        :userProp="user"
         v-for="work in works_list"
         :key="work.id"
       />
@@ -177,6 +161,15 @@
           class="page-toggle"
         />
       </div>
+    </div>
+    <div class="list" v-else-if="toggle == 'works-approve'">
+      <work-component
+        :work="work"
+        :work-approve="true"
+        @reloadApproveList="reloadWorksListApprove"
+        v-for="work in works_list"
+        :key="work.id"
+      />
     </div>
     <div class="list" v-else-if="toggle == 'infos'">
       <info-component
@@ -278,6 +271,7 @@ import {
   postsByUser,
   getWorkerTasks,
   loadPostsListApprove,
+  loadWorksListApprove
 } from "@/DbOperations";
 import { mapGetters, mapMutations } from "vuex";
 
@@ -334,6 +328,17 @@ export default {
         })
         .catch((error) => {
           console.error(error);
+          this.posts_list = [];
+        });
+    },
+    reloadWorksListApprove() {
+      loadWorksListApprove()
+        .then((response) => {
+          this.works_list = response;
+        })
+        .catch((error) => {
+          console.error(error);
+          this.works_list = [];
         });
     },
     reloadPostsList() {
@@ -372,6 +377,8 @@ export default {
             });
         } else if (this.toggle == "posts-approve") {
           this.reloadPostsListApprove();
+        } else if (this.toggle == "works-approve"){
+          this.reloadWorksListApprove();
         }
       }
     },

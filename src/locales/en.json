@@ -12,6 +12,7 @@
         "loading": "Loading",
         "service": "Service",
         "post-approve":"Approve post",
+        "work-approve":"Approve work",
         "worker":{
             "plumber":"Plumber",
             "joiner":"Joiner",

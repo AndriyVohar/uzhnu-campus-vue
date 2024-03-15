@@ -20,7 +20,7 @@
           <div class="tag">
             <span>{{ work.tag }}</span>
           </div>
-          <div class="buttons" v-if="user.role == 'admin'">
+          <div class="buttons" v-if="user.role == 'admin'&&!workApprove">
             <font-awesome-icon
               class="done-button"
               :icon="['fas', 'pen']"
@@ -32,6 +32,14 @@
               @click.prevent="deleteWork()"
             />
           </div>
+          <div class="buttons" v-else-if="workApprove" @click.prevent="approve()">
+            <img src="@/assets/svg/done-icon.png" alt="Done" class="done-button" />
+            <font-awesome-icon
+              class="done-button"
+              :icon="['fas', 'trash']"
+              @click.prevent="deletePost()"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -40,11 +48,15 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { deleteItem } from "@/DbOperations";
+import { deleteItem, updateItem } from "@/DbOperations";
 export default {
   name: "WorkComponent",
   props: {
     work: Object,
+    workApprove: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     ...mapGetters(["user"]),
@@ -64,6 +76,20 @@ export default {
           });
       }
     },
+    approve(){
+      let workUpdate ={
+        user_id: this.user.id,
+        status: 1  
+      };
+      updateItem('works',this.work.id, workUpdate,this.user.google_id)
+        .then((response)=>{
+          console.log(response);
+          this.$emit('reloadApproveList')
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   },
 };
 </script>

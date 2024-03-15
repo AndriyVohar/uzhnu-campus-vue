@@ -223,3 +223,18 @@ export function loadPostsListApprove(dormitory){
       console.log(error);
     })
 }
+export function loadWorksListApprove(){
+  return axios
+    .get(`${databaseApiUrl}/works/approve`,{
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true",
+      },
+    })
+    .then((response)=>{
+      return response.data.data;
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+}

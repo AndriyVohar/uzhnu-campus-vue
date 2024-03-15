@@ -1,5 +1,13 @@
 <template>
-  <div class="mobile-form-container" v-if="postData">
+  <div
+    class="mobile-form-container"
+    v-if="
+      postData &&
+      (postData.status == 1 ||
+        (postData.status == 0 &&
+          ['admin', 'commandant'].includes(this.user.role)))
+    "
+  >
     <div class="form-container">
       <div class="photo-container">
         <img :src="postData.imgURL" alt="Photo" class="photo" />
@@ -37,12 +45,16 @@
 
 <script>
 import { itemById } from "@/DbOperations";
+import { mapGetters } from "vuex";
 export default {
   name: "PostPage",
   data() {
     return {
       postData: null,
     };
+  },
+  computed: {
+    ...mapGetters(["user"]),
   },
   methods: {
     copyToClipboard(value, type) {
@@ -175,8 +187,8 @@ export default {
       padding: 5px 10px;
       background-color: #72ddf7;
     }
-    .date{
-      font-size:12px;
+    .date {
+      font-size: 12px;
     }
   }
 }

@@ -12,6 +12,7 @@
         "loading": "Завантаження",
         "service": "Послуги",
         "post-approve":"Підтвердити пост",
+        "work-approve":"Підтвердити роботу",
         "worker": {
             "plumber": "Сантехнік",
             "joiner": "Столяр",

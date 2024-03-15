@@ -41,7 +41,7 @@
               @click.prevent="deletePost()"
             />
           </div>
-          <div class="buttons" v-if="postApprove==true" @click.prevent="approve()">
+          <div class="buttons" v-else-if="postApprove==true" @click.prevent="approve()">
             <img src="@/assets/svg/done-icon.png" alt="Done" class="done-button" />
             <font-awesome-icon
               class="done-button"
@@ -90,7 +90,6 @@ export default {
     },
     approve(){
       let postUpdate ={
-        id:this.post.id,
         user_id: this.user.id,
         status: 1  
       };

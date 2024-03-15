@@ -162,7 +162,8 @@ export default {
       if (this.user.id) {
         if (
           this.washes[index] &&
-          this.washes[index].creator.id != this.user.id
+          this.washes[index].creator.id != this.user.id&&
+          !['commandant','admin'].includes(this.user.role)
         ) {
           alert("Година зайнята");
           console.log("userId = " + this.user.id);
@@ -217,6 +218,8 @@ export default {
             alert("Надіслано");
           });
         }
+      }else{
+        alert("Авторизуйтеся");
       }
     },
   },
