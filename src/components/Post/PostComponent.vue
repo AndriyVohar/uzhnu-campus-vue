@@ -28,13 +28,23 @@
           </div>
           <div
             class="buttons"
-            v-if="user.id == post.creator.id || user.role == 'admin'"
+            v-if="(user.id == post.creator.id || user.role == 'admin')&&postApprove==false"
           >
             <font-awesome-icon
+              class="done-button"
               :icon="['fas', 'pen']"
               @click.prevent="updatePost()"
             />
             <font-awesome-icon
+              class="done-button"
+              :icon="['fas', 'trash']"
+              @click.prevent="deletePost()"
+            />
+          </div>
+          <div class="buttons" v-else-if="postApprove==true" @click.prevent="approve()">
+            <img src="@/assets/svg/done-icon.png" alt="Done" class="done-button" />
+            <font-awesome-icon
+              class="done-button"
               :icon="['fas', 'trash']"
               @click.prevent="deletePost()"
             />
@@ -47,11 +57,15 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { deleteItem } from "@/DbOperations";
+import { deleteItem, updateItem } from "@/DbOperations";
 export default {
   name: "Post_comp",
   props: {
     post: Object,
+    postApprove: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     ...mapGetters(["user"]),
@@ -67,13 +81,26 @@ export default {
       if (confirm("Видалити оголошення ?")) {
         deleteItem("advertisements", this.post.id)
           .then(() => {
-            location.reload();
+            this.$emit('reloadPostsList');
           })
           .catch((error) => {
             console.log(error);
           });
       }
     },
+    approve(){
+      let postUpdate ={
+        user_id: this.user.id,
+        status: 1  
+      };
+      updateItem('advertisements',this.post.id, postUpdate,this.user.google_id)
+        .then(()=>{
+          this.$emit('reloadApproveList')
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   },
 };
 </script>
@@ -156,6 +183,7 @@ export default {
 
     .post-bottom {
       display: flex;
+      width:100%;
       gap: 25px;
       align-items: center;
       justify-content: space-between;
@@ -163,7 +191,13 @@ export default {
 
       .buttons {
         display: flex;
-        gap: 15px;
+        gap: 5px;
+        .done-button {
+          height: 20px;
+          width: 25px;
+          cursor: pointer;
+          margin-left: auto;
+        }
       }
     }
   }
@@ -183,5 +217,8 @@ export default {
       font-size: 10px;
     }
   }
+}
+@media (min-width: 1000px) {
+
 }
 </style>

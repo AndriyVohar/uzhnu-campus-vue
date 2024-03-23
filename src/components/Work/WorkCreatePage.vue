@@ -116,10 +116,6 @@ export default {
     },
   },
   mounted() {
-    if (this.user.role != "admin") {
-      alert("Ви не маєте доступу до цих функцій");
-      this.$router.push("/me");
-    }
   },
 };
 </script>

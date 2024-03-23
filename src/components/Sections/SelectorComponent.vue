@@ -75,17 +75,18 @@ export default {
 
   span {
     font-weight: 700;
-    font-size: 14px;
+    font-size: 20px;
     margin-top: 15px;
     margin-left: 15px;
     color: #ffffff;
+    text-decoration: underline;
   }
 
   select {
     height: 20px;
     background: transparent;
     font-weight: 500;
-    font-size: 10px;
+    font-size: 18px;
     outline: none;
     border: none;
     color: #ffffff;
@@ -105,6 +106,12 @@ export default {
 @media (min-width: 1000px) {
   .dormitory-selector {
     max-height: 400px;
+    aspect-ratio: 1/0.5;
+  }
+}
+@media (min-width: 800px) and (max-width: 1000px) {
+  .dormitory-selector {
+    max-height: 300px;
     aspect-ratio: 1/0.5;
   }
 }

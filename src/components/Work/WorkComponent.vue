@@ -20,14 +20,24 @@
           <div class="tag">
             <span>{{ work.tag }}</span>
           </div>
-          <div class="buttons" v-if="user.role == 'admin'">
+          <div class="buttons" v-if="user.role == 'admin'&&!workApprove">
             <font-awesome-icon
+              class="done-button"
               :icon="['fas', 'pen']"
               @click.prevent="updateWork()"
             />
             <font-awesome-icon
+              class="done-button"
               :icon="['fas', 'trash']"
               @click.prevent="deleteWork()"
+            />
+          </div>
+          <div class="buttons" v-else-if="workApprove" @click.prevent="approve()">
+            <img src="@/assets/svg/done-icon.png" alt="Done" class="done-button" />
+            <font-awesome-icon
+              class="done-button"
+              :icon="['fas', 'trash']"
+              @click.prevent="deletePost()"
             />
           </div>
         </div>
@@ -38,11 +48,15 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { deleteItem } from "@/DbOperations";
+import { deleteItem, updateItem } from "@/DbOperations";
 export default {
   name: "WorkComponent",
   props: {
     work: Object,
+    workApprove: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     ...mapGetters(["user"]),
@@ -55,13 +69,27 @@ export default {
       if (confirm("Видалити оголошення ?")) {
         deleteItem("works", this.work.id)
           .then(() => {
-            location.reload();
+            this.$emit('reloadWorksList')
           })
           .catch((error) => {
             console.log(error);
           });
       }
     },
+    approve(){
+      let workUpdate ={
+        user_id: this.user.id,
+        status: 1  
+      };
+      updateItem('works',this.work.id, workUpdate,this.user.google_id)
+        .then((response)=>{
+          console.log(response);
+          this.$emit('reloadApproveList')
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   },
 };
 </script>
@@ -133,13 +161,20 @@ export default {
   .post-bottom {
     display: flex;
     gap: 25px;
+    width: 100%;
     align-items: center;
     justify-content: space-between;
     flex-direction: row;
     .buttons {
-      display: flex;
-      gap: 15px;
-    }
+        display: flex;
+        gap: 5px;
+        .done-button {
+          height: 20px;
+          width: 25px;
+          cursor: pointer;
+          margin-left: auto;
+        }
+      }
   }
 }
 

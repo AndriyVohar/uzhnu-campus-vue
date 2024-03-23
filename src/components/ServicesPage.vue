@@ -83,10 +83,12 @@ export default {
       handler(newValue) {
         getWashings(newValue.dormitory, 1, this.formatDateForDay(0, true)).then(
           (washings) => {
-            this.washes = [];
-            for (let wash of washings) {
-              let { hour, ...rest } = wash;
-              this.washes[hour] = { ...rest };
+            if(washings){
+              this.washes = [];
+              for (let wash of washings) {
+                let { hour, ...rest } = wash;
+                this.washes[hour] = { ...rest };
+              }
             }
           }
         );
@@ -160,7 +162,8 @@ export default {
       if (this.user.id) {
         if (
           this.washes[index] &&
-          this.washes[index].creator.id != this.user.id
+          this.washes[index].creator.id != this.user.id&&
+          !['commandant','admin'].includes(this.user.role)
         ) {
           alert("Година зайнята");
           console.log("userId = " + this.user.id);
@@ -215,6 +218,8 @@ export default {
             alert("Надіслано");
           });
         }
+      }else{
+        alert("Авторизуйтеся");
       }
     },
   },
@@ -398,11 +403,61 @@ export default {
 
         .additional-request-data {
           margin: unset;
-          padding: unset;
-          width: 70%;
+          padding-right: 10px;
+          width: 65%;
+          
 
           textarea {
-            width: 90%;
+            width: 100%;
+            min-height: 50px;
+            padding: 10px;
+          }
+
+          button {
+            width: 30%;
+            
+            &:hover {
+              width: 40%;
+              cursor: pointer;
+              font-weight: bold;
+              transition: all ease-out 0.2s;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media (min-width: 800px) and (max-width: 1000px) {
+  .services-page {
+    width: 80vw;
+    padding: 0px 20px;
+    transition: width ease-out 0.2s, margin ease-out 0.2s;
+    margin: auto;
+
+    div {
+      width: 100%;
+    }
+
+    .form-send-problem {
+      width: 100%;
+      transition: width ease-out 0.2s;
+      .selectors {
+        flex-direction: row;
+        align-items: start;
+
+        select {
+          width: 30%;
+        }
+
+        .additional-request-data {
+          margin: unset;
+          padding-right: 10px;
+          width: 65%;
+          
+
+          textarea {
+            width: 100%;
             min-height: 50px;
             padding: 10px;
           }

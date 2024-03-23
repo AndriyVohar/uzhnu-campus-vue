@@ -64,8 +64,8 @@
       >
         <img :src="require(`../assets/dormitory_img/workers/${worker.image}`)" :alt="worker.fullName"/>
         <span>
-        <p class="worker-position">{{ worker.position }}</p>
-        <p class="worker-fullname">{{ worker.fullName }}</p>
+        <p class="worker-position">{{ $t(worker.position) }}</p>
+        <p class="worker-fullname">{{ $t(worker.fullName) }}</p>
         <p class="worker-phone">{{ worker.phone }}</p>
       </span>
       </div>
@@ -76,8 +76,8 @@
       >
         <img :src="require(`../assets/dormitory_img/workers/${worker.image}`)" :alt="worker.fullName"/>
         <span>
-        <p class="worker-position">{{ worker.position }}</p>
-        <p class="worker-fullname">{{ worker.fullName }}</p>
+        <p class="worker-position">{{ $t(worker.position) }} №{{ selected_dormitory }}</p>
+        <p class="worker-fullname">{{ $t(worker.fullName) }}</p>
         <p class="worker-phone">{{ worker.phone }}</p>
       </span>
       </div>
@@ -308,9 +308,33 @@ export default {
       flex-wrap: wrap;
 
       .workers-data {
-        width: calc(30vw - 40px);
+        width: calc(30vw - 30px);
       }
     }
   }
 }
+@media (min-width: 800px) and (max-width: 1000px) {
+  .main-page-container {
+    width: 80vw;
+    transition: width ease-out 0.4s;
+
+
+    .iframe-container {
+      aspect-ratio: 1/0.5;
+      max-height: 400px;
+    }
+
+    .workers-holder {
+      flex-direction: row;
+      max-width: 100%;
+      justify-content: space-evenly;
+      flex-wrap: wrap;
+
+      .workers-data {
+        width: calc(40vw - 30px);
+      }
+    }
+  }
+}
+
 </style>

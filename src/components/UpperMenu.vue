@@ -59,7 +59,7 @@ header {
 
   .header-content {
     height: 50px;
-    width: 90vw;
+    width: 90%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -77,6 +77,13 @@ header {
     img {
       height: 35px;
       width: auto;
+    }
+  }
+}
+@media (min-width: 1000px){
+  header{
+    .header-content {
+      width: 70%;
     }
   }
 }
