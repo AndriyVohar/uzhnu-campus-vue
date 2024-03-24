@@ -73,13 +73,13 @@
             {{ $t("global.info") }}
           </option>
           <option
-            value="joiner"
+            value="plumber"
             v-if="['admin', 'commandant', 'plumber'].includes(user.role)"
           >
             {{ $t("global.worker.plumber") }}
           </option>
           <option
-            value="plumber"
+            value="joiner"
             v-if="['admin', 'commandant', 'joiner'].includes(user.role)"
           >
             {{ $t("global.worker.joiner") }}

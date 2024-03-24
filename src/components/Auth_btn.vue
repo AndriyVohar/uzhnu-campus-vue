@@ -30,6 +30,7 @@ export default {
                     name: response.name,
                     email: response.email,
                     imgURL: response.picture,
+                    role: "student"
                   };
                   console.log(dataToBackend);
                   addItem("users", dataToBackend, response.id).then(() => {
