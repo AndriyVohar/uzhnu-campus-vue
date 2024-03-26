@@ -22,14 +22,14 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user","accessToken"]),
   },
   methods: {
     doneTask() {
       // TODO: Custom confirm
       let conf = confirm("Ви впевнені?");
       if (conf) {
-        deleteItem("worker-tasks", this.task.id, this.user.google_id).then(
+        deleteItem("worker-tasks", this.task.id, this.accessToken).then(
           () => {
             location.reload();
           }

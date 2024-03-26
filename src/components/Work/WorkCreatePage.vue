@@ -116,6 +116,10 @@ export default {
     },
   },
   mounted() {
+    if(this.user.status == 0){
+      alert("Ваш акаунт неактивний, зачекайте на підтвердження комендантом");
+      this.$router.push("/me");
+    }
   },
 };
 </script>

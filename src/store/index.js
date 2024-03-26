@@ -14,8 +14,8 @@ export default createStore({
     user: ({ user }) => {
       return user;
     },
-    userGoogleId: ({ googleId }) => {
-      return googleId;
+    userGoogleId: ({ userGoogleId }) => {
+      return userGoogleId;
     },
     accessToken: ({ accessToken }) => {
       return accessToken;
@@ -28,14 +28,17 @@ export default createStore({
     changeAccessToken(state, value) {
       state.accessToken = value;
     },
+    changeGoogleId(state, value){
+      state.userGoogleId =value;
+    },
     changeDormitoryNumber(state, number) {
       state.dormitoryNumber = number;
       localStorage.setItem("defaultDormitoryNumber", number);
     },
   },
   actions: {
-    loadUser({ commit }, $google_id) {
-      itemById("users", $google_id).then((response) => {
+    loadUser({ commit, state }) {
+      itemById("users", state.userGoogleId, state.accessToken).then((response) => {
         if(response){
           commit("changeUser", response);
           // console.log(response);

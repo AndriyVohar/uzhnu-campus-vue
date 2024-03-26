@@ -55,7 +55,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user","accessToken"]),
   },
   methods: {
     checkFileSize(event) {
@@ -88,7 +88,8 @@ export default {
       }
     },
     updatePost() {
-      updateItem("advertisements", this.$route.params.id, this.formData)
+      this.formData.status = 0;
+      updateItem("advertisements", this.$route.params.id, this.formData,this.accessToken)
         .then(() => {
           this.$router.push("/me");
         })
@@ -100,9 +101,12 @@ export default {
   mounted() {
     itemById("advertisements", this.$route.params.id)
       .then((response) => {
-        if (this.user.role == "admin" || this.user.id == response.creator.id) {
+        if (['admin','commandant'].includes(this.user.role) || this.user.id == response.creator.id) {
           this.formData = response;
-        } else {
+        } else if(this.user.status == 0){
+          alert("Ваш акаунт неактивний, зачекайте на підтвердження комендантом");
+          this.$router.push("/me");
+        } else{
           alert("Ви не маєте доступу до цих функцій");
           this.$router.push("/me");
         }

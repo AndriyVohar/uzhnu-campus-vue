@@ -62,7 +62,7 @@ export default {
     },
   },
   mounted() {
-    if (this.user.role != "admin") {
+    if (!['commandant','admin'].includes(this.user.role)) {
       alert("Ви не маєте доступу до цих функцій");
       this.$router.push("/me");
     }

@@ -68,7 +68,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user","accessToken"]),
   },
   methods: {
     updatePost() {
@@ -79,7 +79,7 @@ export default {
     },
     deletePost() {
       if (confirm("Видалити оголошення ?")) {
-        deleteItem("advertisements", this.post.id)
+        deleteItem("advertisements", this.post.id,this.accessToken)
           .then(() => {
             this.$emit('reloadPostsList');
           })
@@ -93,7 +93,7 @@ export default {
         user_id: this.user.id,
         status: 1  
       };
-      updateItem('advertisements',this.post.id, postUpdate,this.user.google_id)
+      updateItem('advertisements',this.post.id, postUpdate,this.accessToken)
         .then(()=>{
           this.$emit('reloadApproveList')
         })

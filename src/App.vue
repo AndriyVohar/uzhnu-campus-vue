@@ -1,9 +1,14 @@
 <template>
   <div>
-    <custom-confirm :title="confirm_obj.title" :description="confirm_obj.description" :type="confirm_obj.type" v-if="show_confirm"/>
-    <Header/>
+    <custom-confirm
+      :title="confirm_obj.title"
+      :description="confirm_obj.description"
+      :type="confirm_obj.type"
+      v-if="show_confirm"
+    />
+    <Header />
     <RouterView class="router-view-main"></RouterView>
-    <Footer/>
+    <Footer />
   </div>
 </template>
 
@@ -11,9 +16,8 @@
 // import Token from "@/token-usage.js";
 import Header from "./components/UpperMenu.vue";
 import Footer from "@/components/Footer.vue";
-import Token from "@/token-usage.js";
 
-import {mapGetters, mapActions} from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import CustomConfirm from "@/components/customConfirm.vue";
 
 export default {
@@ -22,10 +26,10 @@ export default {
     return {
       show_confirm: false,
       confirm_obj: {
-        title: '',
-        description: '',
-        type: 'success'
-      }
+        title: "",
+        description: "",
+        type: "success",
+      },
     };
   },
   components: {
@@ -37,21 +41,21 @@ export default {
     ...mapGetters("user", ["isLoggedIn"]),
   },
   methods: {
-    ...mapActions(['loadUser'])
+    ...mapActions(["loadUser"]),
   },
   mounted() {
     window.showCustomConfirm = (title, description, type) => {
       this.confirm_obj.title = title;
       this.confirm_obj.description = description;
       this.confirm_obj.type = type;
-      this.show_confirm = true
-    }
+      this.show_confirm = true;
+    };
     window.hideCustomConfirm = () => {
-      this.confirm_obj.title = '';
-      this.confirm_obj.description = '';
-      this.confirm_obj.type = 'success';
-      this.show_confirm = false
-    }
+      this.confirm_obj.title = "";
+      this.confirm_obj.description = "";
+      this.confirm_obj.type = "success";
+      this.show_confirm = false;
+    };
     window.stopScroll = (value) => {
       let val = "";
       if (!value) {
@@ -67,7 +71,7 @@ export default {
     if (!localStorage.getItem("selectedLanguage")) {
       localStorage.setItem("selectedLanguage", "ua");
     }
-    this.loadUser(Token.getGoogleIdFromCookie())
+    this.loadUser();
   },
 };
 </script>

@@ -1,9 +1,9 @@
 class Token {
   //TOKEN
   static setAccessTokenCookie(token, expirationTime) {
-    const cookieString = `access_token=${token}; expires=${new Date(
-      expirationTime
-    ).toUTCString()}; path=/;`;
+    let date = new Date(Date.now() + expirationTime*1000);
+    date = date.toUTCString();
+    const cookieString = `access_token=${token}; expires=${date}; path=/;`;
 
     if (window.location.protocol === "https:") {
       document.cookie = `${cookieString} Secure; SameSite=None;`; // Встановлюємо атрибути Secure та SameSite для HTTPS
@@ -39,9 +39,9 @@ class Token {
 
   //
   static setGoogleIdCookie(token, expirationTime) {
-    const cookieString = `google_id=${token}; expires=${new Date(
-      expirationTime
-    ).toUTCString()}; path=/;`;
+    let date = new Date(Date.now() + expirationTime*1000);
+    date = date.toUTCString();
+    const cookieString = `google_id=${token}; expires=${date}; path=/;`;
 
     if (window.location.protocol === "https:") {
       document.cookie = `${cookieString} Secure; SameSite=None;`; // Встановлюємо атрибути Secure та SameSite для HTTPS

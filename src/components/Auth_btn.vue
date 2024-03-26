@@ -1,106 +1,47 @@
 <script>
-// import axios from "axios";
 import Token from "@/token-usage";
-// const dbCollection = collection(firebaseDB, "users");
 import hello from "hellojs";
-import { addItem } from "@/DbOperations";
-import {mapActions} from 'vuex';
+import { Authenticate } from "@/DbOperations";
+import { mapActions } from "vuex";
 export default {
   name: "Auth_btn",
   methods: {
-    ...mapActions(['loadUser']),
+    ...mapActions(["loadUser"]),
     signInWithGoogle() {
       hello.init({
         google: process.env.VUE_APP_GOOGLE_CLIENT_ID,
       });
       hello("google")
-        .login({ scope: "email" })
+        .login({
+          scope: "email",
+          response_type: "token",
+        })
         .then(
           (authResponse) => {
             const accessToken = authResponse.authResponse.access_token;
-            console.log(accessToken);
-            hello("google")
-            .api("me")
-            .then(
-              (response) => {
-                  Token.setGoogleIdCookie(response.id);
-                  Token.setAccessTokenCookie(response.id);
-                  const dataToBackend = {
-                    google_id: response.id,
-                    name: response.name,
-                    email: response.email,
-                    imgURL: response.picture,
-                    role: "student"
-                  };
-                  console.log(dataToBackend);
-                  addItem("users", dataToBackend, response.id).then(() => {
-                    this.loadUser(response.id).then(()=>{
-                      if(this.$route.query.redirect){
-                        this.$router.push(this.$route.query.redirect);
-                      }
-                    })
+            if (!Token.getAccessTokenFromCookie()) {
+              Authenticate(accessToken)
+                .then((data) => {
+                  console.log(data)
+                  Token.setAccessTokenCookie(data.access_token,data.lifetime);
+                  Token.setGoogleIdCookie(data.google_id, data.lifetime);
+                  this.$store.commit('changeAccessToken',data.access_token);
+                  this.$store.commit('changeGoogleId',data.google_id);
+                  this.loadUser().then(()=>{
+                    if(this.$route.query.redirect){
+                      this.$router.push(this.$route.query.redirect);
+                    }
                   });
-                },
-                (error) => {
-                  console.error("Помилка отримання профілю: ", error);
-                }
-              );
+                })
+                .catch();
+            }
           },
           (error) => {
             console.error("Авторизація не вдалась: ", error);
           }
         );
     },
-    // handleGoogle() {
-    //   const backendUrl = "http://localhost:8000/auth/google";
-    //   axios
-    //     .get(backendUrl)
-    //     .then((response) => {
-    //       // Отримали відповідь від бекенду, можливо, потрібно щось обробити
-    //       console.log(response.data);
-    //     })
-    //     .catch((error) => {
-    //       // Обробка помилок, якщо є
-    //       console.error("Error during backend request:", error);
-    //     });
-    //   const provider = new GoogleAuthProvider();
-    //   //використовуємо функцію авторизації у спливаючому вікні
-    //   signInWithPopup(auth, provider)
-    //     .then(async (result) => {
-    //       const user = result.user; //Дістаємо об'єкт користувача
-    //       if (!this.getItemById(user.uid)) {
-    //         console.log("Write to firestore");
-    //         await setDoc(doc(firebaseDB, "users", user.uid), {
-    //           avatarUrl: user.photoURL,
-    //           fullName: user.displayName,
-    //           email: user.email,
-    //           role: "student",
-    //           joinDate: serverTimestamp(),
-    //         });
-    //       }
-    //       //Set token to cookie
-    //       Token.setAccessTokenCookie(
-    //         user.uid,
-    //         new Date().getTime() + 3 * 60 * 60 * 1000 // 3 hours in milliseconds
-    //       );
-
-    //       if (this.$route.query.redirect!="/me") {
-    //         this.$router.push(this.$route.query.redirect);
-    //       } else if(this.$route.query.redirect=="/me"){
-    //         this.$router.push(this.$route.query.redirect)
-    //       }else
-    //         {
-    //         location.reload();
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
   },
-  // async created() {
-  //   await this.loadList();
-  // },
 };
 </script>
 

@@ -1,5 +1,12 @@
-import axios from "axios";
+import axios from "axios";  
+
 const databaseApiUrl = process.env.VUE_APP_DATABASE_API_URL;
+let headers = {
+  "Content-Type": "application/json",
+  "Accept":'application/json',
+  "ngrok-skip-browser-warning": "true",
+}
+
 // const databaseApiUrl = 'http://localhost:8000/api';
 /**
  * Завантажує список даних з бази даних за допомогою HTTP GET запиту.
@@ -17,10 +24,7 @@ export function loadItemsList(name, pageIndex = null) {
   }
   return axios
     .get(url, {
-      headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "true",
-      },
+      headers: headers,
     })
     .then((response) => {
       if (pageIndex) {
@@ -49,10 +53,7 @@ export function loadItemsListByDormitory(name, dormitory, pageIndex = null) {
   }
   return axios
     .get(url, {
-      headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "true",
-      },
+      headers: headers,
     })
     .then((response) => {
       if (pageIndex) {
@@ -75,13 +76,11 @@ export function loadItemsListByDormitory(name, dormitory, pageIndex = null) {
  * @returns {Promise} - Обіцянка (Promise), яка вирішиться результатом HTTP запиту.
  *                     Успішна обіцянка містить об'єкт відповіді сервера, інакше вона відхиляється з помилкою.
  */
-export function addItem(name, data, userGoogleId) {
+export function addItem(name, data, accessToken) {
+  headers.Authorization = `Bearer ${accessToken}`;
   return axios
     .post(`${databaseApiUrl}/${name}`, data, {
-      headers: {
-        "Content-Type": "application/json",
-        "User-Google-Id": userGoogleId,
-      },
+      headers: headers,
     })
     .then((response) => {
       return response.data;
@@ -96,13 +95,13 @@ export function addItem(name, data, userGoogleId) {
  * @param {number|string} id - Ідентифікатор об'єкта для завантаження.
  * @returns {Promise<Object>} - Об'єкт Promise, який вирішиться об'єктом або вилучить помилку.
  */
-export function itemById(name, id) {
+export function itemById(name, id, accessToken=null) {
+  if(accessToken){
+    headers.Authorization = `Bearer ${accessToken}`;
+  }
   return axios
     .get(`${databaseApiUrl}/${name}/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "true",
-      },
+      headers: headers,
     })
     .then((response) => {
       return response.data.data;
@@ -118,14 +117,11 @@ export function itemById(name, id) {
  * @param {Object} data - Дані, які слід оновити.
  * @returns {Promise<Object>} - Об'єкт Promise, який вирішиться оновленим об'єктом або вилучить помилку.
  */
-export function updateItem(name, id, data, userGoogleId) {
+export function updateItem(name, id, data, accessToken) {
+  headers.Authorization = `Bearer ${accessToken}`;
   return axios
     .put(`${databaseApiUrl}/${name}/${id}`, data, {
-      headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "true",
-        "User-Google-Id": userGoogleId,
-      },
+      headers: headers,
     })
     .then((response) => {
       return response.data;
@@ -142,26 +138,20 @@ export function updateItem(name, id, data, userGoogleId) {
  * @returns {Promise} - Обіцянка (Promise), яка вирішиться результатом HTTP запиту.
  *                     Успішна обіцянка містить об'єкт відповіді сервера, інакше вона відхиляється з помилкою.
  */
-export function deleteItem(name, id, userGoogleId) {
+export function deleteItem(name, id, accessToken) {
+  headers.Authorization = `Bearer ${accessToken}`;
   return axios.delete(`${databaseApiUrl}/${name}/${id}`, {
-    headers: {
-      "Content-Type": "application/json",
-      "ngrok-skip-browser-warning": "true",
-      "User-Google-Id": userGoogleId,
-    },
+    headers: headers,
   });
 }
 
 //===========================
 //Special methods
-export function postsByUser(id, userGoogleId) {
+export function postsByUser(id, accessToken) {
+  headers.Authorization = `Bearer ${accessToken}`;
   return axios
     .get(`${databaseApiUrl}/users/${id}/advertisements`, {
-      headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "true",
-        "User-Google-Id": userGoogleId,
-      },
+      headers: headers,
     })
     .then((response) => {
       return response.data.data;
@@ -181,10 +171,7 @@ export function postsByUser(id, userGoogleId) {
 export function getWashings(dormitory,washingMachineNum=1,day){
   return axios
     .get(`${databaseApiUrl}/washings/${dormitory}/${washingMachineNum}/${day}`, {
-      headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "true",
-      },
+      headers: headers,
     })
     .then((response) => {
       return response.data;
@@ -193,13 +180,11 @@ export function getWashings(dormitory,washingMachineNum=1,day){
       console.error(error);
     });
 }
-export function getWorkerTasks(dormitory,worker){
+export function getWorkerTasks(dormitory,worker,accessToken){
+  headers.Authorization = `Bearer ${accessToken}`;
   return axios
     .get(`${databaseApiUrl}/${dormitory}/worker-tasks/${worker}`,{
-      headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "true",
-      },
+      headers: headers,
     })
     .then((response)=>{
       return response.data.data;
@@ -208,13 +193,11 @@ export function getWorkerTasks(dormitory,worker){
       console.log(error);
     })
 }
-export function loadPostsListApprove(dormitory){
+export function loadPostsListApprove(dormitory,accessToken){
+  headers.Authorization = `Bearer ${accessToken}`;
   return axios
     .get(`${databaseApiUrl}/${dormitory}/advertisements/approve`,{
-      headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "true",
-      },
+      headers: headers,
     })
     .then((response)=>{
       return response.data.data;
@@ -223,16 +206,31 @@ export function loadPostsListApprove(dormitory){
       console.log(error);
     })
 }
-export function loadWorksListApprove(){
+export function loadWorksListApprove(accessToken){
+  headers.Authorization = `Bearer ${accessToken}`;
   return axios
     .get(`${databaseApiUrl}/works/approve`,{
-      headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "true",
-      },
+      headers: headers,
     })
     .then((response)=>{
       return response.data.data;
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+}
+export function Authenticate(accessToken){
+  return axios
+    .get(`${databaseApiUrl}/auth`,{
+      headers: {
+        "Content-Type": "application/json",
+        "Accept":'application/json',
+        "ngrok-skip-browser-warning": "true",
+        'Google-Access-Token':accessToken
+      },
+    })
+    .then((response)=>{
+      return response.data;
     })
     .catch((error)=>{
       console.log(error);

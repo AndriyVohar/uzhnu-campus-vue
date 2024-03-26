@@ -59,7 +59,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user","accessToken"]),
   },
   methods: {
     updateWork() {
@@ -67,7 +67,7 @@ export default {
     },
     deleteWork() {
       if (confirm("Видалити оголошення ?")) {
-        deleteItem("works", this.work.id)
+        deleteItem("works", this.work.id, this.accessToken)
           .then(() => {
             this.$emit('reloadWorksList')
           })
@@ -81,7 +81,7 @@ export default {
         user_id: this.user.id,
         status: 1  
       };
-      updateItem('works',this.work.id, workUpdate,this.user.google_id)
+      updateItem('works',this.work.id, workUpdate,this.accessToken)
         .then((response)=>{
           console.log(response);
           this.$emit('reloadApproveList')

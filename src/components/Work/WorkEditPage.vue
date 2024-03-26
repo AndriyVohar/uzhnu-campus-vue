@@ -70,7 +70,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user","accessToken"]),
   },
   methods: {
     checkFileSize(event) {
@@ -107,7 +107,7 @@ export default {
         "works",
         this.$route.params.id,
         this.formData,
-        this.user.google_id
+        this.accessToken
       )
         .then(() => {
           this.$router.push("/me");
@@ -118,7 +118,7 @@ export default {
     },
   },
   mounted() {
-    if (this.user.role == "admin") {
+    if (["admin","commandant"].includes(this.user.role)) {
       itemById("works", this.$route.params.id)
         .then((response) => {
           this.formData = response;
@@ -126,7 +126,10 @@ export default {
         .catch((error) => {
           console.error(error);
         });
-    } else {
+    } else if(this.user.status == 0){
+      alert("Ваш акаунт неактивний, зачекайте на підтвердження комендантом");
+      this.$router.push("/me");
+    } else{
       alert("Ви не маєте доступу до цих функцій");
       this.$router.push("/me");
     }

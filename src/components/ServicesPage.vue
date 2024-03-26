@@ -74,7 +74,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user","accessToken"]),
   },
   watch: {
     user: {
@@ -83,7 +83,7 @@ export default {
       handler(newValue) {
         getWashings(newValue.dormitory, 1, this.formatDateForDay(0, true)).then(
           (washings) => {
-            if(washings){
+            if (washings) {
               this.washes = [];
               for (let wash of washings) {
                 let { hour, ...rest } = wash;
@@ -162,8 +162,8 @@ export default {
       if (this.user.id) {
         if (
           this.washes[index] &&
-          this.washes[index].creator.id != this.user.id&&
-          !['commandant','admin'].includes(this.user.role)
+          this.washes[index].creator.id != this.user.id &&
+          !["commandant", "admin"].includes(this.user.role)
         ) {
           alert("Година зайнята");
           console.log("userId = " + this.user.id);
@@ -180,45 +180,61 @@ export default {
             deleteItem(
               "washings",
               this.washes[index].id,
-              this.user.google_id
+              this.accessToken
             ).then(this.loadWashings());
           }
         } else {
           // TODO: localization
           // TODO:custom confirm
           //TODO: washing machine num
-          let conf = confirm(
-            `Бажаєте записатися на ${index}:00-${index + 1}:00`
-          );
-          if (conf) {
-            let dataWashings = {
-              day: this.formatDateForDay(this.dayIndex, true),
-              dormitory: this.user.dormitory,
-              washing_machine_num: 1,
-              hour: index,
-              user_id: this.user.id,
-            };
-            addItem("washings", dataWashings, this.user.google_id).then(() => {
-              this.loadWashings();
-            });
+          if (this.user.status == 1) {
+            let conf = confirm(
+              `Бажаєте записатися на ${index}:00-${index + 1}:00`
+            );
+            if (conf) {
+              let dataWashings = {
+                day: this.formatDateForDay(this.dayIndex, true),
+                dormitory: this.user.dormitory,
+                washing_machine_num: 1,
+                hour: index,
+                user_id: this.user.id,
+              };
+              addItem("washings", dataWashings, this.accessToken).then(
+                () => {
+                  this.loadWashings();
+                }
+              );
+            }
+          } else {
+            alert(
+              "Ваш акаунт неактивний, зачекайте на підтвердження комендантом"
+            );
           }
         }
-      }else{
-        alert('Авторизуйтеся')
+      } else {
+        alert("Авторизуйтеся");
       }
     },
     sendProblem() {
       // TODO: Після того як у роутах заблокуємо цю сторінку не авторизованим користувачав - заберемо перевірку
-      if(this.user.id){
-        let conf = confirm(`Впевнені, що хочете надіслати запис?`);
-        if (conf) {
-          this.formData.user_id = this.user.id;
-          addItem("worker-tasks", this.formData, this.user.google_id).then(() => {
-            this.formData.description = "";
-            alert("Надіслано");
-          });
+      if (this.user.id) {
+        if (this.user.status == 1) {
+          let conf = confirm(`Впевнені, що хочете надіслати запис?`);
+          if (conf) {
+            this.formData.user_id = this.user.id;
+            addItem("worker-tasks", this.formData, this.accessToken).then(
+              () => {
+                this.formData.description = "";
+                alert("Надіслано");
+              }
+            );
+          }
+        } else {
+          alert(
+            "Ваш акаунт неактивний, зачекайте на підтвердження комендантом"
+          );
         }
-      }else{
+      } else {
         alert("Авторизуйтеся");
       }
     },
@@ -284,8 +300,8 @@ export default {
 
     .selectors {
       width: 100%;
-      padding:0;
-      margin-top:0;
+      padding: 0;
+      margin-top: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -306,7 +322,7 @@ export default {
       }
 
       .additional-request-data {
-        padding:0;
+        padding: 0;
         display: flex;
         gap: 10px;
         flex-direction: column;
@@ -405,7 +421,6 @@ export default {
           margin: unset;
           padding-right: 10px;
           width: 65%;
-          
 
           textarea {
             width: 100%;
@@ -415,7 +430,7 @@ export default {
 
           button {
             width: 30%;
-            
+
             &:hover {
               width: 40%;
               cursor: pointer;
@@ -454,7 +469,6 @@ export default {
           margin: unset;
           padding-right: 10px;
           width: 65%;
-          
 
           textarea {
             width: 100%;
@@ -464,7 +478,7 @@ export default {
 
           button {
             width: 30%;
-            
+
             &:hover {
               width: 40%;
               cursor: pointer;

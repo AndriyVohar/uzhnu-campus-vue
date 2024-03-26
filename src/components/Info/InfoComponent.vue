@@ -2,7 +2,7 @@
   <div class="custom-alert">
     <div class="left-part">
       <h4>
-        <span v-if="user.role == 'admin'">№{{ attention.dormitory }}</span>
+        <span v-if="['admin','commandant'].includes(user.role)">№{{ attention.dormitory }}</span>
         {{ attention.title }}
         <span>{{ attention.created_at }}</span>
       </h4>
@@ -15,7 +15,7 @@
         class="exclamation-danger-end"
       />
     </div>
-    <div class="buttons" v-if="user.role == 'admin'">
+    <div class="buttons" v-if="['admin','commandant'].includes(user.role)">
       <font-awesome-icon :icon="['fas', 'pen']" @click.stop="updateInfo()" />
       <font-awesome-icon :icon="['fas', 'trash']" @click.stop="deleteInfo()" />
     </div>

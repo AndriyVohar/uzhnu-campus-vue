@@ -295,7 +295,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user","accessToken"]),
   },
   mounted() {
     this.loadForUser();
@@ -322,7 +322,7 @@ export default {
   methods: {
     ...mapMutations(["changeUser"]),
     reloadPostsListApprove() {
-      loadPostsListApprove(this.user.dormitory)
+      loadPostsListApprove(this.user.dormitory,this.accessToken)
         .then((response) => {
           this.posts_list = response;
         })
@@ -332,7 +332,7 @@ export default {
         });
     },
     reloadWorksListApprove() {
-      loadWorksListApprove()
+      loadWorksListApprove(this.accessToken)
         .then((response) => {
           this.works_list = response;
         })
@@ -342,7 +342,7 @@ export default {
         });
     },
     reloadPostsList() {
-      postsByUser(this.user.id, this.user.google_id).then((posts) => {
+      postsByUser(this.user.id, this.accessToken).then((posts) => {
         this.posts_list = posts;
       });
     },
@@ -368,7 +368,7 @@ export default {
               console.error(error);
             });
         } else if (["plumber", "joiner", "electrician"].includes(this.toggle)) {
-          getWorkerTasks(this.user.dormitory, this.toggle)
+          getWorkerTasks(this.user.dormitory, this.toggle,this.accessToken)
             .then((response) => {
               this.workerTaskList = response;
             })
@@ -410,12 +410,12 @@ export default {
           "users",
           this.user.google_id,
           userEdited,
-          this.user.google_id
+          this.accessToken
         ).then(() => {
           location.reload();
         });
       } else {
-        alert("Введіть коректний номер гуртожиту");
+        alert("Введіть коректний номер гуртожитку");
       }
     },
     createBtn(type) {

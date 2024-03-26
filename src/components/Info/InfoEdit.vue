@@ -68,7 +68,7 @@ export default {
     },
   },
   mounted() {
-    if (this.user.role == "admin") {
+    if (["admin","commandant"].includes(this.user.role)) {
       itemById("infos", this.$route.params.id)
         .then((response) => {
           this.formData = response;

@@ -56,7 +56,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["user", "userGoogleId"]),
+    ...mapGetters(["user", "userGoogleId",'accessToken']),
   },
   methods: {
     checkFileSize(event) {
@@ -94,12 +94,18 @@ export default {
 
     createPost() {
       this.formData.user_id = this.user.id;
-      addItem("advertisements", this.formData, this.userGoogleId).then(() => {
+      addItem("advertisements", this.formData, this.accessToken).then(() => {
         //TODO: Custom alert
         alert("Очікуйте на підтвердження посту комендантом");
         this.$router.push("/me");
       });
     },
+  },
+  mounted () {
+    if(this.user.status == 0){
+      alert("Ваш акаунт неактивний, зачекайте на підтвердження комендантом");
+      this.$router.push("/me");
+    }
   },
 };
 </script>
